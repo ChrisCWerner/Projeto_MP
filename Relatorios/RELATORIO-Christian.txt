@@ -1,0 +1,9 @@
+19:19 11/11/2015 | 0:31 | Codificar módulos | Projetar
+	* Início do projeto;
+	* Definido structs para cidade, gerador, interconexão e adaptador;
+	* Problemas com a internet.
+
+10:14 12/11/2015 |  | Projetar | Codificar módulos
+	* Repositório criado no GitHub;
+	* Função Le_Arquivo (incompleto);
+	* Problemas com a internet.
