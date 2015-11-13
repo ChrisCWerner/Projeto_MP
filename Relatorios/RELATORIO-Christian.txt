@@ -3,7 +3,22 @@
 	* Definido structs para cidade, gerador, interconexão e adaptador;
 	* Problemas com a internet.
 
-10:14 12/11/2015 |  | Projetar | Codificar módulos
+10:14 12/11/2015 | 1:15 | Projetar | Codificar módulos
 	* Repositório criado no GitHub;
 	* Função Le_Arquivo (incompleto);
 	* Problemas com a internet.
+
+17:00 12/11/2015 | 2:37 | Codificar módulos | Estudar aulas
+	* Fim da função Le_Arquivo (falta testar);
+	* Programação genérica;
+	* Função de empilhar cada elemento (Insere_Lista);
+	* Criação de um arquivo para testar as funções (parcial).
+	
+20:02 12/11/2015 |  | Codificar módulos | Realizar testes | Estudar
+	* Finalização do arquivo de entrada para testes;
+	* Funções completadas:
+		- Le_Arquivo;
+		- Insere_Lista;
+		- Destroi;
+		- Imprime;
+	    onde todas estão funcionando corretamente;
