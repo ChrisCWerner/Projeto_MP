@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct cidade{
 	char nome_cidade[16];
@@ -27,24 +28,29 @@ typedef struct interc{
 	int tempo_conserto;
 	int custo_conserto;
 	struct interc *prox;
+	
+	void *vem;	//vem de ...
+	char vemc;
+	void *vai;	//vai para ...
+	char vaic;
 } Interc;
 
-typedef struct adaptador{
-	char nome_adaptador[16];
+typedef struct adapter{
+	char nome_adapter[16];
 	int pos_x, pos_y;
-	struct adaptador *prox;
-} Adaptador;
+	struct adapter *prox;
+} Adapter;
 
 typedef struct listas{
 	cidade *p_cidade;
 	gerador *p_gerador;
 	interc *p_interc;
-	adaptador *p_adaptador;
+	adapter *p_adapter;
 } Listas;
 
+
+
 //Funcoes
-
-
 
 Listas *Le_Arquivo(FILE *fp);
 
@@ -53,7 +59,4 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento);
 void Imprime(Listas *inicio);
 
 void Destroi(Listas *inicio);
-
-
-
 

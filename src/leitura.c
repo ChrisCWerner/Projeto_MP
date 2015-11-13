@@ -12,7 +12,7 @@ listas *Le_Arquivo(FILE *fp){
 	Cidade *cidade = NULL;
 	Gerador *gerador = NULL;
 	Interc *interc = NULL;
-	Adaptador *adaptador = NULL;
+	Adapter *adapter = NULL;
 	char c;
 	
 	
@@ -20,7 +20,7 @@ listas *Le_Arquivo(FILE *fp){
 	sts->p_cidade = NULL;
 	sts->p_gerador = NULL;
 	sts->p_interc = NULL;
-	sts->p_adaptador = NULL;
+	sts->p_adapter = NULL;
 	
 	
 	while((c = getc(fp)) != EOF){
@@ -62,13 +62,13 @@ listas *Le_Arquivo(FILE *fp){
 			Insere_Lista('I', sts, interc);
 		}
 		else if(c == 'A'){
-			adaptador = (Adaptador *) malloc(sizeof(Adaptador));
+			adapter = (Adapter *) malloc(sizeof(Adapter));
 			
-			fscanf(fp, "%s", adaptador->nome_adaptador);
-			fscanf(fp, "%d", &(adaptador->pos_x));
-			fscanf(fp, "%d", &(adaptador->pos_y));
+			fscanf(fp, "%s", adapter->nome_adapter);
+			fscanf(fp, "%d", &(adapter->pos_x));
+			fscanf(fp, "%d", &(adapter->pos_y));
 			
-			Insere_Lista('A', sts, adaptador);
+			Insere_Lista('A', sts, adapter);
 		}
 	}
 	
@@ -88,7 +88,6 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 		Cidade *novo_elem1 = (Cidade *) elemento;
 		novo_elem1->prox = top->p_cidade;
 		top->p_cidade = novo_elem1;
-		printf("%d \t %d\n", novo_elem1->pos_x, top->p_cidade->pos_x);
 	}
 	else if(tipo_elemento == 'G'){
 		
@@ -104,18 +103,25 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 	}
 	else if(tipo_elemento == 'A'){
 		
-		Adaptador *novo_elem4 = (Adaptador *) elemento;
-		novo_elem4->prox = top->p_adaptador;
-		top->p_adaptador = novo_elem4;
+		Adapter *novo_elem4 = (Adapter *) elemento;
+		novo_elem4->prox = top->p_adapter;
+		top->p_adapter = novo_elem4;
 	}
 }
 
 void Imprime(Listas *inicio){
 	
-	Cidade *aux1 = NULL;
-	Gerador *aux2 = NULL;
+	assert(inicio != NULL);
+	assert(inicio->p_cidade != NULL);
+	assert(inicio->p_gerador != NULL);
+	assert(inicio->p_interc != NULL);
+	assert(inicio->p_adapter != NULL);
+	
+	
+	Cidade *aux1 = NULL, *v_cidade;
+	Gerador *aux2 = NULL, *v_gerador;
 	Interc *aux3 = NULL;
-	Adaptador *aux4 = NULL;
+	Adapter *aux4 = NULL, *v_adapter;
 	
 	
 	printf("\nCidades: \n");
@@ -150,14 +156,41 @@ void Imprime(Listas *inicio){
 		printf("\t Chance de falha: %.2f\n", aux3->chance_falha);
 		printf("\t Tempo de conserto: %d\n", aux3->tempo_conserto);
 		printf("\t Custo do conserto: %d\n\n", aux3->custo_conserto);
+		
+		if(aux3->vemc == 'C'){
+			v_cidade = (Cidade *) aux3->vem;
+			printf("\t  Vem de: \t%s\n", v_cidade->nome_cidade);
+		}
+		else if(aux3->vemc == 'G'){
+			v_gerador = (Gerador *) aux3->vem;
+			printf("\t  Vem de: \t%s\n", v_gerador->nome_gerador);
+		}
+		else if(aux3->vemc == 'A'){
+			v_adapter = (Adapter *) aux3->vem;
+			printf("\t  Vem de: \t%s\n", v_adapter->nome_adapter);
+		}
+		
+		if(aux3->vaic == 'C'){
+			v_cidade = (Cidade *) aux3->vai;
+			printf("\t  Vai para: \t%s\n\n", v_cidade->nome_cidade);
+		}
+		else if(aux3->vaic == 'G'){
+			v_gerador = (Gerador *) aux3->vai;
+			printf("\t  Vai para: \t%s\n\n", v_gerador->nome_gerador);
+		}
+		else if(aux3->vaic == 'A'){
+			v_adapter = (Adapter *) aux3->vai;
+			printf("\t  Vai para: \t%s\n\n", v_adapter->nome_adapter);
+		}
+		
 		aux3 = aux3->prox;
 	}
 	
 	printf("\nAdaptadores: \n");
 	
-	aux4 = inicio->p_adaptador;
+	aux4 = inicio->p_adapter;
 	while(aux4 != NULL){
-		printf("  %s: \n", aux4->nome_adaptador);
+		printf("  %s: \n", aux4->nome_adapter);
 		printf("\t Posicao: (%d, %d)\n", aux4->pos_x, aux4->pos_y);
 		aux4 = aux4->prox;
 	}
@@ -167,10 +200,18 @@ void Imprime(Listas *inicio){
 
 void Destroi(Listas *inicio){
 	
+	assert(inicio != NULL);
+	assert(inicio->p_cidade != NULL);
+	assert(inicio->p_gerador != NULL);
+	assert(inicio->p_interc != NULL);
+	assert(inicio->p_adapter != NULL);
+	
+	
 	Cidade *aux1 = NULL;
 	Gerador *aux2 = NULL;
 	Interc *aux3 = NULL;
-	Adaptador *aux4 = NULL;
+	Adapter *aux4 = NULL;
+	
 	
 	while(inicio->p_cidade != NULL){
 		aux1 = inicio->p_cidade;
@@ -187,9 +228,9 @@ void Destroi(Listas *inicio){
 		inicio->p_interc = aux3->prox;
 		free(aux3);
 	}
-	while(inicio->p_adaptador != NULL){
-		aux4 = inicio->p_adaptador;
-		inicio->p_adaptador = aux4->prox;
+	while(inicio->p_adapter != NULL){
+		aux4 = inicio->p_adapter;
+		inicio->p_adapter = aux4->prox;
 		free(aux4);
 	}
 	

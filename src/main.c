@@ -1,6 +1,6 @@
 //Main
 
-#include "leitura.h"
+#include "funcoes.h"
 
 int main(){
 	
@@ -10,6 +10,8 @@ int main(){
 	
 	inicio = Le_Arquivo(fp);
 	fclose(fp);
+	
+	Localiza_Paths(inicio);
 	
 	Imprime(inicio);
 	
