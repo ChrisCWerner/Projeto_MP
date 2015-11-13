@@ -14,7 +14,7 @@
 	* Função de empilhar cada elemento (Insere_Lista);
 	* Criação de um arquivo para testar as funções (parcial).
 	
-20:02 12/11/2015 |  | Codificar módulos | Realizar testes | Estudar
+20:02 12/11/2015 | 1:53 | Codificar módulos | Realizar testes | Estudar
 	* Finalização do arquivo de entrada para testes;
 	* Funções completadas:
 		- Le_Arquivo;
@@ -22,3 +22,12 @@
 		- Destroi;
 		- Imprime;
 	    onde todas estão funcionando corretamente;
+
+12:51 13/11/2015 | 1:22 | Projetar | Codificar módulos | Estudar
+	* Criação de 'funções.h' e 'funções.c';
+	* Inicio das funções 'Localiza_Paths' e 'Distribui_G_A'
+
+15:27 13/11/2015 | 4:11 | Codificar módulos | Projetar
+	* Problemas com a função 'Localiza_Paths';
+	* Término da função 'Localiza_Paths', que integra a rede;
+	* Pequenos ajustes no código.
