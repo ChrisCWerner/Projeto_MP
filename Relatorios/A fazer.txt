@@ -1,3 +1,6 @@
-  * Funções em geral;
+Itens pendentes:
+
+  * Funções de distribuição;
+  * Função para o relatório de dados;
   * Makefile;
   * ?
