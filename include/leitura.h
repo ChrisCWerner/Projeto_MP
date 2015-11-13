@@ -3,55 +3,56 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Cidade{
-	char *nome_cidade;
+typedef struct cidade{
+	char nome_cidade[16];
 	int pos_x, pos_y;
 	int recurso_necessario;
-	struct Cidade *prox;
-} cidade;
+	struct cidade *prox;
+} Cidade;
 
-typedef struct Gerador{
-	char *nome_gerador;
+typedef struct gerador{
+	char nome_gerador[16];
 	int pos_x, pos_y;
 	int recurso_produzido;
 	int custo_gerador;
-	struct Gerador *prox;
-} gerador;
+	struct gerador *prox;
+} Gerador;
 
-typedef struct Interc{
-	char *nome_interc;
+typedef struct interc{
+	char nome_interc[16];
 	int pos_inic_x, pos_inic_y;
 	int pos_final_x, pos_final_y;
 	int capacidade_max;
 	float chance_falha;
 	int tempo_conserto;
 	int custo_conserto;
-	struct Interc *prox;
-} interc;
+	struct interc *prox;
+} Interc;
 
-typedef struct Adaptador{
-	char *nome_adaptador;
+typedef struct adaptador{
+	char nome_adaptador[16];
 	int pos_x, pos_y;
-	struct Adaptador *prox;
-} adaptador;
+	struct adaptador *prox;
+} Adaptador;
 
-typedef struct Listas{
+typedef struct listas{
 	cidade *p_cidade;
 	gerador *p_gerador;
 	interc *p_interc;
 	adaptador *p_adaptador;
-} listas;
-
-
-
-
+} Listas;
 
 //Funcoes
 
 
 
-listas *Le_Arquivo(FILE *fp);
+Listas *Le_Arquivo(FILE *fp);
 
+void Insere_Lista(char tipo_elemento, Listas *top, void *elemento);
+
+void Imprime(Listas *inicio);
+
+void Destroi(Listas *inicio);
 
 
 
