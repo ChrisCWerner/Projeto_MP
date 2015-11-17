@@ -104,6 +104,7 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 		novo_elem2->total = 0;
 		novo_elem2->sobra = 0;
 		novo_elem2->works = 0;
+		novo_elem2->cheio = 0;
 		novo_elem2->prim = NULL;
 	}
 	else if(tipo_elemento == 'I'){
@@ -113,6 +114,7 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 		top->p_interc = novo_elem3;
 		
 		novo_elem3->fluxo = 0;
+		novo_elem3->rel_flow = 1;
 		novo_elem3->funciona = 1;
 		novo_elem3->irmao = NULL;
 	}
@@ -126,6 +128,7 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 		novo_elem4->saida = 0;
 		novo_elem4->sobra = 0;
 		novo_elem4->works = 0;
+		novo_elem4->cheio = 0;
 		novo_elem4->prim = NULL;
 	}
 }
@@ -166,8 +169,9 @@ void Imprime(Listas *inicio){
 		
 		printf("\t Capacidade total de transporte: %d\n", aux2->total);
 		printf("\t Quantidade de caminhos de saida: %d\n", aux2->saida);
-		printf("\t Recursos desperdiçados: %d\n", aux2->sobra);
-		printf("\t Total de saidas funcionando: %d\n\n", aux2->works);
+		printf("\t Recursos desperdicados: %d\n", aux2->sobra);
+		printf("\t Total de saidas funcionando: %d\n", aux2->works);
+		printf("\t Total de saidas lotadas: %d\n\n", aux2->cheio);
 		aux2 = aux2->prox;
 	}
 	
@@ -183,7 +187,8 @@ void Imprime(Listas *inicio){
 		printf("\t Tempo de conserto: %d\n", aux3->tempo_conserto);
 		printf("\t Custo do conserto: %d\n\n", aux3->custo_conserto);
 		
-		printf("\t Fluxo de recursos: %d\n\n", aux3->fluxo);
+		printf("\t Fluxo de recursos: %d\n", aux3->fluxo);
+		printf("\t Fluxo relativo de recursos: %.2f\n\n", aux3->rel_flow);
 		
 		if(aux3->vemc == 'C'){
 			v_cidade = (Cidade *) aux3->vem;
@@ -223,7 +228,7 @@ void Imprime(Listas *inicio){
 		
 		printf("\t Fluxo de recursos: %d\n", aux4->fluxo);
 		printf("\t Quantidade de caminhos de saida: %d\n", aux4->saida);
-		printf("\t Recursos desperdiçados: %d\n", aux4->sobra);
+		printf("\t Recursos desperdicados: %d\n", aux4->sobra);
 		printf("\t Total de saidas funcionando: %d\n\n", aux4->works);
 		aux4 = aux4->prox;
 	}

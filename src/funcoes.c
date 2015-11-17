@@ -95,14 +95,29 @@ int Calcula_Cap_Total(Interc *inicio){
 	
 	assert(inicio != NULL);
 	
+	Interc *aux = inicio;
 	int capacidade_total = 0;
 	
-	do {
-		if(inicio->funciona)
-			capacidade_total += inicio->capacidade_max;
-		inicio = inicio->irmao;
-	} while(inicio != NULL);
+	while(aux != NULL){
+		if((aux->funciona) && (aux->fluxo < aux->capacidade_max))
+			capacidade_total += aux->capacidade_max;
+		aux = aux->irmao;
+	}
 	return capacidade_total;
+}
+
+void Calcula_Rel_Flow(Gerador *gerad){
+	
+	assert(gerad->total != 0);
+	
+	Interc *aux = gerad->prim;
+	
+	while(aux != NULL){
+		if((aux->funciona) && (aux->fluxo < aux->capacidade_max))
+			aux->rel_flow = (float) (aux->capacidade_max) / (gerad->total);
+		else	aux->rel_flow = 0;
+		aux = aux->irmao;
+	}
 }
 
 int Calcula_Fluxo(Gerador *gerad){
@@ -110,19 +125,28 @@ int Calcula_Fluxo(Gerador *gerad){
 	assert(gerad->prim != NULL);
 	
 	Interc *path = NULL;
-	int sobra = 0;
+	int sobra = 0, rec_disp;
 	
+	rec_disp = gerad->recurso_produzido;
+	gerad->cheio = 0;
 	path = gerad->prim;
 	while(path != NULL){
 		if(path->funciona){
-			path->fluxo = (gerad->recurso_produzido)*(path->capacidade_max);
-			path->fluxo = (float) (path->fluxo)/(gerad->total);
+			path->fluxo = (path->rel_flow) * (rec_disp);
+			
 			
 			if(path->fluxo > path->capacidade_max){
 				sobra += path->fluxo - path->capacidade_max;
 				path->fluxo = path->capacidade_max;
 			}
+			
+		assert(path->fluxo <= path->capacidade_max);
+		
+			if(path->fluxo == path->capacidade_max)
+				gerad->cheio++;
 		}
+		else	path->fluxo = 0;
+		
 		path = path->irmao;
 	}
 	
@@ -132,22 +156,44 @@ int Calcula_Fluxo(Gerador *gerad){
 void Gerencia_Sobra(Gerador *gerad){
 	
 	assert(gerad->sobra != 0);
+	assert(gerad->works >= 0);
+	assert(gerad->cheio >= 0);
 	
 	Interc *path = NULL;
+	int sobra;
 	
-	if(gerad->saida == 1)
+	
+	if((gerad->works - gerad->cheio) == 0)
 		return;
 	else {
-		
-		path = gerad->prim;
-		while(path != NULL){
+		while(((gerad->works - gerad->cheio) == 0) && (gerad->total != 0)){
+			
+			if(((gerad->works - gerad->cheio) == 1)){
+				
+				
+				
+			}
 			
 			
+			sobra = 0;
+			gerad->total = Calcula_Cap_Total(gerad->prim);
+			Calcula_Rel_Flow(gerad);
+			path = gerad->prim;
+			while(path != NULL){
+				
+				if((path->funciona) && (path->fluxo < path->capacidade_max))
+					path->fluxo += (path->rel_flow) * (gerad->sobra);
+				
+				if(path->fluxo > path->capacidade_max){
+					sobra += path->fluxo - path->capacidade_max;
+					path->fluxo = path->capacidade_max;
+				}
+				
+				path = path->irmao;
+			}
 			
-			path = path->irmao;
+			gerad->sobra = sobra;
 		}
-		
-		
 	}
 	
 	
@@ -174,23 +220,12 @@ void Distribui_Recursos0(Listas *inicio){
 		
 		//Distribui recursos;
 		gerad->sobra = Calcula_Fluxo(gerad);
+		Calcula_Rel_Flow(gerad);
 		
 		//Gerencia sobra (?)
+		if(gerad->sobra > 0)
+			Gerencia_Sobra(gerad);
 		
-//		if(gerad->sobra){
-//			
-//			
-//			
-//			path = gerad->prim;
-//			while(path != NULL){
-//				
-//				if((path->fluxo < path->capacidade_max) && (path->funciona)){
-////					path->fluxo += 
-//				}
-//				
-//				path = path->irmao;
-//			}
-//		}
 		
 		
 		gerad = gerad->prox;
