@@ -22,6 +22,7 @@ typedef struct gerador{
 	int saida;				//quantidade de interc. que saem do gerador;
 	int sobra;				//quantidade de rec. que sobra;
 	int works;				//n° de interc. funcionando;
+	int cheio;				//n° de interc. lotadas;
 	struct interc *prim;	//interc. que saem do mesmo gerador;
 } Gerador;
 
@@ -41,6 +42,7 @@ typedef struct interc{
 	char vaic;
 	
 	int fluxo;				//quantidade de recursos que passa pela interc.
+	float rel_flow;			//fluxo relativo da interc.
 	int funciona;			//variavel booleana.
 	struct interc *irmao;	//interc. que saem do mesmo lugar.
 } Interc;
@@ -54,6 +56,7 @@ typedef struct adapter{
 	int saida;				//quantidade de interc. que saem do adaptador;
 	int sobra;				//quantidade de rec. que sobra;
 	int works;				//n° de interc. funcionando;
+	int cheio;				//n° de interc. lotadas;
 	struct interc *prim;	//interc. que saem do mesmo adaptador;
 } Adapter;
 
