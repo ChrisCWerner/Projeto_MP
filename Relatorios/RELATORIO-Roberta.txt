@@ -1,0 +1,15 @@
+13/11/2015 | 3 horas | redigir casos de teste |
+
+Foi criada uma rotina de testes, utilizando o Gtest, para testar as funções recem criadas:
+	- Inicializa
+	- Le_arquivo
+	- Insere Listas
+	- Destroi Listas
+	- Localiza caminhos
+
+13/11/2015 | 30 min | realizar os testes |
+
+O módulo do teste, utilizando o Gtest foi compilado com o makefile.
+
+13/11/2015 | 30 min | Rodar os CPPCheck e retirar warnings |
+13/11/2015 | 20 min | instrumentar via gcov		   |
