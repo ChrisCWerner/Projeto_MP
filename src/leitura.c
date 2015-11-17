@@ -3,10 +3,19 @@
 #include "leitura.h"
 #include <assert.h>
 
+Listas *Inicializa(void){
+	Listas *sts = (Listas *) malloc(sizeof(Listas));
+	sts->p_cidade = NULL;
+	sts->p_gerador = NULL;
+	sts->p_interc = NULL;
+	sts->p_adapter = NULL;
+	
+	return sts;
+}
+
 listas *Le_Arquivo(FILE *fp){
 	
 	assert(fp != NULL);
-	
 	
 	Listas *sts = NULL;
 	Cidade *cidade = NULL;
@@ -16,11 +25,7 @@ listas *Le_Arquivo(FILE *fp){
 	char c;
 	
 	
-	sts = (Listas *) malloc(sizeof(Listas));
-	sts->p_cidade = NULL;
-	sts->p_gerador = NULL;
-	sts->p_interc = NULL;
-	sts->p_adapter = NULL;
+	sts = Inicializa();
 	
 	
 	while((c = getc(fp)) != EOF){
@@ -94,18 +99,31 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 		Gerador *novo_elem2 = (Gerador *) elemento;
 		novo_elem2->prox = top->p_gerador;
 		top->p_gerador = novo_elem2;
+		
+		novo_elem2->saida = 0;
+		novo_elem2->total = 0;
+		novo_elem2->prim = NULL;
 	}
 	else if(tipo_elemento == 'I'){
 		
 		Interc *novo_elem3 = (Interc *) elemento;
 		novo_elem3->prox = top->p_interc;
 		top->p_interc = novo_elem3;
+		
+		novo_elem3->fluxo = 0;
+//		novo_elem3->rel_flow = 0;
+		novo_elem3->funciona = 1;
+		novo_elem3->irmao = NULL;
 	}
 	else if(tipo_elemento == 'A'){
 		
 		Adapter *novo_elem4 = (Adapter *) elemento;
 		novo_elem4->prox = top->p_adapter;
 		top->p_adapter = novo_elem4;
+		
+		novo_elem4->fluxo = 0;
+		novo_elem4->saida = 0;
+		novo_elem4->prim = NULL;
 	}
 }
 
@@ -142,6 +160,8 @@ void Imprime(Listas *inicio){
 		printf("\t Posicao: (%d, %d)\n", aux2->pos_x, aux2->pos_y);
 		printf("\t Recurso produzido: %d\n", aux2->recurso_produzido);
 		printf("\t Custo do gerador: %d\n\n", aux2->custo_gerador);
+		
+		printf("\t Quantidade de caminhos de saida: %d\n\n", aux2->saida);
 		aux2 = aux2->prox;
 	}
 	
@@ -156,6 +176,8 @@ void Imprime(Listas *inicio){
 		printf("\t Chance de falha: %.2f\n", aux3->chance_falha);
 		printf("\t Tempo de conserto: %d\n", aux3->tempo_conserto);
 		printf("\t Custo do conserto: %d\n\n", aux3->custo_conserto);
+		
+		printf("\t Fluxo de recursos: %d\n\n", aux3->fluxo);
 		
 		if(aux3->vemc == 'C'){
 			v_cidade = (Cidade *) aux3->vem;
@@ -191,7 +213,10 @@ void Imprime(Listas *inicio){
 	aux4 = inicio->p_adapter;
 	while(aux4 != NULL){
 		printf("  %s: \n", aux4->nome_adapter);
-		printf("\t Posicao: (%d, %d)\n", aux4->pos_x, aux4->pos_y);
+		printf("\t Posicao: (%d, %d)\n\n", aux4->pos_x, aux4->pos_y);
+		
+		printf("\t Fluxo de recursos: %d\n", aux4->fluxo);
+		printf("\t Quantidade de caminhos de saida: %d\n\n", aux4->saida);
 		aux4 = aux4->prox;
 	}
 	

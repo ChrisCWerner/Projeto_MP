@@ -31,3 +31,8 @@
 	* Problemas com a função 'Localiza_Paths';
 	* Término da função 'Localiza_Paths', que integra a rede;
 	* Pequenos ajustes no código.
+
+19:08 16/11/2015 | 3:41 | Codificar módulos
+	* Alteração da função 'Localiza_Paths' para complementar código;
+	* Codificação da função 'Distribui_Recursos0' (ex-'Distribui_G_A);
+	* Pequenos ajustes no código.

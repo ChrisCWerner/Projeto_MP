@@ -12,11 +12,13 @@ int main(){
 	fclose(fp);
 	
 	Localiza_Paths(inicio);
+	Distribui_Recursos0(inicio);
 	
 	Imprime(inicio);
 	
 	Destroi(inicio);
 	
+	printf("Pressione Enter para sair...");
 	getchar();
 	return 0;
 }
