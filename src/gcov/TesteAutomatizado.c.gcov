@@ -1,0 +1,124 @@
+        -:    0:Source:TesteAutomatizado.c
+        -:    0:Graph:TesteAutomatizado.gcno
+        -:    0:Data:TesteAutomatizado.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "funcoes.h"
+        -:    2:#include "gtest/gtest.h"
+        -:    3:#include <limits.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include <stdlib.h>
+        -:    6:
+        -:    7:Listas *sts = NULL;
+        -:    8:Listas *inicio = NULL;
+        -:    9:Cidade *cidade = NULL;
+        -:   10:Gerador *gerador = NULL;
+        -:   11:Interc *interc = NULL;
+        -:   12:Adapter *adaptador = NULL;
+        -:   13:
+        5:   14:TEST(Alocando_as_Estruturas, Inicializa){
+        -:   15:
+        1:   16:	sts = inicializa ();
+        1:   17:	ASSERT_EQ(NULL, sts->p_cidade);
+        1:   18:	ASSERT_EQ(NULL, sts->p_gerador);
+        1:   19:	ASSERT_EQ(NULL, sts->p_interc);
+        1:   20:	ASSERT_EQ(NULL, sts->p_adapter);
+        -:   21:}
+        -:   22:
+        5:   23:TEST(Inseri_na_Lista_Cidade, Cidade){
+        1:   24:	cidade = (Cidade *) malloc(sizeof(Cidade));
+        1:   25:	strcpy(cidade->nome_cidade, "A_City");
+        1:   26:	cidade->pos_x = 20;
+        1:   27:	cidade->pos_y = 15;
+        1:   28:	cidade->recurso_necessario = 100;
+        1:   29:	Insere_Lista('C', sts, cidade);
+        1:   30:	EXPECT_STREQ("A_City", sts->p_cidade->nome_cidade);
+        1:   31:	EXPECT_EQ(20, sts->p_cidade->pos_x);
+        1:   32:	EXPECT_EQ(15,sts->p_cidade->pos_y);
+        1:   33:}
+        -:   34:
+        5:   35:TEST(Inseri_na_Lista_Gerador, Gerador){
+        1:   36:	gerador = (Gerador *) malloc(sizeof(Gerador));
+        1:   37:	strcpy(gerador->nome_gerador, "A_Gen");
+        1:   38:	gerador->pos_x = 7;
+        1:   39:	gerador->pos_y = 48;
+        1:   40:	gerador->recurso_produzido = 110;
+        1:   41:	gerador->custo_gerador = 1000;
+        1:   42:	Insere_Lista('G', sts, gerador);
+        1:   43:	EXPECT_STREQ("A_Gen", sts->p_gerador->nome_gerador);
+        1:   44:	EXPECT_EQ(07, sts->p_gerador->pos_x);
+        1:   45:	EXPECT_EQ(48, sts->p_gerador->pos_y);
+        1:   46:	EXPECT_EQ(110, sts->p_gerador->recurso_produzido);
+        1:   47:	EXPECT_EQ(1000, sts->p_gerador->custo_gerador);
+        1:   48:}
+        -:   49:
+        5:   50:TEST(Inseri_na_Lista_Interconexao, Interconexao){
+        1:   51:	interc = (Interc *) malloc(sizeof(Interc));
+        1:   52:	strcpy(interc->nome_interc, "A_Path");
+        1:   53:	interc->pos_inic_x = 07;
+        1:   54:	interc->pos_inic_y = 48;
+        1:   55:	interc->pos_final_x = 21;
+        1:   56:	interc->pos_final_y = 40;
+        1:   57:	interc->capacidade_max = 140;
+        1:   58:	interc->chance_falha = 0.1;
+        1:   59:	interc->tempo_conserto = 14;
+        1:   60:	interc->custo_conserto = 20;
+        1:   61:	Insere_Lista('I', sts, interc);
+        1:   62:	EXPECT_STREQ("A_Path", sts->p_interc->nome_interc);
+        1:   63:	EXPECT_EQ(07,  sts->p_interc->pos_inic_x);
+        1:   64:	EXPECT_EQ(48,  sts->p_interc->pos_inic_y);
+        1:   65:	EXPECT_EQ(21,  sts->p_interc->pos_final_x);
+        1:   66:	EXPECT_EQ(40, sts->p_interc->pos_final_y);
+        1:   67:	EXPECT_EQ(140, sts->p_interc->capacidade_max);
+        1:   68:	EXPECT_EQ(0.1*10, 10*sts->p_interc->chance_falha);
+        1:   69:	EXPECT_EQ(14,  sts->p_interc->tempo_conserto);
+        1:   70:	EXPECT_EQ(20,  sts->p_interc->custo_conserto);
+        -:   71:	
+        1:   72:}
+        -:   73:
+        5:   74:TEST(Inseri_na_Lista_Adaptador, Adaptador){
+        1:   75:	adaptador = (Adapter *) malloc(sizeof(Adapter));
+        1:   76:	strcpy(adaptador->nome_adapter, "A_dapt");
+        1:   77:	adaptador->pos_x = 21;
+        1:   78:	adaptador->pos_y = 40;
+        1:   79:	Insere_Lista('A', sts, adaptador);
+        1:   80:	EXPECT_STREQ("A_dapt", sts->p_adapter->nome_adapter);
+        1:   81:	EXPECT_EQ(21,  sts->p_adapter->pos_x);
+        1:   82:	EXPECT_EQ(40,  sts->p_adapter->pos_y);
+        1:   83:}
+        -:   84:
+        5:   85:TEST(Localiza_caminhos, localizar){
+        1:   86:	Localiza_Paths(sts);
+        1:   87:	Gerador* aux1 = (Gerador*)sts->p_interc->vem;
+        1:   88:	Adapter* aux2 = (Adapter*)sts->p_interc->vai;
+        1:   89:	EXPECT_STREQ("A_Gen", aux1->nome_gerador);
+        1:   90:	EXPECT_EQ('G',  sts->p_interc->vemc);
+        1:   91:	EXPECT_STREQ("A_dapt", aux2->nome_adapter);
+        1:   92:	EXPECT_EQ('A',  sts->p_interc->vaic);
+        1:   93:}
+        -:   94:
+        5:   95:TEST(Destroi_Listas, Destruir){
+        1:   96:	sts = Destroi(sts);
+        1:   97:	EXPECT_EQ(NULL, sts->p_cidade);
+        1:   98:	EXPECT_EQ(NULL, sts->p_gerador);
+        1:   99:	EXPECT_EQ(NULL, sts->p_interc);
+        1:  100:	EXPECT_EQ(NULL, sts->p_adapter);
+        1:  101:}
+        -:  102:
+        5:  103:TEST(Leitura_do_arquivo_de_entrada, Leitura){
+        1:  104:	FILE *fp = fopen("Arquivo.txt", "r");
+        2:  105:	ASSERT_EQ(NULL, inicio);
+        1:  106:	inicio = Le_Arquivo(fp);
+        1:  107:	fclose(fp);
+        1:  108:	Localiza_Paths(inicio);
+        1:  109:	inicio = Destroi(inicio);
+        1:  110:	EXPECT_EQ(NULL, inicio->p_cidade);
+        1:  111:	EXPECT_EQ(NULL, inicio->p_gerador);
+        1:  112:	EXPECT_EQ(NULL, inicio->p_interc);
+        1:  113:	EXPECT_EQ(NULL, inicio->p_adapter);
+        -:  114:}
+        -:  115:
+        1:  116:int main(int argc, char **argv) {
+        1:  117:        ::testing::InitGoogleTest( &argc, argv );
+        1:  118:        return RUN_ALL_TESTS();
+        3:  119:}

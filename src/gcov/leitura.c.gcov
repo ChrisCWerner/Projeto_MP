@@ -1,0 +1,249 @@
+        -:    0:Source:leitura.c
+        -:    0:Graph:leitura.gcno
+        -:    0:Data:leitura.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1://Arquivo de funcoes para leitura de dados
+        -:    2:
+        -:    3:#include "leitura.h"
+        -:    4:#include <assert.h>
+        -:    5:
+        2:    6:Listas* inicializa(void) {
+        2:    7:	Listas* sts = (Listas *) malloc(sizeof(Listas));
+        2:    8:	sts->p_cidade = NULL;
+        2:    9:	sts->p_gerador = NULL;
+        2:   10:	sts->p_interc = NULL;
+        2:   11:	sts->p_adapter = NULL;
+        2:   12:	return sts;
+        -:   13:}
+        -:   14:
+        1:   15:Listas *Le_Arquivo(FILE *fp){
+        -:   16:	
+        1:   17:	assert(fp != NULL);
+        -:   18:	
+        -:   19:	
+        1:   20:	Listas *sts = NULL;
+        1:   21:	Cidade *cidade = NULL;
+        1:   22:	Gerador *gerador = NULL;
+        1:   23:	Interc *interc = NULL;
+        1:   24:	Adapter *adapter = NULL;
+        -:   25:	char c;
+        -:   26:	
+        -:   27:	
+        1:   28:	sts = inicializa();
+        -:   29:	
+        -:   30:	
+       63:   31:	while((c = getc(fp)) != EOF){
+        -:   32:		
+       61:   33:		if(c == 'C'){
+        3:   34:			cidade = (Cidade *) malloc(sizeof(Cidade));
+        -:   35:			
+        3:   36:			fscanf(fp, "%s", cidade->nome_cidade);
+        3:   37:			fscanf(fp, "%d", &(cidade->pos_x));
+        3:   38:			fscanf(fp, "%d", &(cidade->pos_y));
+        3:   39:			fscanf(fp, "%d", &(cidade->recurso_necessario));
+        -:   40:			
+        3:   41:			Insere_Lista('C', sts, cidade);
+        -:   42:		}
+       58:   43:		else if(c == 'G'){
+        3:   44:			gerador = (Gerador *) malloc(sizeof(Gerador));
+        -:   45:			
+        3:   46:			fscanf(fp, "%s", gerador->nome_gerador);
+        3:   47:			fscanf(fp, "%d", &(gerador->pos_x));
+        3:   48:			fscanf(fp, "%d", &(gerador->pos_y));
+        3:   49:			fscanf(fp, "%d", &(gerador->recurso_produzido));
+        3:   50:			fscanf(fp, "%d", &(gerador->custo_gerador));
+        -:   51:			
+        3:   52:			Insere_Lista('G', sts, gerador);
+        -:   53:		}
+       55:   54:		else if(c == 'I'){
+       10:   55:			interc = (Interc *) malloc(sizeof(Interc));
+        -:   56:			
+       10:   57:			fscanf(fp, "%s", interc->nome_interc);
+       10:   58:			fscanf(fp, "%d", &(interc->pos_inic_x));
+       10:   59:			fscanf(fp, "%d", &(interc->pos_inic_y));
+       10:   60:			fscanf(fp, "%d", &(interc->pos_final_x));
+       10:   61:			fscanf(fp, "%d", &(interc->pos_final_y));
+       10:   62:			fscanf(fp, "%d", &(interc->capacidade_max));
+       10:   63:			fscanf(fp, "%f", &(interc->chance_falha));
+       10:   64:			fscanf(fp, "%d", &(interc->tempo_conserto));
+       10:   65:			fscanf(fp, "%d", &(interc->custo_conserto));
+        -:   66:			
+       10:   67:			Insere_Lista('I', sts, interc);
+        -:   68:		}
+       45:   69:		else if(c == 'A'){
+        3:   70:			adapter = (Adapter *) malloc(sizeof(Adapter));
+        -:   71:			
+        3:   72:			fscanf(fp, "%s", adapter->nome_adapter);
+        3:   73:			fscanf(fp, "%d", &(adapter->pos_x));
+        3:   74:			fscanf(fp, "%d", &(adapter->pos_y));
+        -:   75:			
+        3:   76:			Insere_Lista('A', sts, adapter);
+        -:   77:		}
+        -:   78:	}
+        -:   79:	
+        1:   80:	return sts;
+        -:   81:}
+        -:   82:
+       23:   83:void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
+        -:   84:	
+       23:   85:	assert(top != NULL);
+       23:   86:	assert(elemento != NULL);
+       19:   87:	assert((tipo_elemento == 'C') || (tipo_elemento == 'G') || \
+       23:   88:		   (tipo_elemento == 'I') || (tipo_elemento == 'A'));
+        -:   89:	
+        -:   90:	
+       23:   91:	if(tipo_elemento == 'C'){
+        -:   92:		
+        4:   93:		Cidade *novo_elem1 = (Cidade *) elemento;
+        4:   94:		novo_elem1->prox = top->p_cidade;
+        4:   95:		top->p_cidade = novo_elem1;
+        -:   96:	}
+       19:   97:	else if(tipo_elemento == 'G'){
+        -:   98:		
+        4:   99:		Gerador *novo_elem2 = (Gerador *) elemento;
+        4:  100:		novo_elem2->prox = top->p_gerador;
+        4:  101:		top->p_gerador = novo_elem2;
+        -:  102:	}
+       15:  103:	else if(tipo_elemento == 'I'){
+        -:  104:		
+       11:  105:		Interc *novo_elem3 = (Interc *) elemento;
+       11:  106:		novo_elem3->prox = top->p_interc;
+       11:  107:		top->p_interc = novo_elem3;
+        -:  108:	}
+        4:  109:	else if(tipo_elemento == 'A'){
+        -:  110:		
+        4:  111:		Adapter *novo_elem4 = (Adapter *) elemento;
+        4:  112:		novo_elem4->prox = top->p_adapter;
+        4:  113:		top->p_adapter = novo_elem4;
+        -:  114:	}
+       23:  115:}
+        -:  116:
+    #####:  117:void Imprime(Listas *inicio){
+        -:  118:	
+    #####:  119:	assert(inicio != NULL);
+    #####:  120:	assert(inicio->p_cidade != NULL);
+    #####:  121:	assert(inicio->p_gerador != NULL);
+    #####:  122:	assert(inicio->p_interc != NULL);
+    #####:  123:	assert(inicio->p_adapter != NULL);
+        -:  124:	
+        -:  125:	
+    #####:  126:	Cidade *aux1 = NULL, *v_cidade;
+    #####:  127:	Gerador *aux2 = NULL, *v_gerador;
+    #####:  128:	Interc *aux3 = NULL;
+    #####:  129:	Adapter *aux4 = NULL, *v_adapter;
+        -:  130:	
+        -:  131:	
+    #####:  132:	printf("\nCidades: \n");
+        -:  133:	
+    #####:  134:	aux1 = inicio->p_cidade;
+    #####:  135:	while(aux1 != NULL){
+    #####:  136:		printf("  %s: \n", aux1->nome_cidade);
+    #####:  137:		printf("\t Posicao: (%d, %d)\n", aux1->pos_x, aux1->pos_y);
+    #####:  138:		printf("\t Recursos necessarios: %d\n\n", aux1->recurso_necessario);
+    #####:  139:		aux1 = aux1->prox;
+        -:  140:	}
+        -:  141:	
+    #####:  142:	printf("\nGeradores: \n");
+        -:  143:	
+    #####:  144:	aux2 = inicio->p_gerador;
+    #####:  145:	while(aux2 != NULL){
+    #####:  146:		printf("  %s: \n", aux2->nome_gerador);
+    #####:  147:		printf("\t Posicao: (%d, %d)\n", aux2->pos_x, aux2->pos_y);
+    #####:  148:		printf("\t Recurso produzido: %d\n", aux2->recurso_produzido);
+    #####:  149:		printf("\t Custo do gerador: %d\n\n", aux2->custo_gerador);
+    #####:  150:		aux2 = aux2->prox;
+        -:  151:	}
+        -:  152:	
+    #####:  153:	printf("\nInterconexoes: \n");
+        -:  154:	
+    #####:  155:	aux3 = inicio->p_interc;
+    #####:  156:	while(aux3 != NULL){
+    #####:  157:		printf("  %s: \n", aux3->nome_interc);
+    #####:  158:		printf("\t Posicao inicial: (%d, %d)\n", aux3->pos_inic_x, aux3->pos_inic_y);
+    #####:  159:		printf("\t Posicao final: (%d, %d)\n", aux3->pos_final_x, aux3->pos_final_y);
+    #####:  160:		printf("\t Capacidade maxima: %d \n", aux3->capacidade_max);
+    #####:  161:		printf("\t Chance de falha: %.2f\n", aux3->chance_falha);
+    #####:  162:		printf("\t Tempo de conserto: %d\n", aux3->tempo_conserto);
+    #####:  163:		printf("\t Custo do conserto: %d\n\n", aux3->custo_conserto);
+        -:  164:		
+    #####:  165:		if(aux3->vemc == 'C'){
+    #####:  166:			v_cidade = (Cidade *) aux3->vem;
+    #####:  167:			printf("\t  Vem de: \t%s\n", v_cidade->nome_cidade);
+        -:  168:		}
+    #####:  169:		else if(aux3->vemc == 'G'){
+    #####:  170:			v_gerador = (Gerador *) aux3->vem;
+    #####:  171:			printf("\t  Vem de: \t%s\n", v_gerador->nome_gerador);
+        -:  172:		}
+    #####:  173:		else if(aux3->vemc == 'A'){
+    #####:  174:			v_adapter = (Adapter *) aux3->vem;
+    #####:  175:			printf("\t  Vem de: \t%s\n", v_adapter->nome_adapter);
+        -:  176:		}
+        -:  177:		
+    #####:  178:		if(aux3->vaic == 'C'){
+    #####:  179:			v_cidade = (Cidade *) aux3->vai;
+    #####:  180:			printf("\t  Vai para: \t%s\n\n", v_cidade->nome_cidade);
+        -:  181:		}
+    #####:  182:		else if(aux3->vaic == 'G'){
+    #####:  183:			v_gerador = (Gerador *) aux3->vai;
+    #####:  184:			printf("\t  Vai para: \t%s\n\n", v_gerador->nome_gerador);
+        -:  185:		}
+    #####:  186:		else if(aux3->vaic == 'A'){
+    #####:  187:			v_adapter = (Adapter *) aux3->vai;
+    #####:  188:			printf("\t  Vai para: \t%s\n\n", v_adapter->nome_adapter);
+        -:  189:		}
+        -:  190:		
+    #####:  191:		aux3 = aux3->prox;
+        -:  192:	}
+        -:  193:	
+    #####:  194:	printf("\nAdaptadores: \n");
+        -:  195:	
+    #####:  196:	aux4 = inicio->p_adapter;
+    #####:  197:	while(aux4 != NULL){
+    #####:  198:		printf("  %s: \n", aux4->nome_adapter);
+    #####:  199:		printf("\t Posicao: (%d, %d)\n", aux4->pos_x, aux4->pos_y);
+    #####:  200:		aux4 = aux4->prox;
+        -:  201:	}
+        -:  202:	
+    #####:  203:	printf("\n\n");
+    #####:  204:}
+        -:  205:
+        2:  206:Listas* Destroi(Listas *inicio){
+        -:  207:	
+        2:  208:	assert(inicio != NULL);
+        2:  209:	assert(inicio->p_cidade != NULL);
+        2:  210:	assert(inicio->p_gerador != NULL);
+        2:  211:	assert(inicio->p_interc != NULL);
+        2:  212:	assert(inicio->p_adapter != NULL);
+        -:  213:	
+        -:  214:	
+        2:  215:	Cidade *aux1 = NULL;
+        2:  216:	Gerador *aux2 = NULL;
+        2:  217:	Interc *aux3 = NULL;
+        2:  218:	Adapter *aux4 = NULL;
+        -:  219:	
+        -:  220:	
+        8:  221:	while(inicio->p_cidade != NULL){
+        4:  222:		aux1 = inicio->p_cidade;
+        4:  223:		inicio->p_cidade = aux1->prox;
+        4:  224:		free(aux1);
+        -:  225:	}
+        8:  226:	while(inicio->p_gerador != NULL){
+        4:  227:		aux2 = inicio->p_gerador;
+        4:  228:		inicio->p_gerador = aux2->prox;
+        4:  229:		free(aux2);
+        -:  230:	}
+       15:  231:	while(inicio->p_interc != NULL){
+       11:  232:		aux3 = inicio->p_interc;
+       11:  233:		inicio->p_interc = aux3->prox;
+       11:  234:		free(aux3);
+        -:  235:	}
+        8:  236:	while(inicio->p_adapter != NULL){
+        4:  237:		aux4 = inicio->p_adapter;
+        4:  238:		inicio->p_adapter = aux4->prox;
+        4:  239:		free(aux4);
+        -:  240:	}
+        -:  241:	
+        2:  242:	return inicio;
+        -:  243:}
+        -:  244:

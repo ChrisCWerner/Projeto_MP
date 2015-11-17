@@ -1,8 +1,6 @@
 //Arquivo de header para leitura de dados
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 typedef struct cidade{
 	char nome_cidade[16];
@@ -17,10 +15,6 @@ typedef struct gerador{
 	int recurso_produzido;
 	int custo_gerador;
 	struct gerador *prox;
-	
-	int total;				//total de rec. que as interc. podem transportar;
-	int saida;				//quantidade de interc. que saem do gerador;
-	struct interc *prim;	//interc. que saem do mesmo gerador;
 } Gerador;
 
 typedef struct interc{
@@ -37,41 +31,31 @@ typedef struct interc{
 	char vemc;
 	void *vai;	//vai para ...
 	char vaic;
-	
-	int fluxo;				//quantidade de recursos que passa pela interc.
-//	float rel_flow;			//quantidade relativa de rec...
-	int funciona;			//variavel booleana.
-	struct interc *irmao;	//interc. que saem do mesmo lugar.
 } Interc;
 
 typedef struct adapter{
 	char nome_adapter[16];
 	int pos_x, pos_y;
 	struct adapter *prox;
-	
-	int fluxo;				//quantidade de recursos que passa pelo adaptador;
-	int saida;				//quantidade de interc. que saem do adaptador;
-	struct interc *prim;	//interc. que saem do mesmo adaptador;
 } Adapter;
 
 typedef struct listas{
-	cidade *p_cidade;
-	gerador *p_gerador;
-	interc *p_interc;
-	adapter *p_adapter;
+	Cidade *p_cidade;
+	Gerador *p_gerador;
+	Interc *p_interc;
+	Adapter *p_adapter;
 } Listas;
-
-
 
 //Funcoes
 
-Listas *Inicializa(void);
 
-Listas *Le_Arquivo(FILE *fp);
+Listas* inicializa(void);
 
-void Insere_Lista(char tipo_elemento, Listas *top, void *elemento);
+Listas* Le_Arquivo(FILE*);
 
-void Imprime(Listas *inicio);
+void Insere_Lista(char, Listas*, void*);
 
-void Destroi(Listas *inicio);
+void Imprime(Listas*);
+
+Listas* Destroi(Listas*);
 

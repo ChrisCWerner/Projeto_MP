@@ -5,8 +5,4 @@
 
 void Localiza_Paths(Listas *inicio);
 
-Interc *Insere_Irmao(Interc *novo_elem, Interc *top);
-
-void Atualiza_Paths(Interc *inicio);
-
-void Distribui_Recursos0(Listas *inicio);
+void Distribui_G_A(Gerador *gerad, Adapter *adapt, Listas *inicio);

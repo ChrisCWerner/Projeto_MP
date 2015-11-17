@@ -26,24 +26,30 @@ typedef struct interc{
 	int tempo_conserto;
 	int custo_conserto;
 	struct interc *prox;
+	
+	void *vem;	//vem de ...
+	char vemc;
+	void *vai;	//vai para ...
+	char vaic;
 } Interc;
 
-typedef struct adaptador{
-	char nome_adaptador[16];
+typedef struct adapter{
+	char nome_adapter[16];
 	int pos_x, pos_y;
-	struct adaptador *prox;
-} Adaptador;
+	struct adapter *prox;
+} Adapter;
 
 typedef struct listas{
 	Cidade *p_cidade;
 	Gerador *p_gerador;
 	Interc *p_interc;
-	Adaptador *p_adaptador;
+	Adapter *p_adapter;
 } Listas;
 
 //Funcoes
 
 
+Listas* inicializa(void);
 
 Listas* Le_Arquivo(FILE*);
 

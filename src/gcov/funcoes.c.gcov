@@ -1,0 +1,79 @@
+        -:    0:Source:funcoes.c
+        -:    0:Graph:funcoes.gcno
+        -:    0:Data:funcoes.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1://Arquivo de funcoes para funcoes principais
+        -:    2:
+        -:    3:#include "funcoes.h"
+        -:    4:#include <assert.h>
+        -:    5:
+        -:    6:
+        -:    7:
+        2:    8:void Localiza_Paths(Listas *inicio){
+        -:    9:	
+        2:   10:	assert(inicio != NULL);
+        -:   11:	
+        -:   12:	
+        -:   13:	Cidade *aux1;
+        -:   14:	Gerador *aux2;
+        -:   15:	Interc *aux3;
+        -:   16:	Adapter *aux4;
+        -:   17:	
+        -:   18:	
+        2:   19:	aux3 = inicio->p_interc;
+       15:   20:	while(aux3 != NULL){
+        -:   21:		
+       11:   22:		aux2 = inicio->p_gerador;
+       53:   23:		while(aux2 != NULL){
+        -:   24:			
+       31:   25:			if((aux3->pos_inic_x == aux2->pos_x) && (aux3->pos_inic_y == aux2->pos_y)){
+        5:   26:				aux3->vem = aux2;
+        5:   27:				aux3->vemc = 'G';
+        -:   28:			}
+        -:   29:			
+       31:   30:			aux2 = aux2->prox;
+        -:   31:		}
+       11:   32:		aux3 = aux3->prox;
+        -:   33:	}
+        -:   34:	
+        2:   35:	aux3 = inicio->p_interc;
+       15:   36:	while(aux3 != NULL){
+        -:   37:		
+       11:   38:		aux4 = inicio->p_adapter;
+       53:   39:		while(aux4 != NULL){
+        -:   40:			
+       31:   41:			if((aux3->pos_inic_x == aux4->pos_x) && (aux3->pos_inic_y == aux4->pos_y)){
+        6:   42:				aux3->vem = aux4;
+        6:   43:				aux3->vemc = 'A';
+        -:   44:			}
+       25:   45:			else if((aux3->pos_final_x == aux4->pos_x) && (aux3->pos_final_y == aux4->pos_y)){
+        5:   46:				aux3->vai = aux4;
+        5:   47:				aux3->vaic = 'A';
+        -:   48:			}
+        -:   49:			
+       31:   50:			aux4 = aux4->prox;
+        -:   51:		}
+       11:   52:		aux3 = aux3->prox;
+        -:   53:	}
+        -:   54:	
+        2:   55:	aux3 = inicio->p_interc;
+       15:   56:	while(aux3 != NULL){
+        -:   57:		
+       11:   58:		aux1 = inicio->p_cidade;
+       53:   59:		while(aux1 != NULL){
+        -:   60:			
+       31:   61:			if((aux3->pos_final_x == aux1->pos_x) && (aux3->pos_final_y == aux1->pos_y)){
+        6:   62:				aux3->vai = aux1;
+        6:   63:				aux3->vaic = 'C';
+        -:   64:			}
+        -:   65:			
+       31:   66:			aux1 = aux1->prox;
+        -:   67:		}
+       11:   68:		aux3 = aux3->prox;
+        -:   69:	}
+        2:   70:}
+        -:   71:
+        -:   72:
+        -:   73:
+        -:   74:
