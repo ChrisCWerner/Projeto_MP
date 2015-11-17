@@ -5,4 +5,14 @@
 
 void Localiza_Paths(Listas *inicio);
 
-void Distribui_G_A(Gerador *gerad, Adapter *adapt, Listas *inicio);
+Interc *Insere_Irmao(Interc *novo_elem, Interc *top);
+
+int Calcula_Cap_Total(Interc *inicio);
+
+int Calcula_Fluxo(Gerador *gerad);
+
+void Gerencia_Sobra(Gerador *gerad);
+
+void Distribui_Recursos0(Listas *inicio);
+
+void Atualiza_Paths(Interc *inicio);

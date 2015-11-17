@@ -32,7 +32,14 @@
 	* Término da função 'Localiza_Paths', que integra a rede;
 	* Pequenos ajustes no código.
 
-19:08 16/11/2015 | 3:41 | Codificar módulos
+19:08 16/11/2015 | 3:41 | Codificar módulos | Projetar
 	* Alteração da função 'Localiza_Paths' para complementar código;
 	* Codificação da função 'Distribui_Recursos0' (ex-'Distribui_G_A);
+	* Pequenos ajustes no código.
+
+10:25 17/11/2015 | 1:05 | Codificar módulos
+	* Modularização:
+		- Calcula_Cap_Total;
+		- Calcula_Fluxo;
+		- Gerencia_Sobra;
 	* Pequenos ajustes no código.

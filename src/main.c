@@ -16,7 +16,8 @@ int main(){
 	
 	Imprime(inicio);
 	
-	Destroi(inicio);
+	inicio = Destroi(inicio);
+	free(inicio);
 	
 	printf("Pressione Enter para sair...");
 	getchar();
