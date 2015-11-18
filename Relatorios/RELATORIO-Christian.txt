@@ -54,3 +54,9 @@
 		- Calcula_Rel_Flow;
 		- Fluxo_Adapt.
 	* Pequenos ajustes no código.
+
+15:52 18/11/2015 | 2:56 | Codificar módulos
+	* Todas as funções adaptadas para adaptadores;
+	* Agora as cidades recebem recursos;
+	* Modularizações...
+	* Pequenos ajustes no código.
