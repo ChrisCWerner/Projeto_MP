@@ -18,9 +18,9 @@ typedef struct gerador{
 	int custo_gerador;
 	struct gerador *prox;
 	
-	int total;				//total de rec. que as interc. podem transportar;
 	int saida;				//quantidade de interc. que saem do gerador;
 	int sobra;				//quantidade de rec. que sobra;
+	int total;				//total de rec. que as interc. podem transportar;
 	int works;				//n° de interc. funcionando;
 	int cheio;				//n° de interc. lotadas;
 	struct interc *prim;	//interc. que saem do mesmo gerador;
@@ -54,6 +54,7 @@ typedef struct adapter{
 	
 	int fluxo;				//quantidade de recursos que passa pelo adaptador;
 	int saida;				//quantidade de interc. que saem do adaptador;
+	int total;				//total de rec. que as interc. podem transportar;
 	int sobra;				//quantidade de rec. que sobra;
 	int works;				//n° de interc. funcionando;
 	int cheio;				//n° de interc. lotadas;

@@ -47,3 +47,11 @@
 16:33 17/11/2015 | 2:36 | Codificar módulos
 	* Desenvolvimento dos módulos;
 	* Pequenos ajustes no código.
+
+23:40 17/11/2015 |  | Codificar módulos
+
+	* Algumas funções adaptadas para receberem também adaptadores;
+	* Novas funções:
+		- Calcula_Rel_Flow;
+		- Fluxo_Adapt.
+	* Pequenos ajustes no código.

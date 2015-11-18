@@ -126,6 +126,7 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 		
 		novo_elem4->fluxo = 0;
 		novo_elem4->saida = 0;
+		novo_elem4->total = 0;
 		novo_elem4->sobra = 0;
 		novo_elem4->works = 0;
 		novo_elem4->cheio = 0;
@@ -167,9 +168,9 @@ void Imprime(Listas *inicio){
 		printf("\t Recurso produzido: %d\n", aux2->recurso_produzido);
 		printf("\t Custo do gerador: %d\n\n", aux2->custo_gerador);
 		
-		printf("\t Capacidade total de transporte: %d\n", aux2->total);
 		printf("\t Quantidade de caminhos de saida: %d\n", aux2->saida);
 		printf("\t Recursos desperdicados: %d\n", aux2->sobra);
+		printf("\t Capacidade total de transporte: %d\n", aux2->total);
 		printf("\t Total de saidas funcionando: %d\n", aux2->works);
 		printf("\t Total de saidas lotadas: %d\n\n", aux2->cheio);
 		aux2 = aux2->prox;
@@ -190,11 +191,8 @@ void Imprime(Listas *inicio){
 		printf("\t Fluxo de recursos: %d\n", aux3->fluxo);
 		printf("\t Fluxo relativo de recursos: %.2f\n\n", aux3->rel_flow);
 		
-		if(aux3->vemc == 'C'){
-			v_cidade = (Cidade *) aux3->vem;
-			printf("\t  Vem de: \t%s\n", v_cidade->nome_cidade);
-		}
-		else if(aux3->vemc == 'G'){
+		
+		if(aux3->vemc == 'G'){
 			v_gerador = (Gerador *) aux3->vem;
 			printf("\t  Vem de: \t%s\n", v_gerador->nome_gerador);
 		}
@@ -206,10 +204,6 @@ void Imprime(Listas *inicio){
 		if(aux3->vaic == 'C'){
 			v_cidade = (Cidade *) aux3->vai;
 			printf("\t  Vai para: \t%s\n\n", v_cidade->nome_cidade);
-		}
-		else if(aux3->vaic == 'G'){
-			v_gerador = (Gerador *) aux3->vai;
-			printf("\t  Vai para: \t%s\n\n", v_gerador->nome_gerador);
 		}
 		else if(aux3->vaic == 'A'){
 			v_adapter = (Adapter *) aux3->vai;
@@ -228,8 +222,10 @@ void Imprime(Listas *inicio){
 		
 		printf("\t Fluxo de recursos: %d\n", aux4->fluxo);
 		printf("\t Quantidade de caminhos de saida: %d\n", aux4->saida);
+		printf("\t Capacidade total de transporte: %d\n", aux4->total);
 		printf("\t Recursos desperdicados: %d\n", aux4->sobra);
-		printf("\t Total de saidas funcionando: %d\n\n", aux4->works);
+		printf("\t Total de saidas funcionando: %d\n", aux4->works);
+		printf("\t Total de saidas lotadas: %d\n\n", aux4->cheio);
 		aux4 = aux4->prox;
 	}
 	
