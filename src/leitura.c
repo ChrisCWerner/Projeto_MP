@@ -3,6 +3,18 @@
 #include "leitura.h"
 #include <assert.h>
 
+/***********************************************************************************
+* Nome da função: Inicializa;
+* Descrição: Inicializa a estrutura que contem as listas de cada tipo de dado;
+* Assertivas de Entrada: 
+*			nenhum
+* Assertivas de Saída:
+*			Listas criadas:
+*			Listas->p_cidade = NULL;
+*			Listas->p_gerador = NULL;
+*			Listas->p_interc = NULL;
+*			Listas->p_adapter = NULL;
+*************************************************************************************/
 Listas *Inicializa(void){
 	Listas *sts = (Listas *) malloc(sizeof(Listas));
 	sts->p_cidade = NULL;
@@ -12,8 +24,19 @@ Listas *Inicializa(void){
 	
 	return sts;
 }
-
-listas *Le_Arquivo(FILE *fp){
+/**********************************************************************************************************************************
+* Nome da função: Le_Arquivo;
+* Descrição: Le o arquivo de entrada e insere os tipos de informações nas respectivas listas.
+* Assertivas de Entrada: 
+*			FILE *fp != NULL (ponteiro para arquivo de entrada)
+* Assertivas de Saída:
+*			Listas criadas:
+*			Listas->p_cidade != NULL;
+*			Listas->p_gerador != NULL;
+*			Listas->p_interc != NULL;
+*			Listas->p_adapter != NULL;
+*************************************************************************************************************************************/
+Listas *Le_Arquivo(FILE *fp){
 	
 	assert(fp != NULL);
 	
@@ -79,7 +102,16 @@ listas *Le_Arquivo(FILE *fp){
 	
 	return sts;
 }
-
+/**************************************************************************************************************************
+* Nome da função: Insere_Lista;
+* Descrição: Insere o tipo de informação lida, a partir da função 'Le_arquivo', para o tipo correspondente das Listas.
+* Assertivas de Entrada: 
+*			char tipo_elemento;
+*			Listas (previamente alocada, podendo ou não estarem vazias)
+*			void *elemento (ponteiro para o elemento a ser inserido)
+* Assertivas de Saída:
+*			nenhuma
+*****************************************************************************************************************************/
 void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 	
 	assert(top != NULL);
@@ -135,7 +167,19 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 		novo_elem4->prim = NULL;
 	}
 }
-
+/*********************************************************************************************************************************
+* Nome da função: Imprime;
+* Descrição: Imprime a estrutura que armazena cada tipo de lista, ou seja, vai imprimir cada uma das listas de cidades, geradores,
+	     adaptadores e interconexões.
+* Assertivas de Entrada:
+*			Listas criadas:
+*			Listas->p_cidade != NULL;
+*			Listas->p_gerador != NULL;
+*			Listas->p_interc != NULL;
+*			Listas->p_adapter != NULL;
+* Assertivas de Saída:
+*			nenhuma
+***********************************************************************************************************************************/
 void Imprime(Listas *inicio){
 	
 	assert(inicio != NULL);
@@ -238,7 +282,18 @@ void Imprime(Listas *inicio){
 	
 	printf("\n\n");
 }
-
+/**********************************************************************************************************
+* Nome da função: Destroi;
+* Descrição: Desaloca a posição de memória ocupada pelas listas.
+* Assertivas de Entrada:
+*			Listas criadas:
+*			Listas->p_cidade != NULL;
+*			Listas->p_gerador != NULL;
+*			Listas->p_interc != NULL;
+*			Listas->p_adapter != NULL;
+* Assertivas de Saída:
+*			Listas = NULL;
+***********************************************************************************************************/
 Listas *Destroi(Listas *inicio){
 	
 	assert(inicio != NULL);
@@ -277,5 +332,4 @@ Listas *Destroi(Listas *inicio){
 	
 	return inicio;
 }
-
 
