@@ -93,6 +93,8 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 		Cidade *novo_elem1 = (Cidade *) elemento;
 		novo_elem1->prox = top->p_cidade;
 		top->p_cidade = novo_elem1;
+		
+		novo_elem1->fluxo = 0;
 	}
 	else if(tipo_elemento == 'G'){
 		
@@ -156,9 +158,12 @@ void Imprime(Listas *inicio){
 		printf("  %s: \n", aux1->nome_cidade);
 		printf("\t Posicao: (%d, %d)\n", aux1->pos_x, aux1->pos_y);
 		printf("\t Recursos necessarios: %d\n\n", aux1->recurso_necessario);
+		
+		printf("\t Recursos recebidos: %d\n\n", aux1->fluxo);
 		aux1 = aux1->prox;
 	}
 	
+	getchar();
 	printf("\nGeradores: \n");
 	
 	aux2 = inicio->p_gerador;
@@ -176,6 +181,7 @@ void Imprime(Listas *inicio){
 		aux2 = aux2->prox;
 	}
 	
+	getchar();
 	printf("\nInterconexoes: \n");
 	
 	aux3 = inicio->p_interc;
@@ -213,6 +219,7 @@ void Imprime(Listas *inicio){
 		aux3 = aux3->prox;
 	}
 	
+	getchar();
 	printf("\nAdaptadores: \n");
 	
 	aux4 = inicio->p_adapter;

@@ -4,7 +4,7 @@
 
 int main(){
 	
-	FILE *fp = fopen("Arquivo.txt", "r");
+	FILE *fp = fopen("Arquivo2.txt", "r");
 	
 	Listas *inicio = NULL;
 	

@@ -9,6 +9,8 @@ typedef struct cidade{
 	int pos_x, pos_y;
 	int recurso_necessario;
 	struct cidade *prox;
+	
+	int fluxo;		//Quantidade de rec. que chegam na cidade;
 } Cidade;
 
 typedef struct gerador{
