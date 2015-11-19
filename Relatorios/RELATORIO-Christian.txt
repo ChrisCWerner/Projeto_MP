@@ -60,3 +60,8 @@
 	* Agora as cidades recebem recursos;
 	* Modularizações...
 	* Pequenos ajustes no código.
+
+22:07 18/11/2015 | 1:46 | Codificar módulos
+	* Funções de falha;
+	* Modularização;
+	* Pequenos ajustes no código.
