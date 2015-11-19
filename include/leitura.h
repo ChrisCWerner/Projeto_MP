@@ -66,8 +66,13 @@ typedef struct adapter{
 } Adapter;
 
 typedef struct record{
+	int numerofalhas;
 	int tempo_de_falha;
 	int custo_total;
+	int tempo_total;
+	int total_geradores, total_cidades;
+	int energia_total_geradores, energia_gasta_cidades;
+	int tamanho_interc;
 } Record;
 
 typedef struct listas{

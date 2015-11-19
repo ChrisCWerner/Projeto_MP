@@ -1,11 +1,20 @@
 //Arquivo de funcoes para funcoes principais
 
 #include "funcoes.h"
+#include "math.h"
 
 Record *Inicializa_Record(void){
 	Record *rec = (Record *) malloc(sizeof(Record));
 	rec->custo_total = 0;
 	rec->tempo_de_falha = 0;
+	rec->total_geradores = 0;
+	rec->total_cidades = 0;
+	rec->energia_total_geradores = 0;
+	rec->energia_gasta_cidades = 0;
+	rec->tamanho_interc = 0;
+	rec->numerofalhas = 0;
+
+	return rec;
 }
 
 void Localiza_Paths(Listas *inicio){
@@ -179,7 +188,7 @@ void Gerencia_Sobra(void *inicio, char id){
 	Gerador *gerad = NULL;
 	Interc *path = NULL;
 	Adapter *adapt = NULL;
-	int sobra, sobra_saida, path_ncheio, total;
+	int sobra, sobra_saida, path_ncheio = 0, total;
 	
 	if(id == 'G'){
 		gerad = (Gerador *) inicio;
@@ -324,7 +333,7 @@ void Contabiliza_Falhas(Interc *inicio, Record *rec){
 	path = inicio;
 	while(path != NULL){
 		if(!path->funciona){
-			
+			rec->numerofalhas += 1;
 			rec->custo_total += path->custo_conserto;
 			rec->tempo_de_falha += path->tempo_conserto;
 			path->time_wrk = path->tempo_conserto;
@@ -383,5 +392,55 @@ void Distribui_Recursos(Listas *inicio){
 }
 
 
+
+void Relatorio(Listas *inicio, Record* rec,int tempo){
+	int custoaux = 0, cidades_sem_recurso = 0;
+	Cidade *aux1 = NULL;
+	Gerador *aux2 = NULL;
+	Interc *aux3 = NULL;
+	Adapter *aux4 = NULL;
+
+	aux1 = inicio->p_cidade;
+	aux2 = inicio->p_gerador;
+	aux3 = inicio->p_interc;
+
+	FILE* arq;
+	arq = fopen("Relatorio","w+");
+	
+	fprintf(arq, "Tempo total de simulação: %d\n", tempo);
+	while(aux2 != NULL){
+		rec->total_geradores += 1;
+		rec->energia_total_geradores += aux2->recurso_produzido;
+		custoaux += aux2->custo_gerador;
+		rec->custo_total += (custoaux*tempo);
+		aux2 = aux2->prox;
+	}
+	fprintf(arq, "Custo total da simulação: %d\n", rec->custo_total);
+	fprintf(arq, "Total de geradores: %d\n", rec->total_geradores);
+	fprintf(arq, "Energia total gerada: %d\n", rec->energia_total_geradores);
+
+	while(aux1 != NULL){
+		rec->total_cidades += 1;
+		rec->energia_gasta_cidades += aux1->fluxo;
+		aux1 = aux1->prox;
+	
+	}
+	fprintf(arq, "Energia total gasta pelas cidades: %d\n", rec->energia_gasta_cidades);
+
+	while(aux3 != NULL){
+		rec->tamanho_interc += sqrt(pow(aux3->pos_final_x - aux3->pos_inic_x,2) 
+					+ pow(aux3->pos_final_y - aux3->pos_inic_y,2));
+		aux3 = aux3->prox;
+	}
+	fprintf(arq, "Tamanho total das interconexões: %d\n", rec->tamanho_interc);
+	fprintf(arq, "Número de falhas nas interconexões: %d\n", rec->numerofalhas);
+	fprintf(arq, "Tempo que ficaram sem recurso: %d\n", rec->tempo_de_falha);
+	fprintf(arq, "Número de cidades que ficaram sem recurso necessário: \n");
+	fprintf(arq, "Tempo que ficaram sem recurso: \n");
+
+
+	fclose(arq);
+
+}
 
 

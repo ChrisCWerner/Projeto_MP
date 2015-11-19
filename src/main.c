@@ -4,7 +4,7 @@
 
 int main(){
 	
-	FILE *fp = fopen("Arquivo2.txt", "r");
+	FILE *fp = fopen("Arquivo.txt", "r");
 	
 	Listas *inicio = NULL;
 	
@@ -19,7 +19,10 @@ int main(){
 	Distribui_Recursos(inicio);
 	
 	Imprime(inicio);
-	
+	Relatorio(inicio,inicio->p_record,20);
+	getchar();
+
+
 	inicio = Destroi(inicio);
 	free(inicio);
 	
