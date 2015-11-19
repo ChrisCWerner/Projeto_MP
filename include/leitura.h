@@ -91,6 +91,7 @@ typedef struct listas{
 *			Listas->p_gerador = NULL;
 *			Listas->p_interc = NULL;
 *			Listas->p_adapter = NULL;
+*			Listas->p_record = NULL;
 *************************************************************************************/
 Listas *Inicializa(void);
 

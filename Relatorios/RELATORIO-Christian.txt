@@ -65,3 +65,6 @@
 	* Funções de falha;
 	* Modularização;
 	* Pequenos ajustes no código.
+
+10:32 19/11/2015 | 2:38 | Codificar módulos | Estudar
+	* Ajustes para fazer as funções correrem no tempo.
