@@ -1,12 +1,12 @@
 NOME = teste_automatizado
 
 CODIGO1 = leitura.c
-CODIGOT1 = TesteAutomatizado.c
+CODIGOT1 = main.c
 CODIGO2 = funcoes.c
 
 ARQUIVOS = $(CODIGO1) $(CODIGOT1) $(CODIGO2)
 
-OBJETOS = leitura.o TesteAutomatizado.o funcoes.o
+OBJETOS = leitura.o main.o funcoes.o
 
 DIRINCLUDE = -I ../include
 DIRLIB = -L ../lib

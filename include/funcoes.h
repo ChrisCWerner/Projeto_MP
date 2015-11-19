@@ -25,3 +25,5 @@ void Contabiliza_Falhas(Interc *inicio, Record *rec);
 void Maneja_Falhas(Interc *inicio);
 
 void Distribui_Recursos(Listas *inicio);
+
+void Relatorio(Listas *, Record* rec,int tempo);
