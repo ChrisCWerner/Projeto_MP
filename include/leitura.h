@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 typedef struct cidade{
 	char nome_cidade[16];
@@ -46,6 +47,7 @@ typedef struct interc{
 	int fluxo;				//quantidade de recursos que passa pela interc.
 	float rel_flow;			//fluxo relativo da interc.
 	int funciona;			//variavel booleana.
+	int time_wrk;			//tempo para voltar a funcionar.
 	struct interc *irmao;	//interc. que saem do mesmo lugar.
 } Interc;
 
@@ -63,11 +65,17 @@ typedef struct adapter{
 	struct interc *prim;	//interc. que saem do mesmo adaptador;
 } Adapter;
 
+typedef struct record{
+	int tempo_de_falha;
+	int custo_total;
+} Record;
+
 typedef struct listas{
 	Cidade *p_cidade;
 	Gerador *p_gerador;
 	Interc *p_interc;
 	Adapter *p_adapter;
+	Record *p_record;
 } Listas;
 
 

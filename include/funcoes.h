@@ -2,6 +2,7 @@
 
 #include "leitura.h"
 
+Record *Inicializa_Record(void);
 
 void Localiza_Paths(Listas *inicio);
 
@@ -17,6 +18,10 @@ void Gerencia_Sobra(void *inicio, char id);
 
 void Fluxo_Adapt(Interc *inicio);
 
-void Distribui_Recursos0(Listas *inicio);
+void Verifica_Falhas(Interc *inicio);
 
-void Atualiza_Paths(Interc *inicio);
+void Contabiliza_Falhas(Interc *inicio, Record *rec);
+
+void Maneja_Falhas(Interc *inicio);
+
+void Distribui_Recursos(Listas *inicio);

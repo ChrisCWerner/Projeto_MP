@@ -8,11 +8,15 @@ int main(){
 	
 	Listas *inicio = NULL;
 	
+	srand(1);
+	
 	inicio = Le_Arquivo(fp);
 	fclose(fp);
 	
+	inicio->p_record = Inicializa_Record();
+	
 	Localiza_Paths(inicio);
-	Distribui_Recursos0(inicio);
+	Distribui_Recursos(inicio);
 	
 	Imprime(inicio);
 	

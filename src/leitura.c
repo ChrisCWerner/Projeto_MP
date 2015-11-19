@@ -1,7 +1,6 @@
 //Arquivo de funcoes para leitura de dados
 
 #include "leitura.h"
-#include <assert.h>
 
 /***********************************************************************************
 * Nome da função: Inicializa;
@@ -21,6 +20,7 @@ Listas *Inicializa(void){
 	sts->p_gerador = NULL;
 	sts->p_interc = NULL;
 	sts->p_adapter = NULL;
+	sts->p_record = NULL;
 	
 	return sts;
 }
@@ -150,6 +150,7 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 		novo_elem3->fluxo = 0;
 		novo_elem3->rel_flow = 1;
 		novo_elem3->funciona = 1;
+		novo_elem3->time_wrk = 0;
 		novo_elem3->irmao = NULL;
 	}
 	else if(tipo_elemento == 'A'){
@@ -238,6 +239,7 @@ void Imprime(Listas *inicio){
 		printf("\t Tempo de conserto: %d\n", aux3->tempo_conserto);
 		printf("\t Custo do conserto: %d\n\n", aux3->custo_conserto);
 		
+		printf("\t Caminho funciona? %s", (aux3->funciona ? "Sim" : "Nao"));
 		printf("\t Fluxo de recursos: %d\n", aux3->fluxo);
 		printf("\t Fluxo relativo de recursos: %.2f\n\n", aux3->rel_flow);
 		
@@ -307,6 +309,7 @@ Listas *Destroi(Listas *inicio){
 	Gerador *aux2 = NULL;
 	Interc *aux3 = NULL;
 	Adapter *aux4 = NULL;
+	Record *aux5 = NULL;
 	
 	
 	while(inicio->p_cidade != NULL){
@@ -329,6 +332,8 @@ Listas *Destroi(Listas *inicio){
 		inicio->p_adapter = aux4->prox;
 		free(aux4);
 	}
+	aux5 = inicio->p_record;
+	free(aux5);
 	
 	return inicio;
 }

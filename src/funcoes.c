@@ -1,9 +1,12 @@
 //Arquivo de funcoes para funcoes principais
 
 #include "funcoes.h"
-#include <assert.h>
 
-
+Record *Inicializa_Record(void){
+	Record *rec = (Record *) malloc(sizeof(Record));
+	rec->custo_total = 0;
+	rec->tempo_de_falha = 0;
+}
 
 void Localiza_Paths(Listas *inicio){
 	
@@ -99,19 +102,14 @@ int Calcula_Cap_Total(Interc *inicio){
 	int capacidade_total = 0;
 	
 	while(aux != NULL){
-//		printf(" %s, %d, %d\n", aux->nome_interc, aux->fluxo, aux->capacidade_max);
 		if((aux->funciona) && (aux->fluxo < aux->capacidade_max))
 			capacidade_total += aux->capacidade_max;
-//		printf(" %d\n", capacidade_total);
 		aux = aux->irmao;
-//		puts(" z");
 	}
 	return capacidade_total;
 }
 
 int Calcula_Rel_Flow(Interc *inicio, int total){
-	
-//	assert(total != 0);
 	
 	Interc *aux = inicio;
 	int i = 0;
@@ -177,10 +175,6 @@ int Calcula_Fluxo(void *inicio, char id){
 }
 
 void Gerencia_Sobra(void *inicio, char id){
-	
-//	assert(gerad->sobra != 0);
-//	assert(gerad->works >= 0);
-//	assert(gerad->cheio >= 0);
 	
 	Gerador *gerad = NULL;
 	Interc *path = NULL;
@@ -295,21 +289,67 @@ void Fluxo_City(Interc *inicio){
 	}
 }
 
-void Distribui_Recursos0(Listas *inicio){
+void Verifica_Falhas(Interc *inicio){
+	
+	Interc *path = NULL;
+	Gerador *gerad = NULL;
+	Adapter *adapt = NULL;
+	float num;
+	
+	path = inicio;
+	while(path != NULL){
+		
+		num = ((float) rand() / RAND_MAX);
+		
+		if((path->chance_falha > 0) && (path->chance_falha > num) && (path->funciona)){
+			path->funciona = 0;
+			if(path->vemc == 'G'){
+				gerad = (Gerador *) path->vem;
+				gerad->works--;
+			}
+			else {
+				adapt = (Adapter *) path->vem;
+				adapt->works--;
+			}
+		}
+		
+		path = path->prox;
+	}
+}
+
+void Contabiliza_Falhas(Interc *inicio, Record *rec){
+	
+	Interc *path = NULL;
+	
+	path = inicio;
+	while(path != NULL){
+		if(!path->funciona){
+			
+			rec->custo_total += path->custo_conserto;
+			rec->tempo_de_falha += path->tempo_conserto;
+			path->time_wrk = path->tempo_conserto;
+		}
+		path = path->prox;
+	}
+}
+
+void Maneja_Falhas(Interc *inicio){
+	
+}
+
+void Distribui_Recursos(Listas *inicio){
 	
 	assert(inicio != NULL);
 	assert(inicio->p_gerador->prim != NULL);
 	
 	
-	Interc *path = NULL, *aux = NULL;
-	Cidade *city = NULL;
 	Gerador *gerad = NULL;
 	Adapter *adapt = NULL;
 	
+	Verifica_Falhas(inicio->p_interc);
+	Contabiliza_Falhas(inicio->p_interc, inicio->p_record);
 	
 	gerad = inicio->p_gerador;
-	adapt = inicio->p_adapter;
-	
 	while(gerad != NULL){
 		
 		gerad->total = Calcula_Cap_Total(gerad->prim);
@@ -325,6 +365,7 @@ void Distribui_Recursos0(Listas *inicio){
 	
 	Fluxo_Adapt(inicio->p_interc);
 	
+	adapt = inicio->p_adapter;
 	while(adapt != NULL){
 		
 		adapt->total = Calcula_Cap_Total(adapt->prim);
@@ -341,13 +382,6 @@ void Distribui_Recursos0(Listas *inicio){
 	Fluxo_City(inicio->p_interc);
 }
 
-void Atualiza_Paths(Interc *inicio){
-	
-	
-	
-	
-	
-}
 
 
 
