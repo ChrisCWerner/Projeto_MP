@@ -1,6 +1,6 @@
 Itens pendentes:
 
-  * Funções de distribuição;
+  * Rotina de falha para interconexão (arcar com os danos);
+  * Amostrar no tempo;
   * Função para o relatório de dados;
-  * Makefile;
   * ?
