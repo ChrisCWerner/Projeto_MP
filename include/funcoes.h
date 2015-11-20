@@ -20,10 +20,10 @@ void Fluxo_Adapt(Interc *inicio);
 
 void Verifica_Falhas(Interc *inicio);
 
-void Contabiliza_Falhas(Interc *inicio, Record *rec);
+void Contabiliza_Falhas(Interc *inicio, Record *rec, int);
 
-void Maneja_Falhas(Interc *inicio);
+void Maneja_Falhas(Interc *inicio, int);
 
-void Distribui_Recursos(Listas *inicio);
+void Distribui_Recursos(Listas *inicio, int);
 
 void Relatorio(Listas *, Record* rec,int tempo);

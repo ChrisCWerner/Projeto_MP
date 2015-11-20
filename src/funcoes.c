@@ -326,27 +326,37 @@ void Verifica_Falhas(Interc *inicio){
 	}
 }
 
-void Contabiliza_Falhas(Interc *inicio, Record *rec){
+void Contabiliza_Falhas(Interc *inicio, Record *rec, int tempoatual){
 	
 	Interc *path = NULL;
 	
 	path = inicio;
 	while(path != NULL){
-		if(!path->funciona){
+		if(!path->funciona && path->verificada != 1){
 			rec->numerofalhas += 1;
 			rec->custo_total += path->custo_conserto;
 			rec->tempo_de_falha += path->tempo_conserto;
-			path->time_wrk = path->tempo_conserto;
+
+			path->time_wrk = path->tempo_conserto + tempoatual;
+			path->verificada = 1;
 		}
 		path = path->prox;
 	}
 }
 
-void Maneja_Falhas(Interc *inicio){
-	
+void Maneja_Falhas(Interc *inicio, int tempoatual){
+	Interc *path = NULL;
+	path = inicio;
+	while(path != NULL){
+		if(path->time_wrk >= tempoatual){
+			path->funciona = 1;
+			path->verificada = 0;
+		}; 
+		path = path->prox;
+	}
 }
 
-void Distribui_Recursos(Listas *inicio){
+void Distribui_Recursos(Listas *inicio, int tempoatual){
 	
 	assert(inicio != NULL);
 	assert(inicio->p_gerador->prim != NULL);
@@ -356,7 +366,7 @@ void Distribui_Recursos(Listas *inicio){
 	Adapter *adapt = NULL;
 	
 	Verifica_Falhas(inicio->p_interc);
-	Contabiliza_Falhas(inicio->p_interc, inicio->p_record);
+	Contabiliza_Falhas(inicio->p_interc, inicio->p_record, tempoatual);
 	
 	gerad = inicio->p_gerador;
 	while(gerad != NULL){

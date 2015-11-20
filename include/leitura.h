@@ -36,6 +36,7 @@ typedef struct interc{
 	int capacidade_max;
 	float chance_falha;
 	int tempo_conserto;
+	int verificada;
 	int custo_conserto;
 	struct interc *prox;
 	
