@@ -1,29 +1,40 @@
 NOME = teste_automatizado
+NOME2 = interface
 
 CODIGO1 = leitura.c
-CODIGOT1 = main.c
+CODIGOT1 = TesteAutomatizado.c
 CODIGO2 = funcoes.c
+CODIGOT2 = main.c
 
 ARQUIVOS = $(CODIGO1) $(CODIGOT1) $(CODIGO2)
+ARQUIVOS2 = $(CODIGO1) $(CODIGOT2) $(CODIGO2)
 
-OBJETOS = leitura.o main.o funcoes.o
+OBJETOS = leitura.o TesteAutomatizado.o funcoes.o 
+OBJETOS2 = main.o leitura.o funcoes.o 
 
 DIRINCLUDE = -I ../include
 DIRLIB = -L ../lib
 DIROBJ = ../src/obj
 DIRGCNO = ../src/gcda_gcno
 DIRGCOV = ../src/gcov
-PARLIB = -lgtest -lgtest_main -lpthread -lm
+PARLIB = -lgtest -lgtest_main -lpthread -lm -lcurses
 FLAGS = -fprofile-arcs -ftest-coverage
 
 COMPILADOR = g++
 
-all:	link1 compile1 executar GCOV organizar CPPCHECK
+all:	link link1 compile compile1 executar2 executar GCOV organizar CPPCHECK
 
+link:	$(ARQUIVOS2)
+	@clear
+	@clear
+	@echo "\n ** LINKANDO TESTE DA INTERFACE GRAFICA **\n"	
+	@$(COMPILADOR) -c $(ARQUIVOS2) $(DIRINCLUDE) $(FLAGS)
+
+compile: $(ARQUIVOS2)
+	@echo "\n ** COMPILANDO TESTE AUTOMATIZADO **\n"
+	@$(COMPILADOR) $(OBJETOS2) $(DIRINCLUDE) $(DIRLIB) $(PARLIB) $(FLAGS) -o $(NOME2)
 
 link1: $(ARQUIVOS)
-	@clear
-	@clear
 	@echo "\n ** LINKANDO TESTE AUTOMATIZADO **\n"	
 	@$(COMPILADOR) -c $(ARQUIVOS) $(DIRINCLUDE) $(FLAGS)
 
@@ -41,6 +52,10 @@ organizar: $(DIROBJ)
 executar: $(NOME)
 	@echo "\n\n ******** TESTE AUTOMATIZADO ********\n\n" 
 	@./$(NOME)
+
+executar2: $(NOME2)
+	@echo "\n\n ******** TESTE DA INTERFACE GRAFICA ********\n\n" 
+	@./$(NOME2)
 
 GCOV: $(CODIGO1) $(CODIGOT1) $(CODIGO2) $(CODIGOT2)
 	@echo "\n\n ************************************************** \n"

@@ -4,7 +4,7 @@
 
 int main(){
 	char arquivo[20];
-	int tempo, i = 0;
+	int tempo, i = 0, espera = 0;
 
 	printf("\033[2J\033[1;1H");
 
@@ -30,14 +30,19 @@ int main(){
 		printf("\033[2J\033[1;1H");
 		Distribui_Recursos(inicio, i);
 		Imprime(inicio);
+	do{
+		        espera++;
+	}while(espera <150000000);
+	espera = 0;
+	Interface_Grafica (inicio);
 	}
-
-	Relatorio(inicio,inicio->p_record,20);
+	Relatorio(inicio,inicio->p_record,tempo);
 
 	inicio = Destroi(inicio);
 	free(inicio);
-	
+	getchar();
 	printf("Pressione Enter para sair...");
 	getchar();
 	return 0;
 }
+

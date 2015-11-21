@@ -13,7 +13,7 @@ Adapter *adaptador = NULL;
 
 TEST(Alocando_as_Estruturas, Inicializa){
 
-	sts = inicializa ();
+	sts = Inicializa ();
 	ASSERT_EQ(NULL, sts->p_cidade);
 	ASSERT_EQ(NULL, sts->p_gerador);
 	ASSERT_EQ(NULL, sts->p_interc);
@@ -68,7 +68,6 @@ TEST(Inseri_na_Lista_Interconexao, Interconexao){
 	EXPECT_EQ(0.1*10, 10*sts->p_interc->chance_falha);
 	EXPECT_EQ(14,  sts->p_interc->tempo_conserto);
 	EXPECT_EQ(20,  sts->p_interc->custo_conserto);
-	
 }
 
 TEST(Inseri_na_Lista_Adaptador, Adaptador){
@@ -92,7 +91,7 @@ TEST(Localiza_caminhos, localizar){
 	EXPECT_EQ('A',  sts->p_interc->vaic);
 }
 
-TEST(Destroi_Listas, Destruir){
+TEST(Destroi_Listas1, Destruir1){
 	sts = Destroi(sts);
 	EXPECT_EQ(NULL, sts->p_cidade);
 	EXPECT_EQ(NULL, sts->p_gerador);
@@ -102,15 +101,22 @@ TEST(Destroi_Listas, Destruir){
 
 TEST(Leitura_do_arquivo_de_entrada, Leitura){
 	FILE *fp = fopen("Arquivo.txt", "r");
+	int i;
 	ASSERT_EQ(NULL, inicio);
 	inicio = Le_Arquivo(fp);
 	fclose(fp);
+	inicio->p_record = Inicializa_Record();
 	Localiza_Paths(inicio);
+	for(i = 0; i<20; i++){
+		Distribui_Recursos(inicio, i);
+	}
+	Relatorio(inicio,inicio->p_record,20);
 	inicio = Destroi(inicio);
 	EXPECT_EQ(NULL, inicio->p_cidade);
 	EXPECT_EQ(NULL, inicio->p_gerador);
 	EXPECT_EQ(NULL, inicio->p_interc);
 	EXPECT_EQ(NULL, inicio->p_adapter);
+	EXPECT_EQ(NULL, inicio->p_record);
 }
 
 int main(int argc, char **argv) {

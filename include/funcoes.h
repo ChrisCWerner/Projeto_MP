@@ -27,3 +27,5 @@ void Maneja_Falhas(Interc *inicio, int);
 void Distribui_Recursos(Listas *inicio, int);
 
 void Relatorio(Listas *, Record* rec,int tempo);
+
+void Interface_Grafica(Listas* inicio);

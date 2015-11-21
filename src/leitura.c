@@ -20,8 +20,7 @@ Listas *Inicializa(void){
 	sts->p_gerador = NULL;
 	sts->p_interc = NULL;
 	sts->p_adapter = NULL;
-	sts->p_record = NULL;
-	
+	sts->p_record = NULL;	
 	return sts;
 }
 /**********************************************************************************************************************************
@@ -189,7 +188,7 @@ void Imprime(Listas *inicio){
 	assert(inicio->p_interc != NULL);
 	assert(inicio->p_adapter != NULL);
 	
-	
+	int espera = 0;
 	Cidade *aux1 = NULL, *v_cidade;
 	Gerador *aux2 = NULL, *v_gerador;
 	Interc *aux3 = NULL;
@@ -208,7 +207,10 @@ void Imprime(Listas *inicio){
 		aux1 = aux1->prox;
 	}
 	
-	getchar();
+	do{
+		        espera++;
+	}while(espera <150000000);
+	espera = 0;
 	printf("\nGeradores: \n");
 	
 	aux2 = inicio->p_gerador;
@@ -226,7 +228,10 @@ void Imprime(Listas *inicio){
 		aux2 = aux2->prox;
 	}
 	
-	getchar();
+	do{
+		        espera++;
+	}while(espera <150000000);
+	espera = 0;
 	printf("\nInterconexoes: \n");
 	
 	aux3 = inicio->p_interc;
@@ -265,7 +270,10 @@ void Imprime(Listas *inicio){
 		aux3 = aux3->prox;
 	}
 	
-	getchar();
+	do{
+		        espera++;
+	}while(espera <150000000);
+	espera = 0;
 	printf("\nAdaptadores: \n");
 	
 	aux4 = inicio->p_adapter;
@@ -334,7 +342,6 @@ Listas *Destroi(Listas *inicio){
 	}
 	aux5 = inicio->p_record;
 	free(aux5);
-	
+	inicio->p_record = NULL;
 	return inicio;
 }
-

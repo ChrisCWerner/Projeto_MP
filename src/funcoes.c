@@ -2,6 +2,7 @@
 
 #include "funcoes.h"
 #include "math.h"
+#include <curses.h>
 
 Record *Inicializa_Record(void){
 	Record *rec = (Record *) malloc(sizeof(Record));
@@ -415,7 +416,7 @@ void Relatorio(Listas *inicio, Record* rec,int tempo){
 	aux3 = inicio->p_interc;
 
 	FILE* arq;
-	arq = fopen("Relatorio","w+");
+	arq = fopen("Relatorio","w");
 	
 	fprintf(arq, "Tempo total de simulação: %d\n", tempo);
 	while(aux2 != NULL){
@@ -435,6 +436,7 @@ void Relatorio(Listas *inicio, Record* rec,int tempo){
 		aux1 = aux1->prox;
 	
 	}
+	fprintf(arq, "Total das cidades: %d\n", rec->total_cidades);
 	fprintf(arq, "Energia total gasta pelas cidades: %d\n", rec->energia_gasta_cidades);
 
 	while(aux3 != NULL){
@@ -453,4 +455,59 @@ void Relatorio(Listas *inicio, Record* rec,int tempo){
 
 }
 
-
+void Interface_Grafica(Listas* inicio){
+	assert(inicio != NULL);
+	assert(inicio->p_cidade != NULL);
+	assert(inicio->p_gerador != NULL);
+	assert(inicio->p_interc != NULL);
+	assert(inicio->p_adapter != NULL);
+	int i = 1, j = 0, espera = 0;
+	Cidade *aux1 = NULL;
+	Gerador *aux2 = NULL;
+	Interc *aux3 = NULL;
+	Adapter *aux4 = NULL;
+	initscr();  
+	 start_color(); //Esta função torna possível o uso das cores
+//Abaixo estamos definindo os pares de cores que serão utilizados no programa
+    init_pair(1,COLOR_GREEN,COLOR_BLACK ); //Texto(Branco) | Fundo(Azul)
+    init_pair(2,COLOR_RED,COLOR_BLACK );
+    init_pair(3,COLOR_YELLOW,COLOR_BLACK );
+ bkgd(COLOR_PAIR(1));  /*Aqui nós definiremos que a cor de fundo do nosso
+                                      programa será azul e a cor dos textos será branca.*/
+	move (0,0);
+	printw("Os geradores, adapatadores e cidades representados estão todos conectados!Pressione Enter para sair...");
+	aux3 = inicio->p_interc;
+	while (aux3 != NULL){ 
+		if (aux3->vemc == 'G'){
+			attroff(COLOR_PAIR(2));
+			attroff(COLOR_PAIR(3));
+			aux2 = (Gerador*) aux3->vem;
+			move(aux2->pos_x,aux2->pos_y);
+			printw("G\t", i);
+		}else if (aux3->vemc == 'A'){
+			aux4 = (Adapter*)aux3->vem;
+			if(aux3->funciona == 0 && aux4->saida == 2) attron(COLOR_PAIR(2));
+			else attroff(COLOR_PAIR(2));
+			move(aux4->pos_x,aux4->pos_y);
+			printw("A\t", i);
+		}
+		if (aux3->vaic == 'A'){
+			aux4 = (Adapter*)aux3->vai;
+			if(aux3->funciona == 0 && aux4->saida == 2) attron(COLOR_PAIR(2));
+			else attroff(COLOR_PAIR(2));
+			move(aux4->pos_x,aux4->pos_y);
+			printw("A\t", i);
+		}else if (aux3->vaic == 'C'){
+			aux1 = (Cidade*) aux3->vai;
+			if (aux3->vemc == 'A' && aux3->funciona == 0 && aux4->saida == 2) attron(COLOR_PAIR(3));
+			else attroff(COLOR_PAIR(3));
+			move(aux1->pos_x,aux1->pos_y);
+			printw("C\t", i);
+		}
+		aux3 = aux3->prox;
+		i++;
+	}  	
+	refresh();    //Atualiza a tela
+	getch();
+	endwin();	
+}
