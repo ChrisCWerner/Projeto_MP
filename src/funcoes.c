@@ -1,12 +1,8 @@
 //Arquivo de funcoes para funcoes principais
 
 #include "funcoes.h"
-<<<<<<< HEAD
 #include <math.h>
-=======
-#include "math.h"
 #include <curses.h>
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
 
 Record *Inicializa_Record(void){
 	Record *rec = (Record *) malloc(sizeof(Record));
@@ -365,11 +361,7 @@ void Verifica_Falhas(Interc *inicio, Record *rec){
 	}
 }
 
-<<<<<<< HEAD
 void Maneja_Falhas(Interc *inicio){
-=======
-void Contabiliza_Falhas(Interc *inicio, Record *rec, int tempoatual){
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
 	
 	Interc *path = NULL;
 	Gerador *gerad = NULL;
@@ -377,7 +369,6 @@ void Contabiliza_Falhas(Interc *inicio, Record *rec, int tempoatual){
 	
 	path = inicio;
 	while(path != NULL){
-<<<<<<< HEAD
 		if(!path->funciona){
 			
 			path->time_wrk--;
@@ -392,21 +383,11 @@ void Contabiliza_Falhas(Interc *inicio, Record *rec, int tempoatual){
 					adapt->works++;
 				}
 			}
-=======
-		if(!path->funciona && path->verificada != 1){
-			rec->numerofalhas += 1;
-			rec->custo_total += path->custo_conserto;
-			rec->tempo_de_falha += path->tempo_conserto;
-
-			path->time_wrk = path->tempo_conserto + tempoatual;
-			path->verificada = 1;
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
 		}
 		path = path->prox;
 	}
 }
 
-<<<<<<< HEAD
 void Zera_Fluxo(Listas *inicio){
 	
 	Cidade *city = NULL;
@@ -435,21 +416,9 @@ void Zera_Fluxo(Listas *inicio){
 		city->fluxo = 0;
 		city = city->prox;
 	}
-=======
-void Maneja_Falhas(Interc *inicio, int tempoatual){
-	Interc *path = NULL;
-	path = inicio;
-	while(path != NULL){
-		if(path->time_wrk >= tempoatual){
-			path->funciona = 1;
-			path->verificada = 0;
-		}; 
-		path = path->prox;
-	}
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
 }
 
-void Distribui_Recursos(Listas *inicio, int tempoatual){
+void Distribui_Recursos(Listas *inicio){
 	
 	assert(inicio != NULL);
 	assert(inicio->p_gerador->prim != NULL);
@@ -459,16 +428,11 @@ void Distribui_Recursos(Listas *inicio, int tempoatual){
 	Gerador *gerad = NULL;
 	Adapter *adapt = NULL;
 	
-<<<<<<< HEAD
 	rec = inicio->p_record
 	Zera_Fluxo(inicio);
 	
 	Maneja_Falhas(inicio->p_interc);
 	Verifica_Falhas(inicio->p_interc, rec);
-=======
-	Verifica_Falhas(inicio->p_interc);
-	Contabiliza_Falhas(inicio->p_interc, inicio->p_record, tempoatual);
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
 	
 	gerad = inicio->p_gerador;
 	while(gerad != NULL){
@@ -534,11 +498,7 @@ void Relatorio(Listas *inicio){
 	Interc *path = inicio->p_interc;
 	
 	FILE* arq;
-<<<<<<< HEAD
 	arq = fopen("Relatorio.txt","w+");
-=======
-	arq = fopen("Relatorio","w");
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
 	
 	rec->tamanho_interc = Tamanho_Interc(path);
 	
@@ -547,16 +507,7 @@ void Relatorio(Listas *inicio){
 	fprintf(arq, "Total de geradores: %d\n", rec->total_geradores);
 	fprintf(arq, "Energia total gerada: %d\n", rec->energia_total_geradores);
 
-<<<<<<< HEAD
-=======
-	while(aux1 != NULL){
-		rec->total_cidades += 1;
-		rec->energia_gasta_cidades += aux1->fluxo;
-		aux1 = aux1->prox;
-	
-	}
-	fprintf(arq, "Total das cidades: %d\n", rec->total_cidades);
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
+	fprintf(arq, "Total de cidades: %d\n", rec->total_cidades);
 	fprintf(arq, "Energia total gasta pelas cidades: %d\n", rec->energia_gasta_cidades);
 	
 	fprintf(arq, "Tamanho total das interconexoes: %d\n", rec->tamanho_interc);
@@ -571,11 +522,6 @@ void Relatorio(Listas *inicio){
 
 }
 
-<<<<<<< HEAD
-
-
-
-=======
 void Interface_Grafica(Listas* inicio){
 	assert(inicio != NULL);
 	assert(inicio->p_cidade != NULL);
@@ -588,15 +534,15 @@ void Interface_Grafica(Listas* inicio){
 	Interc *aux3 = NULL;
 	Adapter *aux4 = NULL;
 	initscr();  
-	 start_color(); //Esta função torna possível o uso das cores
-//Abaixo estamos definindo os pares de cores que serão utilizados no programa
+	 start_color(); //Esta funcao torna possivel o uso das cores
+//Abaixo estamos definindo os pares de cores que serao utilizados no programa
     init_pair(1,COLOR_GREEN,COLOR_BLACK ); //Texto(Branco) | Fundo(Azul)
     init_pair(2,COLOR_RED,COLOR_BLACK );
     init_pair(3,COLOR_YELLOW,COLOR_BLACK );
- bkgd(COLOR_PAIR(1));  /*Aqui nós definiremos que a cor de fundo do nosso
-                                      programa será azul e a cor dos textos será branca.*/
+ bkgd(COLOR_PAIR(1));  /*Aqui nos definiremos que a cor de fundo do nosso
+                                      programa sera azul e a cor dos textos sera branca.*/
 	move (0,0);
-	printw("Os geradores, adapatadores e cidades representados estão todos conectados!Pressione Enter para sair...");
+	printw("Os geradores, adapatadores e cidades representados estao todos conectados!Pressione Enter para sair...");
 	aux3 = inicio->p_interc;
 	while (aux3 != NULL){ 
 		if (aux3->vemc == 'G'){
@@ -632,4 +578,4 @@ void Interface_Grafica(Listas* inicio){
 	getch();
 	endwin();	
 }
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
+

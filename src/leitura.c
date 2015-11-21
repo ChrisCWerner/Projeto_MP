@@ -3,11 +3,11 @@
 #include "leitura.h"
 
 /***********************************************************************************
-* Nome da função: Inicializa;
-* Descrição: Inicializa a estrutura que contem as listas de cada tipo de dado;
+* Nome da funcao: Inicializa;
+* Descricao: Inicializa a estrutura que contem as listas de cada tipo de dado;
 * Assertivas de Entrada: 
 *			nenhum
-* Assertivas de Saída:
+* Assertivas de Saida:
 *			Listas criadas:
 *			Listas->p_cidade = NULL;
 *			Listas->p_gerador = NULL;
@@ -20,15 +20,16 @@ Listas *Inicializa(void){
 	sts->p_gerador = NULL;
 	sts->p_interc = NULL;
 	sts->p_adapter = NULL;
-	sts->p_record = NULL;	
+	sts->p_record = NULL;
+	
 	return sts;
 }
 /**********************************************************************************************************************************
-* Nome da função: Le_Arquivo;
-* Descrição: Le o arquivo de entrada e insere os tipos de informações nas respectivas listas.
+* Nome da funcao: Le_Arquivo;
+* Descricao: Le o arquivo de entrada e insere os tipos de informacoes nas respectivas listas.
 * Assertivas de Entrada: 
 *			FILE *fp != NULL (ponteiro para arquivo de entrada)
-* Assertivas de Saída:
+* Assertivas de Saida:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
 *			Listas->p_gerador != NULL;
@@ -102,13 +103,13 @@ Listas *Le_Arquivo(FILE *fp){
 	return sts;
 }
 /**************************************************************************************************************************
-* Nome da função: Insere_Lista;
-* Descrição: Insere o tipo de informação lida, a partir da função 'Le_arquivo', para o tipo correspondente das Listas.
+* Nome da funcao: Insere_Lista;
+* Descricao: Insere o tipo de informacao lida, a partir da funcao 'Le_arquivo', para o tipo correspondente das Listas.
 * Assertivas de Entrada: 
 *			char tipo_elemento;
-*			Listas (previamente alocada, podendo ou não estarem vazias)
+*			Listas (previamente alocada, podendo ou nao estarem vazias)
 *			void *elemento (ponteiro para o elemento a ser inserido)
-* Assertivas de Saída:
+* Assertivas de Saida:
 *			nenhuma
 *****************************************************************************************************************************/
 void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
@@ -168,16 +169,16 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 	}
 }
 /*********************************************************************************************************************************
-* Nome da função: Imprime;
-* Descrição: Imprime a estrutura que armazena cada tipo de lista, ou seja, vai imprimir cada uma das listas de cidades, geradores,
-	     adaptadores e interconexões.
+* Nome da funcao: Imprime;
+* Descricao: Imprime a estrutura que armazena cada tipo de lista, ou seja, vai imprimir cada uma das listas de cidades, geradores,
+	     adaptadores e interconexoes.
 * Assertivas de Entrada:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
 *			Listas->p_gerador != NULL;
 *			Listas->p_interc != NULL;
 *			Listas->p_adapter != NULL;
-* Assertivas de Saída:
+* Assertivas de Saida:
 *			nenhuma
 ***********************************************************************************************************************************/
 void Imprime(Listas *inicio){
@@ -188,7 +189,7 @@ void Imprime(Listas *inicio){
 	assert(inicio->p_interc != NULL);
 	assert(inicio->p_adapter != NULL);
 	
-	int espera = 0;
+	
 	Cidade *aux1 = NULL, *v_cidade;
 	Gerador *aux2 = NULL, *v_gerador;
 	Interc *aux3 = NULL;
@@ -207,14 +208,7 @@ void Imprime(Listas *inicio){
 		aux1 = aux1->prox;
 	}
 	
-<<<<<<< HEAD
 //	getchar();
-=======
-	do{
-		        espera++;
-	}while(espera <150000000);
-	espera = 0;
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
 	printf("\nGeradores: \n");
 	
 	aux2 = inicio->p_gerador;
@@ -232,14 +226,7 @@ void Imprime(Listas *inicio){
 		aux2 = aux2->prox;
 	}
 	
-<<<<<<< HEAD
 //	getchar();
-=======
-	do{
-		        espera++;
-	}while(espera <150000000);
-	espera = 0;
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
 	printf("\nInterconexoes: \n");
 	
 	aux3 = inicio->p_interc;
@@ -279,14 +266,7 @@ void Imprime(Listas *inicio){
 		aux3 = aux3->prox;
 	}
 	
-<<<<<<< HEAD
 //	getchar();
-=======
-	do{
-		        espera++;
-	}while(espera <150000000);
-	espera = 0;
->>>>>>> 1ce8b8b859635be87e9ce2745a780ebe52161a03
 	printf("\nAdaptadores: \n");
 	
 	aux4 = inicio->p_adapter;
@@ -306,15 +286,15 @@ void Imprime(Listas *inicio){
 	printf("\n\n");
 }
 /**********************************************************************************************************
-* Nome da função: Destroi;
-* Descrição: Desaloca a posição de memória ocupada pelas listas.
+* Nome da funcao: Destroi;
+* Descricao: Desaloca a posicao de memoria ocupada pelas listas.
 * Assertivas de Entrada:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
 *			Listas->p_gerador != NULL;
 *			Listas->p_interc != NULL;
 *			Listas->p_adapter != NULL;
-* Assertivas de Saída:
+* Assertivas de Saida:
 *			Listas = NULL;
 ***********************************************************************************************************/
 Listas *Destroi(Listas *inicio){
@@ -355,6 +335,7 @@ Listas *Destroi(Listas *inicio){
 	}
 	aux5 = inicio->p_record;
 	free(aux5);
-	inicio->p_record = NULL;
+	
 	return inicio;
 }
+
