@@ -336,6 +336,7 @@ Listas *Destroi(Listas *inicio){
 	aux5 = inicio->p_record;
 	free(aux5);
 	
+	inicio->p_record = NULL;
 	return inicio;
 }
 

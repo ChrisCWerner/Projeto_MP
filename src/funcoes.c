@@ -428,7 +428,7 @@ void Distribui_Recursos(Listas *inicio){
 	Gerador *gerad = NULL;
 	Adapter *adapt = NULL;
 	
-	rec = inicio->p_record
+	rec = inicio->p_record;
 	Zera_Fluxo(inicio);
 	
 	Maneja_Falhas(inicio->p_interc);
@@ -575,7 +575,9 @@ void Interface_Grafica(Listas* inicio){
 		i++;
 	}  	
 	refresh();    //Atualiza a tela
-	getch();
+	for ( int c = 1 ; c <= 15000 ; c++ )
+       	for (int d = 1 ; d <= 15000 ; d++ )
+       	{}
 	endwin();	
 }
 

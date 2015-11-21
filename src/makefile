@@ -63,8 +63,6 @@ GCOV: $(CODIGO1) $(CODIGOT1) $(CODIGO2) $(CODIGOT2)
 	@echo " ************************************************** \n"
 	@echo "\n\n ******** leitura.c ******** \n\n"
 	@gcov $(CODIGO1)
-	@echo "\n\n ******** main.c ******** \n\n"
-	@gcov $(CODIGOT1)
 	@echo "\n\n ******** funcoes.c ******** \n\n"
 	@gcov $(CODIGO2)
 

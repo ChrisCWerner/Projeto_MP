@@ -108,9 +108,9 @@ TEST(Leitura_do_arquivo_de_entrada, Leitura){
 	inicio->p_record = Inicializa_Record();
 	Localiza_Paths(inicio);
 	for(i = 0; i<20; i++){
-		Distribui_Recursos(inicio, i);
+		Distribui_Recursos(inicio);
 	}
-	Relatorio(inicio,inicio->p_record,20);
+	Relatorio(inicio);
 	inicio = Destroi(inicio);
 	EXPECT_EQ(NULL, inicio->p_cidade);
 	EXPECT_EQ(NULL, inicio->p_gerador);

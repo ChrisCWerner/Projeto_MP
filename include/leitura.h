@@ -68,6 +68,7 @@ typedef struct adapter{
 
 typedef struct record{
 	int numero_de_falhas;
+	int numerofalhas;
 	int tempo_de_falha;
 	int custo_total;
 	int tempo_total;
