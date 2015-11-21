@@ -68,3 +68,7 @@
 
 10:32 19/11/2015 | 2:38 | Codificar módulos | Estudar
 	* Ajustes para fazer as funções correrem no tempo.
+
+15:18 21/11/2015 | 4:19 | Codificar módulos | Debugging
+	* Função de relatório quase pronta;
+	* Vários ajustes no código.

@@ -1,7 +1,7 @@
 //Arquivo de funcoes para funcoes principais
 
 #include "funcoes.h"
-#include "math.h"
+#include <math.h>
 
 Record *Inicializa_Record(void){
 	Record *rec = (Record *) malloc(sizeof(Record));
@@ -13,6 +13,10 @@ Record *Inicializa_Record(void){
 	rec->energia_gasta_cidades = 0;
 	rec->tamanho_interc = 0;
 	rec->numerofalhas = 0;
+	rec->cidades_sem_recurso = 0;
+	rec->tempo_cidades_sem_recurso = 0;
+	rec->cidades_sem_30porcento = 0;
+	rec->tempo_sem_30porcento = 0;
 
 	return rec;
 }
@@ -22,12 +26,14 @@ void Localiza_Paths(Listas *inicio){
 	assert(inicio != NULL);
 	
 	
+	Record *rec;
 	Cidade *aux1;
 	Gerador *aux2;
 	Interc *aux3;
 	Adapter *aux4;
 	int i;
 	
+	rec = inicio->p_record;
 	
 	aux2 = inicio->p_gerador;
 	while(aux2 != NULL){
@@ -35,6 +41,8 @@ void Localiza_Paths(Listas *inicio){
 		i = 0;
 		aux3 = inicio->p_interc;
 		while(aux3 != NULL){
+			
+			rec->total_geradores++;
 			
 			if((aux3->pos_inic_x == aux2->pos_x) && (aux3->pos_inic_y == aux2->pos_y)){
 				aux3->vem = aux2;
@@ -83,6 +91,8 @@ void Localiza_Paths(Listas *inicio){
 		aux1 = inicio->p_cidade;
 		while(aux1 != NULL){
 			
+			rec->total_cidades++;
+			
 			if((aux3->pos_final_x == aux1->pos_x) && (aux3->pos_final_y == aux1->pos_y)){
 				aux3->vai = aux1;
 				aux3->vaic = 'C';
@@ -111,7 +121,7 @@ int Calcula_Cap_Total(Interc *inicio){
 	int capacidade_total = 0;
 	
 	while(aux != NULL){
-		if((aux->funciona) && (aux->fluxo < aux->capacidade_max))
+		if(aux->funciona)
 			capacidade_total += aux->capacidade_max;
 		aux = aux->irmao;
 	}
@@ -120,16 +130,21 @@ int Calcula_Cap_Total(Interc *inicio){
 
 int Calcula_Rel_Flow(Interc *inicio, int total){
 	
+//	if(total == 0){
+//		printf("\n\ntotal != 0 !!!");
+//		getchar();
+//		return -1;
+//	}
+	
 	Interc *aux = inicio;
 	int i = 0;
 	
 	while(aux != NULL){
-		if((aux->funciona) && (aux->fluxo < aux->capacidade_max) && (total != 0))
-			aux->rel_flow = (float) (aux->capacidade_max) / (total);
-		else {
+		if((!aux->funciona) || (aux->fluxo >= aux->capacidade_max) || (total == 0))
 			aux->rel_flow = 0;
-			i++;
-		}
+		else
+			aux->rel_flow = (float) (aux->capacidade_max) / (total);
+		
 		aux = aux->irmao;
 	}
 	return i;
@@ -149,33 +164,40 @@ int Calcula_Fluxo(void *inicio, char id){
 		rec_disp = gerad->recurso_produzido;
 		gerad->cheio = 0;
 		path = gerad->prim;
+		sobra += gerad->sobra;
 	}
 	else if(id == 'A'){
 		adapt = (Adapter *) inicio;
 		rec_disp = adapt->fluxo;
 		adapt->cheio = 0;
 		path = adapt->prim;
+		sobra += adapt->sobra;
+	}
+	else {
+		printf("\n\n id nao pode ser == '%c'!!\n\n", id);
+		return -1;
 	}
 	
 	while(path != NULL){
 		if(path->funciona){
-			path->fluxo = (path->rel_flow) * (rec_disp);
+			path->fluxo = (int) round( (path->rel_flow) * (rec_disp) );
 			
 			if(path->fluxo > path->capacidade_max){
 				sobra += path->fluxo - path->capacidade_max;
 				path->fluxo = path->capacidade_max;
 			}
 			
-		assert(path->fluxo <= path->capacidade_max);
-		
 			if(path->fluxo == path->capacidade_max){
 				if(id == 'G')
 					gerad->cheio++;
-				if(id == 'A')
+				else
 					adapt->cheio++;
 			}
 		}
-		else	path->fluxo = 0;
+		else {
+			sobra += path->fluxo;
+			path->fluxo = 0;
+		}
 		
 		path = path->irmao;
 	}
@@ -186,78 +208,84 @@ int Calcula_Fluxo(void *inicio, char id){
 void Gerencia_Sobra(void *inicio, char id){
 	
 	Gerador *gerad = NULL;
-	Interc *path = NULL;
+	Interc *path = NULL, *aux = NULL;
 	Adapter *adapt = NULL;
-	int sobra, sobra_saida, path_ncheio = 0, total;
+	int sobra, sobra_saida, tudo_cheio, total;
+	int total_funciona, total_cheio;
+//	int path_ncheio;
 	
 	if(id == 'G'){
 		gerad = (Gerador *) inicio;
-		path_ncheio = gerad->works - gerad->cheio;
+		if(gerad->works == 0){
+			gerad->sobra = gerad->recurso_produzido;
+			return;
+		}
+		total = gerad->total;
+		total_funciona = gerad->works;
+		total_cheio = gerad->cheio;
 		sobra_saida = gerad->sobra;
+		aux = gerad->prim;
 	}
 	else if(id == 'A'){
 		adapt = (Adapter *) inicio;
-		path_ncheio = adapt->works - adapt->cheio;
+		if(adapt->works == 0){
+			adapt->sobra = adapt->fluxo;
+			return;
+		}
+		total = adapt->total;
+		total_funciona = adapt->works;
+		total_cheio = adapt->cheio;
 		sobra_saida = adapt->sobra;
+		aux = adapt->prim;
+	}
+	else {
+		printf("\n\n id nao pode ser == '%c'!!\n\n", id);
+		return;
 	}
 	
-	if(path_ncheio == 0)
-		return;
+	tudo_cheio = total_funciona == total_cheio;
 	
-	while((path_ncheio != 0) && (total != 0)){
+	while((!tudo_cheio) && (sobra_saida != 0)){
 		
-		if(id == 'G'){
-			path = gerad->prim;
-			path_ncheio = gerad->works - gerad->cheio;
-		}
-		else if(id == 'A'){
-			path = adapt->prim;
-			path_ncheio = adapt->works - adapt->cheio;
-		}
-		
-		total = Calcula_Cap_Total(path);
+		total = Calcula_Cap_Total(aux);
 		Calcula_Rel_Flow(path, total);
 		
-		sobra = 0;
-		if(path_ncheio == 1){
-			while(path != NULL){
-				if((path->fluxo < path->capacidade_max) && (path->funciona))
-					break;
-				path = path->irmao;
-			}
+		path = aux;
+		while(path != NULL){
+			path->fluxo += (path->rel_flow) * (sobra_saida);
+			//pois o rel_flow dos caminhos cheios/quebrados == 0;
 			
-			path->fluxo += sobra_saida;
+			path = path->irmao;
+		}
+		
+		sobra = 0;
+		
+		path = aux;
+		while(path != NULL){
 			
 			if(path->fluxo > path->capacidade_max){
 				sobra += path->fluxo - path->capacidade_max;
 				path->fluxo = path->capacidade_max;
-			}
-			
-			if(id == 'G')
-				gerad->total = 0;
-			else if(id == 'A')
-				adapt->total = 0;
-		}
-		else {
-			while(path != NULL){
-				if((path->funciona) && (path->fluxo < path->capacidade_max))
-					path->fluxo += (path->rel_flow) * (sobra_saida);
 				
-				if(path->fluxo > path->capacidade_max){
-					sobra += path->fluxo - path->capacidade_max;
-					path->fluxo = path->capacidade_max;
-				}
-				
-				path = path->irmao;
+				total_cheio++;
 			}
+			path = path->irmao;
 		}
 		
 		sobra_saida = sobra;
+		tudo_cheio = total_funciona == total_cheio;
 	}
-	if(id == 'G')
+	
+	if(id == 'G'){
 		gerad->sobra = sobra_saida;
-	else if(id == 'A')
+		gerad->cheio = total_cheio;
+		gerad->total = total;
+	}
+	else {
 		adapt->sobra = sobra_saida;
+		adapt->cheio = total_cheio;
+		adapt->total = total;
+	}
 }
 
 void Fluxo_Adapt(Interc *inicio){
@@ -279,7 +307,7 @@ void Fluxo_Adapt(Interc *inicio){
 	}
 }
 
-void Fluxo_City(Interc *inicio){
+void Fluxo_City(Interc *inicio, Record *rec){
 	
 	assert(inicio->vai != NULL);
 	
@@ -292,13 +320,15 @@ void Fluxo_City(Interc *inicio){
 		if(path->vaic == 'C'){
 			city = (Cidade *) path->vai;
 			city->fluxo += path->fluxo;
+			
+			rec->energia_gasta_cidades += city->fluxo;
 		}
 		
 		path = path->prox;
 	}
 }
 
-void Verifica_Falhas(Interc *inicio){
+void Verifica_Falhas(Interc *inicio, Record *rec){
 	
 	Interc *path = NULL;
 	Gerador *gerad = NULL;
@@ -312,6 +342,11 @@ void Verifica_Falhas(Interc *inicio){
 		
 		if((path->chance_falha > 0) && (path->chance_falha > num) && (path->funciona)){
 			path->funciona = 0;
+			path->time_wrk = path->tempo_conserto;
+			rec->custo_total += path->custo_conserto;
+			rec->tempo_de_falha += path->tempo_conserto;
+			rec->numero_de_falhas++;
+			
 			if(path->vemc == 'G'){
 				gerad = (Gerador *) path->vem;
 				gerad->works--;
@@ -321,29 +356,65 @@ void Verifica_Falhas(Interc *inicio){
 				adapt->works--;
 			}
 		}
-		
-		path = path->prox;
-	}
-}
-
-void Contabiliza_Falhas(Interc *inicio, Record *rec){
-	
-	Interc *path = NULL;
-	
-	path = inicio;
-	while(path != NULL){
-		if(!path->funciona){
-			rec->numerofalhas += 1;
-			rec->custo_total += path->custo_conserto;
-			rec->tempo_de_falha += path->tempo_conserto;
-			path->time_wrk = path->tempo_conserto;
-		}
 		path = path->prox;
 	}
 }
 
 void Maneja_Falhas(Interc *inicio){
 	
+	Interc *path = NULL;
+	Gerador *gerad = NULL;
+	Adapter *adapt = NULL;
+	
+	path = inicio;
+	while(path != NULL){
+		if(!path->funciona){
+			
+			path->time_wrk--;
+			if(path->time_wrk == 0){
+				path->funciona = 1;
+				if(path->vemc == 'G'){
+					gerad = (Gerador *) path->vem;
+					gerad->works++;
+				}
+				else {
+					adapt = (Adapter *) path->vem;
+					adapt->works++;
+				}
+			}
+		}
+		path = path->prox;
+	}
+}
+
+void Zera_Fluxo(Listas *inicio){
+	
+	Cidade *city = NULL;
+	Adapter *adapt = NULL;
+	Interc *path = NULL;
+	
+	path = inicio->p_interc;
+	while(path != NULL){
+		
+		path->fluxo = 0;
+		path = path->prox;
+	}
+	
+	adapt = inicio->p_adapter;
+	while(adapt != NULL){
+		
+		adapt->fluxo = 0;
+		adapt->sobra = 0;
+		adapt->total = 0;
+		adapt = adapt->prox;
+	}
+	
+	city = inicio->p_cidade;
+	while(city != NULL){
+		
+		city->fluxo = 0;
+		city = city->prox;
+	}
 }
 
 void Distribui_Recursos(Listas *inicio){
@@ -352,14 +423,21 @@ void Distribui_Recursos(Listas *inicio){
 	assert(inicio->p_gerador->prim != NULL);
 	
 	
+	Record *rec = NULL;
 	Gerador *gerad = NULL;
 	Adapter *adapt = NULL;
 	
-	Verifica_Falhas(inicio->p_interc);
-	Contabiliza_Falhas(inicio->p_interc, inicio->p_record);
+	rec = inicio->p_record
+	Zera_Fluxo(inicio);
+	
+	Maneja_Falhas(inicio->p_interc);
+	Verifica_Falhas(inicio->p_interc, rec);
 	
 	gerad = inicio->p_gerador;
 	while(gerad != NULL){
+		
+		rec->custo_total += gerad->custo_gerador;
+		rec->energia_total_geradores += gerad->recurso_produzido;
 		
 		gerad->total = Calcula_Cap_Total(gerad->prim);
 		
@@ -388,59 +466,60 @@ void Distribui_Recursos(Listas *inicio){
 		adapt = adapt->prox;
 	}
 	
-	Fluxo_City(inicio->p_interc);
+	Fluxo_City(inicio->p_interc, rec);
+	
+	rec->tempo_total++;
 }
 
-
-
-void Relatorio(Listas *inicio, Record* rec,int tempo){
-	int custoaux = 0, cidades_sem_recurso = 0;
-	Cidade *aux1 = NULL;
-	Gerador *aux2 = NULL;
-	Interc *aux3 = NULL;
-	Adapter *aux4 = NULL;
-
-	aux1 = inicio->p_cidade;
-	aux2 = inicio->p_gerador;
-	aux3 = inicio->p_interc;
-
-	FILE* arq;
-	arq = fopen("Relatorio","w+");
+float Tamanho_Interc(Interc *inicio){
 	
-	fprintf(arq, "Tempo total de simulação: %d\n", tempo);
-	while(aux2 != NULL){
-		rec->total_geradores += 1;
-		rec->energia_total_geradores += aux2->recurso_produzido;
-		custoaux += aux2->custo_gerador;
-		rec->custo_total += (custoaux*tempo);
-		aux2 = aux2->prox;
+	Interc *path = NULL;
+	int x, y;
+	float tam = 0;
+	
+	path = inicio;
+	while(path != NULL){
+		
+		x = path->pos_inic_x - path->pos_final_x;
+		y = path->pos_inic_y - path->pos_final_y;
+		
+		tam += sqrt(pow(x, 2) + pow(y, 2));
+		
+		path = path->prox;
 	}
-	fprintf(arq, "Custo total da simulação: %d\n", rec->custo_total);
+	
+	return tam;
+}
+
+void Relatorio(Listas *inicio){
+	
+	Record *rec = inicio->p_record;
+	Interc *path = inicio->p_interc;
+	
+	FILE* arq;
+	arq = fopen("Relatorio.txt","w+");
+	
+	rec->tamanho_interc = Tamanho_Interc(path);
+	
+	fprintf(arq, "Tempo total de simulacao: %d\n", rec->tempo_total);
+	fprintf(arq, "Custo total da simulacao: %d\n", rec->custo_total);
 	fprintf(arq, "Total de geradores: %d\n", rec->total_geradores);
 	fprintf(arq, "Energia total gerada: %d\n", rec->energia_total_geradores);
 
-	while(aux1 != NULL){
-		rec->total_cidades += 1;
-		rec->energia_gasta_cidades += aux1->fluxo;
-		aux1 = aux1->prox;
-	
-	}
 	fprintf(arq, "Energia total gasta pelas cidades: %d\n", rec->energia_gasta_cidades);
-
-	while(aux3 != NULL){
-		rec->tamanho_interc += sqrt(pow(aux3->pos_final_x - aux3->pos_inic_x,2) 
-					+ pow(aux3->pos_final_y - aux3->pos_inic_y,2));
-		aux3 = aux3->prox;
-	}
-	fprintf(arq, "Tamanho total das interconexões: %d\n", rec->tamanho_interc);
-	fprintf(arq, "Número de falhas nas interconexões: %d\n", rec->numerofalhas);
-	fprintf(arq, "Tempo que ficaram sem recurso: %d\n", rec->tempo_de_falha);
-	fprintf(arq, "Número de cidades que ficaram sem recurso necessário: \n");
-	fprintf(arq, "Tempo que ficaram sem recurso: \n");
+	
+	fprintf(arq, "Tamanho total das interconexoes: %d\n", rec->tamanho_interc);
+	fprintf(arq, "Numero de falhas nas interconexoes: %d\n", rec->numero_de_falhas);
+	fprintf(arq, "Numero de cidades que ficaram sem recurso necessario: %d\n", rec->cidades_sem_recurso);
+	fprintf(arq, "Tempo que ficaram sem recurso: %d\n",rec->tempo_cidades_sem_recurso);
+	fprintf(arq, "Numero de cidades que ficaram com menos de 30%% dos recursos: %d\n", rec->cidades_sem_30porcento);
+	fprintf(arq, "Tempo que ficaram com menos de 30%% de recurso: %d\n",rec->tempo_sem_30porcento);
 
 
 	fclose(arq);
 
 }
+
+
 
 

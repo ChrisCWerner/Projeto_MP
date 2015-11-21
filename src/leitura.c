@@ -201,22 +201,22 @@ void Imprime(Listas *inicio){
 	aux1 = inicio->p_cidade;
 	while(aux1 != NULL){
 		printf("  %s: \n", aux1->nome_cidade);
-		printf("\t Posicao: (%d, %d)\n", aux1->pos_x, aux1->pos_y);
+//		printf("\t Posicao: (%d, %d)\n", aux1->pos_x, aux1->pos_y);
 		printf("\t Recursos necessarios: %d\n\n", aux1->recurso_necessario);
 		
 		printf("\t Recursos recebidos: %d\n\n", aux1->fluxo);
 		aux1 = aux1->prox;
 	}
 	
-	getchar();
+//	getchar();
 	printf("\nGeradores: \n");
 	
 	aux2 = inicio->p_gerador;
 	while(aux2 != NULL){
 		printf("  %s: \n", aux2->nome_gerador);
-		printf("\t Posicao: (%d, %d)\n", aux2->pos_x, aux2->pos_y);
+//		printf("\t Posicao: (%d, %d)\n", aux2->pos_x, aux2->pos_y);
 		printf("\t Recurso produzido: %d\n", aux2->recurso_produzido);
-		printf("\t Custo do gerador: %d\n\n", aux2->custo_gerador);
+//		printf("\t Custo do gerador: %d\n\n", aux2->custo_gerador);
 		
 		printf("\t Quantidade de caminhos de saida: %d\n", aux2->saida);
 		printf("\t Recursos desperdicados: %d\n", aux2->sobra);
@@ -226,20 +226,21 @@ void Imprime(Listas *inicio){
 		aux2 = aux2->prox;
 	}
 	
-	getchar();
+//	getchar();
 	printf("\nInterconexoes: \n");
 	
 	aux3 = inicio->p_interc;
 	while(aux3 != NULL){
 		printf("  %s: \n", aux3->nome_interc);
-		printf("\t Posicao inicial: (%d, %d)\n", aux3->pos_inic_x, aux3->pos_inic_y);
-		printf("\t Posicao final: (%d, %d)\n", aux3->pos_final_x, aux3->pos_final_y);
+//		printf("\t Posicao inicial: (%d, %d)\n", aux3->pos_inic_x, aux3->pos_inic_y);
+//		printf("\t Posicao final: (%d, %d)\n", aux3->pos_final_x, aux3->pos_final_y);
 		printf("\t Capacidade maxima: %d \n", aux3->capacidade_max);
-		printf("\t Chance de falha: %.2f\n", aux3->chance_falha);
+//		printf("\t Chance de falha: %.2f\n", aux3->chance_falha);
 		printf("\t Tempo de conserto: %d\n", aux3->tempo_conserto);
-		printf("\t Custo do conserto: %d\n\n", aux3->custo_conserto);
+//		printf("\t Custo do conserto: %d\n\n", aux3->custo_conserto);
 		
-		printf("\t Caminho funciona? %s", (aux3->funciona ? "Sim" : "Nao"));
+		printf("\t Tempo para consertar: %d\n", aux3->time_wrk);
+		printf("\t Caminho funciona? %s\n", (aux3->funciona ? "Sim." : "Nao."));
 		printf("\t Fluxo de recursos: %d\n", aux3->fluxo);
 		printf("\t Fluxo relativo de recursos: %.2f\n\n", aux3->rel_flow);
 		
@@ -265,13 +266,13 @@ void Imprime(Listas *inicio){
 		aux3 = aux3->prox;
 	}
 	
-	getchar();
+//	getchar();
 	printf("\nAdaptadores: \n");
 	
 	aux4 = inicio->p_adapter;
 	while(aux4 != NULL){
 		printf("  %s: \n", aux4->nome_adapter);
-		printf("\t Posicao: (%d, %d)\n\n", aux4->pos_x, aux4->pos_y);
+//		printf("\t Posicao: (%d, %d)\n\n", aux4->pos_x, aux4->pos_y);
 		
 		printf("\t Fluxo de recursos: %d\n", aux4->fluxo);
 		printf("\t Quantidade de caminhos de saida: %d\n", aux4->saida);

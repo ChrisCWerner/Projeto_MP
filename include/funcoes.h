@@ -18,12 +18,17 @@ void Gerencia_Sobra(void *inicio, char id);
 
 void Fluxo_Adapt(Interc *inicio);
 
-void Verifica_Falhas(Interc *inicio);
+void Fluxo_City(Interc *inicio, Record *rec);
 
-void Contabiliza_Falhas(Interc *inicio, Record *rec);
+void Verifica_Falhas(Interc *inicio);
 
 void Maneja_Falhas(Interc *inicio);
 
+void Zera_Fluxo(Listas *inicio);
+
 void Distribui_Recursos(Listas *inicio);
 
-void Relatorio(Listas *, Record* rec,int tempo);
+float Tamanho_Interc(Interc *inicio);
+
+void Relatorio(Listas *inicio);
+
