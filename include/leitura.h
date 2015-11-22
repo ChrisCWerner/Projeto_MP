@@ -9,6 +9,7 @@ typedef struct cidade{
 	char nome_cidade[16];
 	int pos_x, pos_y;
 	int recurso_necessario;
+	int verificada, verificada30;
 	struct cidade *prox;
 	
 	int fluxo;		//Quantidade de rec. que chegam na cidade;

@@ -13,7 +13,7 @@ Record *Inicializa_Record(void){
 	rec->energia_total_geradores = 0;
 	rec->energia_gasta_cidades = 0;
 	rec->tamanho_interc = 0;
-	rec->numerofalhas = 0;
+	rec->numero_de_falhas = 0;
 	rec->cidades_sem_recurso = 0;
 	rec->tempo_cidades_sem_recurso = 0;
 	rec->cidades_sem_30porcento = 0;
@@ -43,7 +43,6 @@ void Localiza_Paths(Listas *inicio){
 		aux3 = inicio->p_interc;
 		while(aux3 != NULL){
 			
-			rec->total_geradores++;
 			
 			if((aux3->pos_inic_x == aux2->pos_x) && (aux3->pos_inic_y == aux2->pos_y)){
 				aux3->vem = aux2;
@@ -314,14 +313,14 @@ void Fluxo_City(Interc *inicio, Record *rec){
 	
 	Interc *path = NULL;
 	Cidade *city = NULL;
-	
+
 	path = inicio;
 	while(path != NULL){
 		
 		if(path->vaic == 'C'){
 			city = (Cidade *) path->vai;
 			city->fluxo += path->fluxo;
-			
+
 			rec->energia_gasta_cidades += city->fluxo;
 		}
 		
@@ -436,10 +435,6 @@ void Distribui_Recursos(Listas *inicio){
 	
 	gerad = inicio->p_gerador;
 	while(gerad != NULL){
-		
-		rec->custo_total += gerad->custo_gerador;
-		rec->energia_total_geradores += gerad->recurso_produzido;
-		
 		gerad->total = Calcula_Cap_Total(gerad->prim);
 		
 		Calcula_Rel_Flow(gerad->prim, gerad->total);
@@ -492,30 +487,81 @@ float Tamanho_Interc(Interc *inicio){
 	return tam;
 }
 
-void Relatorio(Listas *inicio){
-	
+void ReunirDados(Listas *inicio){
+	int custoaux = 0;
+	Cidade *aux1 = NULL, *city = NULL;
+	Gerador *aux2 = NULL;
+
+	aux1 = inicio->p_cidade;
+	aux2 = inicio->p_gerador;
+
+	int segundocomputado30 = 0, segundocomputado = 0;
+
+	city = aux1;
 	Record *rec = inicio->p_record;
-	Interc *path = inicio->p_interc;
 	
+	while(aux1 != NULL){
+		if(city->fluxo < city->recurso_necessario){
+			if(segundocomputado == 0){
+				rec->tempo_cidades_sem_recurso++;
+				segundocomputado = 1;
+			}
+			if(city->verificada != 1){
+				city->verificada = 1;
+				rec->cidades_sem_recurso++;
+			}
+		}
+		if(city->fluxo < (0.3*city->recurso_necessario)){
+			if(segundocomputado30 == 0){
+				segundocomputado30 = 1;
+				rec->tempo_sem_30porcento++;
+			}
+			if(city->verificada30 != 1){
+				city->verificada30 = 1;
+				rec->cidades_sem_30porcento++;
+			}
+		}
+
+		aux1 = aux1->prox;
+	}
+
+	while(aux2 != NULL){
+		rec->energia_total_geradores += aux2->recurso_produzido;
+
+		rec->custo_total += aux2->custo_gerador;
+		aux2 = aux2->prox;
+	}
+}
+void Relatorio(Listas *inicio,int tempo){
+	Record *rec = inicio->p_record;
+
+	Cidade *aux1 = inicio->p_cidade;
+	Gerador *aux2 = inicio->p_gerador;
+	Interc *aux3 = inicio->p_interc;
+
 	FILE* arq;
-	arq = fopen("Relatorio.txt","w+");
+	arq = fopen("Relatorio","w+");
 	
-	rec->tamanho_interc = Tamanho_Interc(path);
-	
-	fprintf(arq, "Tempo total de simulacao: %d\n", rec->tempo_total);
-	fprintf(arq, "Custo total da simulacao: %d\n", rec->custo_total);
+	fprintf(arq, "Tempo total de simulação: %d\n", tempo);
+	fprintf(arq, "Custo total da simulação: %d\n", rec->custo_total);
 	fprintf(arq, "Total de geradores: %d\n", rec->total_geradores);
 	fprintf(arq, "Energia total gerada: %d\n", rec->energia_total_geradores);
 
-	fprintf(arq, "Total de cidades: %d\n", rec->total_cidades);
-	fprintf(arq, "Energia total gasta pelas cidades: %d\n", rec->energia_gasta_cidades);
+	while(aux1 != NULL){
+		rec->total_cidades += 1;
+		aux1 = aux1->prox;
 	
-	fprintf(arq, "Tamanho total das interconexoes: %d\n", rec->tamanho_interc);
-	fprintf(arq, "Numero de falhas nas interconexoes: %d\n", rec->numero_de_falhas);
-	fprintf(arq, "Numero de cidades que ficaram sem recurso necessario: %d\n", rec->cidades_sem_recurso);
+	}
+
+	fprintf(arq, "Energia total gasta pelas cidades: %d\n", rec->energia_gasta_cidades);
+
+	rec->tamanho_interc = Tamanho_Interc(inicio->p_interc);
+	fprintf(arq, "Tamanho total das interconexões: %d\n", rec->tamanho_interc);
+	fprintf(arq, "Número de falhas nas interconexões: %d\n", rec->numero_de_falhas);
+	fprintf(arq, "Número de cidades que ficaram sem recurso necessário: %d\n", rec->cidades_sem_recurso);
 	fprintf(arq, "Tempo que ficaram sem recurso: %d\n",rec->tempo_cidades_sem_recurso);
-	fprintf(arq, "Numero de cidades que ficaram com menos de 30%% dos recursos: %d\n", rec->cidades_sem_30porcento);
-	fprintf(arq, "Tempo que ficaram com menos de 30%% de recurso: %d\n",rec->tempo_sem_30porcento);
+	fprintf(arq, "Número de cidades que ficaram com menos de 30 porcento dos recursos: %d\n", rec->cidades_sem_30porcento);
+	fprintf(arq, "Tempo que ficaram com menos 30 porcento de recurso: %d\n",rec->tempo_sem_30porcento);
 
 
 	fclose(arq);

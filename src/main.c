@@ -46,6 +46,7 @@ int main(){
 		for(; i<tempo; i++){
 			printf("\033[2J\033[1;1H\n----------------------------SEGUNDO %d----------------------------", i+1);
 			Distribui_Recursos(inicio);
+			ReunirDados(inicio);
 			if(i==0) getchar();
 			Imprime(inicio);
 			Interface_Grafica (inicio);
@@ -55,6 +56,7 @@ int main(){
 	}else{
 		for(; i<tempo; i++){
 			Distribui_Recursos(inicio);
+			ReunirDados(inicio);
 			Interface_Grafica (inicio);
 		}
 	}
@@ -63,9 +65,8 @@ int main(){
 	printf("Pressione Enter para criar relatório dentro da pasta /src/");
 	getchar();
 	assert(fp);
+	Relatorio(inicio,tempo);
 	printf("\nRelatório criado com sucesso\n\n");
-
-	Relatorio(inicio);
 
 	inicio = Destroi(inicio);
 	free(inicio);

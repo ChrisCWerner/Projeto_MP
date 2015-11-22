@@ -205,6 +205,8 @@ void Imprime(Listas *inicio){
 		printf("\t Recursos necessarios: %d\n\n", aux1->recurso_necessario);
 		
 		printf("\t Recursos recebidos: %d\n\n", aux1->fluxo);
+
+		aux1->verificada = 0;
 		aux1 = aux1->prox;
 	}
 	
@@ -223,6 +225,7 @@ void Imprime(Listas *inicio){
 		printf("\t Capacidade total de transporte: %d\n", aux2->total);
 		printf("\t Total de saidas funcionando: %d\n", aux2->works);
 		printf("\t Total de saidas lotadas: %d\n\n", aux2->cheio);
+		inicio->p_record->total_geradores++;
 		aux2 = aux2->prox;
 	}
 	

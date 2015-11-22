@@ -30,7 +30,8 @@ void Distribui_Recursos(Listas *inicio);
 
 float Tamanho_Interc(Interc *inicio);
 
-void Relatorio(Listas *inicio);
+void Relatorio(Listas *inicio, int tempo);
 
 void Interface_Grafica(Listas* inicio);
 
+void ReunirDados(Listas *inicio);

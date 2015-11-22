@@ -1,0 +1,11 @@
+18/11/2015 | 30 minutos | Estudar algoritmo e requisitos
+
+19/11/2015 | 1 hora e 30 minutos  | Criar protótipo da função para criar relatório
+
+Estudar também formas de simular tempo
+
+20/11/2015 | 1 hora e 30 minutos |
+Melhorar menu e relação com o usuário, melhorar criação do relatório.
+
+21/11/2015 | 4 horas |
+Adptar códigos entre os integrantes, solucionar erros de modularização, solucionar erros de criação de relatório.
