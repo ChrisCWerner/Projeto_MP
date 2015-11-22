@@ -72,3 +72,6 @@
 15:18 21/11/2015 | 4:19 | Codificar módulos | Debugging
 	* Função de relatório quase pronta;
 	* Vários ajustes no código.
+
+23:17 21/11/2015 | 1:55 | Codificar módulos | Debugging
+	* Ajustes no código.
