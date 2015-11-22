@@ -1,0 +1,22 @@
+﻿Para correta compilação do programa é necessário adentrar a pasta /src/ dentro da pasta em que este LEIAME está contido, o arquivo executável será executado automaticamente pelo make, mas ele estará presente na mesma pasta assim como o Relatório.txt final sobre as atividades.
+
+É necessário que o sistema possua a correta instalação da biblioteca gtest e ncurses.
+
+
+
+
+G - Geradores;
+A - Adaptadores;
+C - Cidades;
+
+Obs.: Todos os componentes que aparecem na tela estão conectados por interconexões.
+
+A cor verde significa que está funcionando corretamente;
+
+Se o Adaptador ficar vermelho, significa:
+	- que a conexão que chega até ele falhou;
+	- E que apenas uma conexão chega até ele e outra sai dele, levando energia a algum lugar. Então
+	  se a conexão que chega até ele falha ele não pode transportar a energia necessário (requerida pela outra conexão)
+
+Se a Cidade ficar amarela, significa:
+	- que a conexão que chegou até ela falhou.
