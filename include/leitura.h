@@ -9,10 +9,10 @@ typedef struct cidade{
 	char nome_cidade[16];
 	int pos_x, pos_y;
 	int recurso_necessario;
-	int verificada, verificada30;
 	struct cidade *prox;
 	
 	int fluxo;		//Quantidade de rec. que chegam na cidade;
+	int sem_rec;	//Verifica se a cidade ja esteve sem rec.
 } Cidade;
 
 typedef struct gerador{
@@ -25,7 +25,7 @@ typedef struct gerador{
 	int saida;				//quantidade de interc. que saem do gerador;
 	int sobra;				//quantidade de rec. que sobra;
 	int total;				//total de rec. que as interc. podem transportar;
-	int works;				//n°de interc. funcionando;
+	int works;				//n° de interc. funcionando;
 	int cheio;				//n° de interc. lotadas;
 	struct interc *prim;	//interc. que saem do mesmo gerador;
 } Gerador;
@@ -37,7 +37,6 @@ typedef struct interc{
 	int capacidade_max;
 	float chance_falha;
 	int tempo_conserto;
-	int verificada;
 	int custo_conserto;
 	struct interc *prox;
 	
@@ -69,7 +68,6 @@ typedef struct adapter{
 
 typedef struct record{
 	int numero_de_falhas;
-	int numerofalhas;
 	int tempo_de_falha;
 	int custo_total;
 	int tempo_total;
@@ -77,7 +75,7 @@ typedef struct record{
 	int total_cidades;
 	int energia_total_geradores;
 	int energia_gasta_cidades;
-	int tamanho_interc;
+	float tamanho_interc;
 	int cidades_sem_recurso;
 	int tempo_cidades_sem_recurso;
 	int cidades_sem_30porcento;
@@ -95,11 +93,11 @@ typedef struct listas{
 //Funcoes
 
 /***********************************************************************************
-* Nome da funcao: Inicializa;
-* Descricao: Inicializa a estrutura que contem as listas de cada tipo de dado;
+* Nome da função: Inicializa;
+* Descrição: Inicializa a estrutura que contem as listas de cada tipo de dado;
 * Assertivas de Entrada: 
 *			nenhum
-* Assertivas de Saida:
+* Assertivas de Saída:
 *			Listas criadas:
 *			Listas->p_cidade = NULL;
 *			Listas->p_gerador = NULL;
@@ -110,11 +108,11 @@ typedef struct listas{
 Listas *Inicializa(void);
 
 /**********************************************************************************************************************************
-* Nome da funcao: Le_Arquivo;
-* Descricao: Le o arquivo de entrada e insere os tipos de informacaes nas respectivas listas.
+* Nome da função: Le_Arquivo;
+* Descrição: Le o arquivo de entrada e insere os tipos de informações nas respectivas listas.
 * Assertivas de Entrada: 
 *			FILE *fp != NULL (ponteiro para arquivo de entrada)
-* Assertivas de Saida:
+* Assertivas de Saída:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
 *			Listas->p_gerador != NULL;
@@ -124,42 +122,43 @@ Listas *Inicializa(void);
 Listas *Le_Arquivo(FILE*);
 
 /**************************************************************************************************************************
-* Nome da funcao: Insere_Lista;
-* Descricao: Insere o tipo de informacao lida, a partir da funcao 'Le_arquivo', para o tipo correspondente das Listas.
+* Nome da função: Insere_Lista;
+* Descrição: Insere o tipo de informação lida, a partir da função 'Le_arquivo', para o tipo correspondente das Listas.
 * Assertivas de Entrada: 
 *			char tipo_elemento;
-*			Listas (previamente alocada, podendo ou nio estarem vazias)
+*			Listas (previamente alocada, podendo ou não estarem vazias)
 *			void *elemento (ponteiro para o elemento a ser inserido)
-* Assertivas de Saida:
+* Assertivas de Saída:
 *			nenhuma
 *****************************************************************************************************************************/
 void Insere_Lista(char, Listas*, void*);
 
 /*********************************************************************************************************************************
-* Nome da funcao: Imprime;
-* Descricao: Imprime a estrutura que armazena cada tipo de lista, ou seja, vai imprimir cada uma das listas de cidades, geradores,
-	     adaptadores e interconexies.
+* Nome da função: Imprime;
+* Descrição: Imprime a estrutura que armazena cada tipo de lista, ou seja, vai imprimir cada uma das listas de cidades, geradores,
+	     adaptadores e interconexões.
 * Assertivas de Entrada:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
 *			Listas->p_gerador != NULL;
 *			Listas->p_interc != NULL;
 *			Listas->p_adapter != NULL;
-* Assertivas de Saida:
+* Assertivas de Saída:
 *			nenhuma
 ***********************************************************************************************************************************/
 void Imprime(Listas*);
 
 /**********************************************************************************************************
-* Nome da funcao: Destroi;
-* Descricao: Desaloca a posicao de memiria ocupada pelas listas.
+* Nome da função: Destroi;
+* Descrição: Desaloca a posição de memória ocupada pelas listas.
 * Assertivas de Entrada:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
 *			Listas->p_gerador != NULL;
 *			Listas->p_interc != NULL;
 *			Listas->p_adapter != NULL;
-* Assertivas de Saida:
+* Assertivas de Saída:
 *			Listas = NULL;
 ***********************************************************************************************************/
 Listas *Destroi(Listas*);
+

@@ -20,6 +20,22 @@ TEST(Alocando_as_Estruturas, Inicializa){
 	ASSERT_EQ(NULL, sts->p_adapter);
 }
 
+TEST(Alocando_a_Estrutura_que_armazena_informacoes_para_o_relatorio, Inicializa2){
+	sts->p_record = Inicializa_Record();
+	ASSERT_EQ(0, sts->p_record->numero_de_falhas);
+	ASSERT_EQ(0, sts->p_record->tempo_de_falha);
+	ASSERT_EQ(0, sts->p_record->custo_total);
+	ASSERT_EQ(0, sts->p_record->tempo_total);
+	ASSERT_EQ(0, sts->p_record->total_geradores);
+	ASSERT_EQ(0, sts->p_record->total_cidades);
+	ASSERT_EQ(0, sts->p_record->energia_total_geradores);
+	ASSERT_EQ(0, sts->p_record->energia_gasta_cidades);
+	ASSERT_EQ(0, sts->p_record->tamanho_interc);
+	ASSERT_EQ(0, sts->p_record->cidades_sem_recurso);
+	ASSERT_EQ(0, sts->p_record->tempo_cidades_sem_recurso);
+	ASSERT_EQ(0, sts->p_record->cidades_sem_30porcento);
+	ASSERT_EQ(0, sts->p_record->tempo_sem_30porcento);
+}
 TEST(Inseri_na_Lista_Cidade, Cidade){
 	cidade = (Cidade *) malloc(sizeof(Cidade));
 	strcpy(cidade->nome_cidade, "A_City");
@@ -80,17 +96,8 @@ TEST(Inseri_na_Lista_Adaptador, Adaptador){
 	EXPECT_EQ(21,  sts->p_adapter->pos_x);
 	EXPECT_EQ(40,  sts->p_adapter->pos_y);
 }
-/*
-TEST(Localiza_caminhos, localizar){
-	Localiza_Paths(sts);
-	Gerador* aux1 = (Gerador*)sts->p_interc->vem;
-	Adapter* aux2 = (Adapter*)sts->p_interc->vai;
-	EXPECT_STREQ("A_Gen", aux1->nome_gerador);
-	EXPECT_EQ('G',  sts->p_interc->vemc);
-	EXPECT_STREQ("A_dapt", aux2->nome_adapter);
-	EXPECT_EQ('A',  sts->p_interc->vaic);
-}
-*/
+
+
 TEST(Destroi_Listas1, Destruir1){
 	sts = Destroi(sts);
 	EXPECT_EQ(NULL, sts->p_cidade);
@@ -106,10 +113,22 @@ TEST(Leitura_do_arquivo_de_entrada, Leitura){
 	inicio = Le_Arquivo(fp);
 	fclose(fp);
 	inicio->p_record = Inicializa_Record();
-	Localiza_Paths(inicio);
-	for(i = 0; i<20; i++){
-		Distribui_Recursos(inicio);
-	}
+	ASSERT_EQ(0, inicio->p_record->numero_de_falhas);
+	ASSERT_EQ(0, inicio->p_record->tempo_de_falha);
+	ASSERT_EQ(0, inicio->p_record->custo_total);
+	ASSERT_EQ(0, inicio->p_record->tempo_total);
+	ASSERT_EQ(0, inicio->p_record->total_geradores);
+	ASSERT_EQ(0, inicio->p_record->total_cidades);
+	ASSERT_EQ(0, inicio->p_record->energia_total_geradores);
+	ASSERT_EQ(0, inicio->p_record->energia_gasta_cidades);
+	ASSERT_EQ(0, inicio->p_record->tamanho_interc);
+	ASSERT_EQ(0, inicio->p_record->cidades_sem_recurso);
+	ASSERT_EQ(0, inicio->p_record->tempo_cidades_sem_recurso);
+	ASSERT_EQ(0, inicio->p_record->cidades_sem_30porcento);
+	ASSERT_EQ(0, inicio->p_record->tempo_sem_30porcento);	
+}
+
+TEST(Destroi_Listas2, Destruir2){
 	inicio = Destroi(inicio);
 	EXPECT_EQ(NULL, inicio->p_cidade);
 	EXPECT_EQ(NULL, inicio->p_gerador);
@@ -122,7 +141,7 @@ void delay(){
        for (int d = 1 ; d <= 25000 ; d++ )
        {}
 }
-int main(int argc, char **argv) {
+int main(int argc, char **argv){
 	int opcao;
 	char arquivo[20];
 	int tempo, i = 0;
@@ -160,18 +179,14 @@ int main(int argc, char **argv) {
 		for(; i<tempo; i++){
 			printf("\033[2J\033[1;1H\n----------------------------SEGUNDO %d----------------------------", i+1);
 			Distribui_Recursos(inicio);
-			ReunirDados(inicio);
 			if(i==0) getchar();
 			Imprime(inicio);
-			Interface_Grafica (inicio);
 			delay();
 	
 		}
 	}else{
 		for(; i<tempo; i++){
 			Distribui_Recursos(inicio);
-			ReunirDados(inicio);
-			Interface_Grafica (inicio);
 		}
 	}
 	printf("\nSimulação terminada\n");
@@ -179,7 +194,7 @@ int main(int argc, char **argv) {
 	printf("Pressione Enter para criar relatório dentro da pasta /src/");
 	getchar();
 	assert(fp);
-	Relatorio(inicio,tempo);
+	Relatorio(inicio);
 	printf("\nRelatório criado com sucesso\n\n");
 
 	inicio = Destroi(inicio);

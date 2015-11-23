@@ -1,7 +1,5 @@
-//Main
-
+#include <stdio.h>
 #include "funcoes.h"
-
 
 void delay(){
  for ( int c = 1 ; c <= 25000 ; c++ )
@@ -19,7 +17,7 @@ int main(){
 	scanf("%[^\n]", arquivo);
 	getchar();
 
-	printf("Digite o tempo da simulação:");
+	printf("Digite o tempo da simulacao:");
 	scanf("%d", &tempo);
 
 	FILE *fp = fopen(arquivo, "r");
@@ -34,8 +32,8 @@ int main(){
 	inicio->p_record = Inicializa_Record();
 	Localiza_Paths(inicio);
 	Imprime(inicio);
-	printf("\nModelo de simulação detalhada acima.\n");
-	printf("\nDeseja realizar a simulação de forma detalhada ou apenas gerar o relatório?\n1- Detalhada\n2- Simples\n");
+	printf("\nModelo de simulacao detalhada acima.\n");
+	printf("\nDeseja realizar a simulacao de forma detalhada ou apenas gerar o relatorio?\n1- Detalhada\n2- Simples\n");
 	scanf("%d",&opcao);	
 	while(opcao != 1 && opcao !=2) {
 		printf("\nDigite apenas 1 ou 2\n");
@@ -46,26 +44,24 @@ int main(){
 		for(; i<tempo; i++){
 			printf("\033[2J\033[1;1H\n----------------------------SEGUNDO %d----------------------------", i+1);
 			Distribui_Recursos(inicio);
-			ReunirDados(inicio);
 			if(i==0) getchar();
 			Imprime(inicio);
-			Interface_Grafica (inicio);
+			//Interface_Grafica (inicio);
 			delay();
 	
 		}
 	}else{
 		for(; i<tempo; i++){
 			Distribui_Recursos(inicio);
-			ReunirDados(inicio);
-			Interface_Grafica (inicio);
+			//Interface_Grafica (inicio);
 		}
 	}
-	printf("\nSimulação terminada\n");
+	printf("\nSimulacao terminada\n");
 	
-	printf("Pressione Enter para criar relatório dentro da pasta /src/");
+	printf("Pressione Enter para criar relatorio dentro da pasta /src/");
 	getchar();
 	assert(fp);
-	Relatorio(inicio,tempo);
+	Relatorio(inicio);
 	printf("\nRelatório criado com sucesso\n\n");
 
 	inicio = Destroi(inicio);

@@ -4,16 +4,24 @@
 #include <math.h>
 #include <curses.h>
 
+/************************************************************************************************************
+* Nome da função: Inicializa_Record;
+* Descrição: Inicializa a estrutura que irá armazenar os dados dos relatórios.
+* Assertivas de Entrada: nenhuma
+* Assertivas de Saída: 
+*			Record *Registro != NULL (registro alocado na memória)
+*************************************************************************************************************/
 Record *Inicializa_Record(void){
 	Record *rec = (Record *) malloc(sizeof(Record));
-	rec->custo_total = 0;
+	rec->numero_de_falhas = 0;
 	rec->tempo_de_falha = 0;
+	rec->custo_total = 0;
+	rec->tempo_total = 0;
 	rec->total_geradores = 0;
 	rec->total_cidades = 0;
 	rec->energia_total_geradores = 0;
 	rec->energia_gasta_cidades = 0;
 	rec->tamanho_interc = 0;
-	rec->numero_de_falhas = 0;
 	rec->cidades_sem_recurso = 0;
 	rec->tempo_cidades_sem_recurso = 0;
 	rec->cidades_sem_30porcento = 0;
@@ -22,6 +30,19 @@ Record *Inicializa_Record(void){
 	return rec;
 }
 
+/**********************************************************************************************************
+* Nome da função: Localiza_Paths;
+* Descrição: Faz as ligações entre os Geradores e adapatadores e entre adapatadores e cidades,
+*	através das interconexões.
+* Assertivas de entrada: 
+*			Listas criadas:
+*			Listas->p_cidade != NULL;
+*			Listas->p_gerador != NULL;
+*			Listas->p_interc != NULL;
+*			Listas->p_adapter != NULL;
+* Assertivas de saída:
+*			nenhum
+************************************************************************************************************/
 void Localiza_Paths(Listas *inicio){
 	
 	assert(inicio != NULL);
@@ -42,7 +63,6 @@ void Localiza_Paths(Listas *inicio){
 		i = 0;
 		aux3 = inicio->p_interc;
 		while(aux3 != NULL){
-			
 			
 			if((aux3->pos_inic_x == aux2->pos_x) && (aux3->pos_inic_y == aux2->pos_y)){
 				aux3->vem = aux2;
@@ -91,8 +111,6 @@ void Localiza_Paths(Listas *inicio){
 		aux1 = inicio->p_cidade;
 		while(aux1 != NULL){
 			
-			rec->total_cidades++;
-			
 			if((aux3->pos_final_x == aux1->pos_x) && (aux3->pos_final_y == aux1->pos_y)){
 				aux3->vai = aux1;
 				aux3->vaic = 'C';
@@ -103,7 +121,15 @@ void Localiza_Paths(Listas *inicio){
 		aux3 = aux3->prox;
 	}
 }
-
+/*******************************************************************************************************************
+* Nome da função: Insere_Irmão;
+* Descrição: Insere na lista de interconexão as outras interconexões que saem do mesmo adaptador.
+* Assertivas de entrada:
+*			Interc *novo_elem != NULL
+*			Inetrc *top != NULL
+* Assertivas de saída:
+*			Interc *saida != NULL && Interc *saida = top;
+********************************************************************************************************************/
 Interc *Insere_Irmao(Interc *novo_elem, Interc *top){
 	
 	assert(novo_elem != NULL);
@@ -112,7 +138,18 @@ Interc *Insere_Irmao(Interc *novo_elem, Interc *top){
 	top = novo_elem;
 	return top;
 }
-
+/************************************************************************************************************************
+* Nome da função: Calcula_Cap_Total;
+* Descrição: Calcula a capacidade total que todas as interconexões podem transportar;
+* Assertivas de Entrada:
+*			Listas criadas:
+*			Listas->p_cidade != NULL;
+*			Listas->p_gerador != NULL;
+*			Listas->p_interc != NULL;
+*			Listas->p_adapter != NULL;
+* Assertivas de Saída:
+*			int capacidade_total != 0;
+*************************************************************************************************************************/
 int Calcula_Cap_Total(Interc *inicio){
 	
 	assert(inicio != NULL);
@@ -128,13 +165,20 @@ int Calcula_Cap_Total(Interc *inicio){
 	return capacidade_total;
 }
 
+/************************************************************************************************************************
+* Nome da função: Calcula_Cap_Total;
+* Descrição: Calcula a capacidade relativa que cada interconexão podem transportar;
+* Assertivas de Entrada:
+*			Listas criadas:
+*			Listas->p_cidade != NULL;
+*			Listas->p_gerador != NULL;
+*			Listas->p_interc != NULL;
+*			Listas->p_adapter != NULL;
+*			int total = Capacidade_total;
+* Assertivas de Saída:
+*			int capacidade_total != 0;
+*************************************************************************************************************************/
 int Calcula_Rel_Flow(Interc *inicio, int total){
-	
-//	if(total == 0){
-//		printf("\n\ntotal != 0 !!!");
-//		getchar();
-//		return -1;
-//	}
 	
 	Interc *aux = inicio;
 	int i = 0;
@@ -150,6 +194,15 @@ int Calcula_Rel_Flow(Interc *inicio, int total){
 	return i;
 }
 
+/**************************************************************************************************************
+* Nome da função: Calcula_Fluxo;
+* Descrição: Calcula a sobre de recurso nos adapatadores;
+* Assertivas de entrada: 
+*			void *inicio != NULL;
+*			caracter identificador;
+* Assertivas de saida:
+*			int sobra;
+*******************************************************************************************************************/
 int Calcula_Fluxo(void *inicio, char id){
 	
 	assert(inicio != NULL);
@@ -205,6 +258,16 @@ int Calcula_Fluxo(void *inicio, char id){
 	return sobra;
 }
 
+/**************************************************************************************************************
+* Nome da função: Gerencia_Sobra;
+* Descrição: Faz um gerenciamento da sobre de recursos tanto de adpatadores e geradores, para as interconexões
+*		que saem dele;
+* Assertivas de entrada: 
+*			void *inicio != NULL;
+*			caracter identificador;
+* Assertivas de saida:
+*			nenhuma
+*******************************************************************************************************************/
 void Gerencia_Sobra(void *inicio, char id){
 	
 	Gerador *gerad = NULL;
@@ -212,7 +275,6 @@ void Gerencia_Sobra(void *inicio, char id){
 	Adapter *adapt = NULL;
 	int sobra, sobra_saida, tudo_cheio, total;
 	int total_funciona, total_cheio;
-//	int path_ncheio;
 	
 	if(id == 'G'){
 		gerad = (Gerador *) inicio;
@@ -287,7 +349,14 @@ void Gerencia_Sobra(void *inicio, char id){
 		adapt->total = total;
 	}
 }
-
+/**************************************************************************************************************
+* Nome da função:Fluxo_Adpat;
+* Descrição: calcula o fluxo de energia que chega ao adpatador;
+* Assertivas de entrada: 
+*			void *inicio != NULL;
+* Assertivas de saida:
+*			nenhum
+*******************************************************************************************************************/
 void Fluxo_Adapt(Interc *inicio){
 	
 	assert(inicio->vai != NULL);
@@ -307,20 +376,29 @@ void Fluxo_Adapt(Interc *inicio){
 	}
 }
 
+/**************************************************************************************************************
+* Nome da função: Fluxo_City;
+* Descrição: Calcula o fluxo de recurso que chega nas cidades;
+* Assertivas de entrada: 
+*			Interc *inicio != NULL;
+*			Record *Registro != NULL (Registro alocado)
+* Assertivas de saida:
+*			nenhuma
+*******************************************************************************************************************/
 void Fluxo_City(Interc *inicio, Record *rec){
 	
 	assert(inicio->vai != NULL);
 	
 	Interc *path = NULL;
 	Cidade *city = NULL;
-
+	
 	path = inicio;
 	while(path != NULL){
 		
 		if(path->vaic == 'C'){
 			city = (Cidade *) path->vai;
 			city->fluxo += path->fluxo;
-
+			
 			rec->energia_gasta_cidades += city->fluxo;
 		}
 		
@@ -328,6 +406,15 @@ void Fluxo_City(Interc *inicio, Record *rec){
 	}
 }
 
+/**************************************************************************************************************
+* Nome da função: Verifica_Falhas
+* Descrição: Verifica se houve falhas nas interconexões
+* Assertivas de entrada: 
+*			Interc *inicio != NULL;
+*			Record *Registro != NULL;
+* Assertivas de saida:
+*			nehuma;
+*******************************************************************************************************************/
 void Verifica_Falhas(Interc *inicio, Record *rec){
 	
 	Interc *path = NULL;
@@ -360,6 +447,16 @@ void Verifica_Falhas(Interc *inicio, Record *rec){
 	}
 }
 
+/**************************************************************************************************************
+* Nome da função: Maneja_Falhas
+* Descrição: faz o gerenciamento das falhas nos geradores e adpatadores, modificando a variável booleana,
+*		para indicar falha;
+* Assertivas de entrada: 
+*			Interc *inicio != NULL;
+*			incio->funciona = 1 (Se falhou);
+* Assertivas de saida:
+*			nehuma;
+*******************************************************************************************************************/
 void Maneja_Falhas(Interc *inicio){
 	
 	Interc *path = NULL;
@@ -387,6 +484,14 @@ void Maneja_Falhas(Interc *inicio){
 	}
 }
 
+/**************************************************************************************************************
+* Nome da função: Zera_Fluxo
+* Descrição: Zera o fluxo das interconexões
+* Assertivas de entrada: 
+*			Listas *inicio != NULL;
+* Assertivas de saida:
+*			nehuma;
+*******************************************************************************************************************/
 void Zera_Fluxo(Listas *inicio){
 	
 	Cidade *city = NULL;
@@ -417,6 +522,14 @@ void Zera_Fluxo(Listas *inicio){
 	}
 }
 
+/**************************************************************************************************************
+* Nome da função: Distribui_Recursos;
+* Descrição: Faz a distribuição dos recursos dos geradores para os adaptadores, cidades através das interconexões.
+* Assertivas de entrada: 
+*			Listas *inicio != NULL;
+* Assertivas de saida:
+*			nehuma;
+*******************************************************************************************************************/
 void Distribui_Recursos(Listas *inicio){
 	
 	assert(inicio != NULL);
@@ -435,6 +548,10 @@ void Distribui_Recursos(Listas *inicio){
 	
 	gerad = inicio->p_gerador;
 	while(gerad != NULL){
+		
+		rec->custo_total += gerad->custo_gerador;
+		rec->energia_total_geradores += gerad->recurso_produzido;
+		
 		gerad->total = Calcula_Cap_Total(gerad->prim);
 		
 		Calcula_Rel_Flow(gerad->prim, gerad->total);
@@ -464,9 +581,85 @@ void Distribui_Recursos(Listas *inicio){
 	
 	Fluxo_City(inicio->p_interc, rec);
 	
+	Examina_Cidades(inicio);
+	
 	rec->tempo_total++;
 }
+/**************************************************************************************************************
+* Nome da função: Examina_Cidades
+* Descrição: Calcula o tempo em que a cidade está sem recurso;
+* Assertivas de entrada: 
+*			Listas *inicio != NULL;
+* Assertivas de saida:
+*			nehuma;
+*******************************************************************************************************************/
+void Examina_Cidades(Listas *inicio){
+	
+	Record *rec = inicio->p_record;
+	Cidade *city = inicio->p_cidade;
+	
+//	int segundocontado = 0, segundocontado30 = 0;
 
+	while(city != NULL){
+		
+		if(city->fluxo < city->recurso_necessario){
+//			if(segundocontado == 0){
+				rec->tempo_cidades_sem_recurso++;
+//				segundocontado = 1;
+//			}
+			if(city->sem_rec == 0){
+				city->sem_rec = 1;
+				rec->cidades_sem_recurso++;
+			}
+		}
+		if(city->fluxo < 0.3*city->recurso_necessario){
+//			if(segundocontado30 == 0){
+				rec->tempo_sem_30porcento++;
+//				segundocontado30 = 1;
+//			}
+	
+			if(city->sem_rec < 2){
+				city->sem_rec = 2;
+				rec->cidades_sem_30porcento++;
+			}
+		}
+		city = city->prox;
+	}
+}
+
+/**************************************************************************************************************
+* Nome da função: Total_Elementos
+* Descrição: Calcula o total de cidades e geradores
+* Assertivas de entrada: 
+*			Listas *inicio != NULL;
+* Assertivas de saida:
+*			nehuma;
+*******************************************************************************************************************/
+void Total_Elementos(Listas *inicio){
+	
+	Record *rec = inicio->p_record;
+	Gerador *gerad = inicio->p_gerador;
+	Cidade *city = inicio->p_cidade;
+	
+	while(gerad != NULL){
+		rec->total_geradores++;
+		gerad = gerad->prox;
+	}
+	
+	while(city != NULL){
+		rec->total_cidades++;
+		city = city->prox;
+	}
+}
+
+/**************************************************************************************************************
+* Nome da função: Tamanho_Interc
+* Descrição: Calcula o tamanho de todas as interconexões juntas
+* Assertivas de entrada: 
+*			Listas *inicio != NULL;
+* Assertivas de saida:
+*			nehuma;
+*******************************************************************************************************************/
 float Tamanho_Interc(Interc *inicio){
 	
 	Interc *path = NULL;
@@ -487,88 +680,44 @@ float Tamanho_Interc(Interc *inicio){
 	return tam;
 }
 
-void ReunirDados(Listas *inicio){
-	int custoaux = 0;
-	Cidade *aux1 = NULL, *city = NULL;
-	Gerador *aux2 = NULL;
-
-	aux1 = inicio->p_cidade;
-	aux2 = inicio->p_gerador;
-
-	int segundocomputado30 = 0, segundocomputado = 0;
-
-	city = aux1;
-	Record *rec = inicio->p_record;
+/**************************************************************************************************************
+* Nome da função: Relatorio
+* Descrição: Grava no arquivo .txt o relatório final com todos so dados solicitados pelo podf do trabalho
+* Assertivas de entrada: 
+*			Listas *inicio != NULL;
+* Assertivas de saida:
+*			nehuma;
+*******************************************************************************************************************/
+void Relatorio(Listas *inicio){
 	
-	while(aux1 != NULL){
-		if(city->fluxo < city->recurso_necessario){
-			if(segundocomputado == 0){
-				rec->tempo_cidades_sem_recurso++;
-				segundocomputado = 1;
-			}
-			if(city->verificada != 1){
-				city->verificada = 1;
-				rec->cidades_sem_recurso++;
-			}
-		}
-		if(city->fluxo < (0.3*city->recurso_necessario)){
-			if(segundocomputado30 == 0){
-				segundocomputado30 = 1;
-				rec->tempo_sem_30porcento++;
-			}
-			if(city->verificada30 != 1){
-				city->verificada30 = 1;
-				rec->cidades_sem_30porcento++;
-			}
-		}
-
-		aux1 = aux1->prox;
-	}
-
-	while(aux2 != NULL){
-		rec->energia_total_geradores += aux2->recurso_produzido;
-
-		rec->custo_total += aux2->custo_gerador;
-		aux2 = aux2->prox;
-	}
-}
-void Relatorio(Listas *inicio,int tempo){
 	Record *rec = inicio->p_record;
-
-	Cidade *aux1 = inicio->p_cidade;
-	Gerador *aux2 = inicio->p_gerador;
-	Interc *aux3 = inicio->p_interc;
-
+	Interc *path = inicio->p_interc;
+	
 	FILE* arq;
-	arq = fopen("Relatorio","w+");
+	arq = fopen("Relatorio.txt","w");
 	
-	fprintf(arq, "Tempo total de simulação: %d\n", tempo);
-	fprintf(arq, "Custo total da simulação: %d\n", rec->custo_total);
+	rec->tamanho_interc = Tamanho_Interc(path);
+	Total_Elementos(inicio);
+	
+	fprintf(arq, "Tempo total de simulacao: %d segundos.\n", rec->tempo_total);
+	fprintf(arq, "Custo total da simulacao: %d\n", rec->custo_total);
 	fprintf(arq, "Total de geradores: %d\n", rec->total_geradores);
 	fprintf(arq, "Energia total gerada: %d\n", rec->energia_total_geradores);
-
-	while(aux1 != NULL){
-		rec->total_cidades += 1;
-		aux1 = aux1->prox;
 	
-	}
-
+	fprintf(arq, "Total de cidades: %d\n", rec->total_cidades);
 	fprintf(arq, "Energia total gasta pelas cidades: %d\n", rec->energia_gasta_cidades);
-
-	rec->tamanho_interc = Tamanho_Interc(inicio->p_interc);
-	fprintf(arq, "Tamanho total das interconexões: %d\n", rec->tamanho_interc);
-	fprintf(arq, "Número de falhas nas interconexões: %d\n", rec->numero_de_falhas);
-	fprintf(arq, "Número de cidades que ficaram sem recurso necessário: %d\n", rec->cidades_sem_recurso);
-	fprintf(arq, "Tempo que ficaram sem recurso: %d\n",rec->tempo_cidades_sem_recurso);
-	fprintf(arq, "Número de cidades que ficaram com menos de 30 porcento dos recursos: %d\n", rec->cidades_sem_30porcento);
-	fprintf(arq, "Tempo que ficaram com menos 30 porcento de recurso: %d\n",rec->tempo_sem_30porcento);
-
-
+	
+	fprintf(arq, "Tamanho total das interconexoes: %.2f\n", rec->tamanho_interc);
+	fprintf(arq, "Numero de falhas nas interconexoes: %d\n", rec->numero_de_falhas);
+	fprintf(arq, "Numero de cidades que ficaram sem recurso necessario: %d\n", rec->cidades_sem_recurso);
+	fprintf(arq, "Tempo que ficaram sem recurso: %d segundos.\n",rec->tempo_cidades_sem_recurso);
+	fprintf(arq, "Numero de cidades que ficaram com menos de 30%% dos recursos: %d\n", rec->cidades_sem_30porcento);
+	fprintf(arq, "Tempo que ficaram com menos de 30%% de recurso: %d segundos.\n",rec->tempo_sem_30porcento);
+	
 	fclose(arq);
-
 }
 
-void Interface_Grafica(Listas* inicio){
+/*void Interface_Grafica(Listas* inicio){
 	assert(inicio != NULL);
 	assert(inicio->p_cidade != NULL);
 	assert(inicio->p_gerador != NULL);
@@ -580,13 +729,13 @@ void Interface_Grafica(Listas* inicio){
 	Interc *aux3 = NULL;
 	Adapter *aux4 = NULL;
 	initscr();  
-	 start_color(); //Esta funcao torna possivel o uso das cores
-//Abaixo estamos definindo os pares de cores que serao utilizados no programa
+	 start_color(); //Esta funo torna possvel o uso das cores
+//baixo estamos definindo os pares de cores que sero utilizados no programa
     init_pair(1,COLOR_GREEN,COLOR_BLACK ); //Texto(Branco) | Fundo(Azul)
     init_pair(2,COLOR_RED,COLOR_BLACK );
     init_pair(3,COLOR_YELLOW,COLOR_BLACK );
- bkgd(COLOR_PAIR(1));  /*Aqui nos definiremos que a cor de fundo do nosso
-                                      programa sera azul e a cor dos textos sera branca.*/
+ bkgd(COLOR_PAIR(1));  /*Aqui ns definiremos que a cor de fundo do nosso
+                                      programa ser azul e a cor dos textos ser branca.
 	move (0,0);
 	printw("Os geradores, adapatadores e cidades representados estao todos conectados!Pressione Enter para sair...");
 	aux3 = inicio->p_interc;
@@ -621,9 +770,7 @@ void Interface_Grafica(Listas* inicio){
 		i++;
 	}  	
 	refresh();    //Atualiza a tela
-	for ( int c = 1 ; c <= 15000 ; c++ )
-       	for (int d = 1 ; d <= 15000 ; d++ )
-       	{}
+	getch();
 	endwin();	
-}
+}*/
 

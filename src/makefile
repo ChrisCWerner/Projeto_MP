@@ -3,10 +3,8 @@ NOME2 = interface
 CODIGO1 = leitura.c
 CODIGOT1 = TesteAutomatizado.c
 CODIGO2 = funcoes.c
-CODIGOT2 = main.c
 
 ARQUIVOS = $(CODIGO1) $(CODIGOT1) $(CODIGO2)
-ARQUIVOS2 = $(CODIGO1) $(CODIGOT2) $(CODIGO2)
 
 OBJETOS = leitura.o TesteAutomatizado.o funcoes.o  
 
@@ -22,11 +20,11 @@ COMPILADOR = g++
 
 all:	link link1 compile1 executar GCOV organizar CPPCHECK
 
-link:	$(ARQUIVOS2)
+link:	$(ARQUIVOS)
 	@clear
 	@clear
 	@echo "\n ** LINKANDO TESTE DA INTERFACE GRAFICA **\n"	
-	@$(COMPILADOR) -c $(ARQUIVOS2) $(DIRINCLUDE) $(FLAGS)
+	@$(COMPILADOR) -c $(ARQUIVOS) $(DIRINCLUDE) $(FLAGS)
 
 link1: $(ARQUIVOS)
 	@echo "\n ** LINKANDO TESTE AUTOMATIZADO **\n"	
