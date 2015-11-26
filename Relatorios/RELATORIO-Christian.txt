@@ -75,3 +75,7 @@
 
 23:17 21/11/2015 | 1:55 | Codificar módulos | Debugging
 	* Ajustes no código.
+
+11:56 26/11/2015 | 0:20 | Revisar módulos
+	* Adicionadas assertivas que garantem a direção do fluxo
+		de recursos (G -> A -> C).
