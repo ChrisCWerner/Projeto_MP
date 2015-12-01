@@ -62,10 +62,9 @@ int main(){
 	getchar();
 	assert(fp);
 	Relatorio(inicio);
-	printf("\nRelatório criado com sucesso\n\n");
+	printf("\nRelatorio criado com sucesso\n\n");
 
-	inicio = Destroi(inicio);
-	free(inicio);
+	Limpa_Casa();
 	
 	printf("Pressione Enter para visualizar gcov e gtest...");
 	getchar();

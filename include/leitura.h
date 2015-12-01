@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
+
+#define Checa_Erro(e)	((e) ? (void) 0 : _Checa_Erro(#e, __FILE__, __LINE__))
+
 
 typedef struct cidade{
 	char nome_cidade[16];
@@ -90,6 +92,8 @@ typedef struct listas{
 	Record *p_record;
 } Listas;
 
+extern Listas *LISTA;
+
 //Funcoes
 
 /***********************************************************************************
@@ -162,3 +166,6 @@ void Imprime(Listas*);
 ***********************************************************************************************************/
 Listas *Destroi(Listas*);
 
+void _Checa_Erro(const char *str, const char *fn, int line);
+
+void Limpa_Casa(void);

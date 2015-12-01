@@ -2,16 +2,7 @@
 
 #include "funcoes.h"
 #include <math.h>
-#include <curses.h>
 
-/************************************************************************************************************
-* Nome da funcao: Inicializa_Record;
-* Descricao: Inicializa a estrutura que ira armazenar os dados dos relatorios.
-* Assertivas de Entrada:
-*			nenhum
-* Assertivas de Saida: 
-*			Record *Registro != NULL (registro alocado na memoria)
-*************************************************************************************************************/
 Record *Inicializa_Record(void){
 	Record *rec = (Record *) malloc(sizeof(Record));
 	rec->numero_de_falhas = 0;
@@ -31,22 +22,9 @@ Record *Inicializa_Record(void){
 	return rec;
 }
 
-/**********************************************************************************************************
-* Nome da funcao: Localiza_Paths;
-* Descricao: Faz as ligacoes entre os Geradores e adapatadores e entre adapatadores e cidades,
-*	através das interconexoes.
-* Assertivas de entrada: 
-*			Listas criadas:
-*			Listas->p_cidade != NULL;
-*			Listas->p_gerador != NULL;
-*			Listas->p_interc != NULL;
-*			Listas->p_adapter != NULL;
-* Assertivas de saida:
-*			nenhum
-************************************************************************************************************/
 void Localiza_Paths(Listas *inicio){
 	
-	assert(inicio != NULL);
+	Checa_Erro(inicio != NULL);
 	
 	
 	Record *rec;
@@ -117,50 +95,32 @@ void Localiza_Paths(Listas *inicio){
 				aux3->vaic = 'C';
 			}
 			
-			//Condicoes de fluxo de recursos:
-			if(aux3->vemc == 'G')
-				assert(aux3->vaic == 'A');	//Garante que toda interc. que sai de um gerador chegue em um adaptador.
-			if(aux3->vemc == 'A')
-				assert(aux3->vaic == 'C');	//Garante que toda interc. que sai de um adaptador chegue em uma cidade.
-			//Caso fique preso em uma dessas assertivas, revise o arquivo de entrada.
-			
 			aux1 = aux1->prox;
 		}
+		
+		//Condicoes de fluxo de recursos:
+		if(aux3->vemc == 'G')
+			Checa_Erro(aux3->vaic == 'A');	//Garante que toda interc. que sai de um gerador chegue em um adaptador.
+		if(aux3->vemc == 'A')
+			Checa_Erro(aux3->vaic == 'C');	//Garante que toda interc. que sai de um adaptador chegue em uma cidade.
+		//Caso fique preso em uma dessas assertivas, revise o arquivo de entrada.
+		
 		aux3 = aux3->prox;
 	}
 }
-/*******************************************************************************************************************
-* Nome da funcao: Insere_Irmao;
-* Descricao: Insere na lista de interconexao as outras interconexoes que saem do mesmo adaptador.
-* Assertivas de entrada:
-*			Interc *novo_elem != NULL
-*			Inetrc *top != NULL
-* Assertivas de saida:
-*			Interc *saida != NULL && Interc *saida = top;
-********************************************************************************************************************/
+
 Interc *Insere_Irmao(Interc *novo_elem, Interc *top){
 	
-	assert(novo_elem != NULL);
+	Checa_Erro(novo_elem != NULL);
 	
 	novo_elem->irmao = top;
 	top = novo_elem;
 	return top;
 }
-/************************************************************************************************************************
-* Nome da funcao: Calcula_Cap_Total;
-* Descricao: Calcula a capacidade total que todas as interconexoes podem transportar;
-* Assertivas de Entrada:
-*			Listas criadas:
-*			Listas->p_cidade != NULL;
-*			Listas->p_gerador != NULL;
-*			Listas->p_interc != NULL;
-*			Listas->p_adapter != NULL;
-* Assertivas de Saida:
-*			int capacidade_total != 0;
-*************************************************************************************************************************/
+
 int Calcula_Cap_Total(Interc *inicio){
 	
-	assert(inicio != NULL);
+	Checa_Erro(inicio != NULL);
 	
 	Interc *aux = inicio;
 	int capacidade_total = 0;
@@ -173,19 +133,6 @@ int Calcula_Cap_Total(Interc *inicio){
 	return capacidade_total;
 }
 
-/************************************************************************************************************************
-* Nome da funcao: Calcula_Cap_Total;
-* Descricao: Calcula a capacidade relativa que cada interconexao podem transportar;
-* Assertivas de Entrada:
-*			Listas criadas:
-*			Listas->p_cidade != NULL;
-*			Listas->p_gerador != NULL;
-*			Listas->p_interc != NULL;
-*			Listas->p_adapter != NULL;
-*			int total = Capacidade_total;
-* Assertivas de Saida:
-*			int capacidade_total != 0;
-*************************************************************************************************************************/
 int Calcula_Rel_Flow(Interc *inicio, int total){
 	
 	Interc *aux = inicio;
@@ -202,18 +149,9 @@ int Calcula_Rel_Flow(Interc *inicio, int total){
 	return i;
 }
 
-/**************************************************************************************************************
-* Nome da funcao: Calcula_Fluxo;
-* Descricao: Calcula a sobre de recurso nos adapatadores;
-* Assertivas de entrada: 
-*			void *inicio != NULL;
-*			caracter identificador;
-* Assertivas de saida:
-*			int sobra;
-*******************************************************************************************************************/
 int Calcula_Fluxo(void *inicio, char id){
 	
-	assert(inicio != NULL);
+	Checa_Erro(inicio != NULL);
 	
 	Gerador *gerad = NULL;
 	Interc *path = NULL;
@@ -266,16 +204,6 @@ int Calcula_Fluxo(void *inicio, char id){
 	return sobra;
 }
 
-/**************************************************************************************************************
-* Nome da funcao: Gerencia_Sobra;
-* Descricao: Faz um gerenciamento da sobre de recursos tanto de adpatadores e geradores, para as interconexoes
-*		que saem dele;
-* Assertivas de entrada: 
-*			void *inicio != NULL;
-*			caracter identificador;
-* Assertivas de saida:
-*			nenhuma
-*******************************************************************************************************************/
 void Gerencia_Sobra(void *inicio, char id){
 	
 	Gerador *gerad = NULL;
@@ -357,17 +285,10 @@ void Gerencia_Sobra(void *inicio, char id){
 		adapt->total = total;
 	}
 }
-/**************************************************************************************************************
-* Nome da funcao:Fluxo_Adpat;
-* Descricao: calcula o fluxo de energia que chega ao adpatador;
-* Assertivas de entrada: 
-*			void *inicio != NULL;
-* Assertivas de saida:
-*			nenhum
-*******************************************************************************************************************/
+
 void Fluxo_Adapt(Interc *inicio){
 	
-	assert(inicio->vai != NULL);
+	Checa_Erro(inicio->vai != NULL);
 	
 	Interc *path = NULL;
 	Adapter *adapt = NULL;
@@ -384,18 +305,9 @@ void Fluxo_Adapt(Interc *inicio){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da funcao: Fluxo_City;
-* Descricao: Calcula o fluxo de recurso que chega nas cidades;
-* Assertivas de entrada: 
-*			Interc *inicio != NULL;
-*			Record *Registro != NULL (Registro alocado)
-* Assertivas de saida:
-*			nenhuma
-*******************************************************************************************************************/
 void Fluxo_City(Interc *inicio, Record *rec){
 	
-	assert(inicio->vai != NULL);
+	Checa_Erro(inicio->vai != NULL);
 	
 	Interc *path = NULL;
 	Cidade *city = NULL;
@@ -414,15 +326,6 @@ void Fluxo_City(Interc *inicio, Record *rec){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da funcao: Verifica_Falhas
-* Descricao: Verifica se houve falhas nas interconexoes
-* Assertivas de entrada: 
-*			Interc *inicio != NULL;
-*			Record *Registro != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Verifica_Falhas(Interc *inicio, Record *rec){
 	
 	Interc *path = NULL;
@@ -455,16 +358,6 @@ void Verifica_Falhas(Interc *inicio, Record *rec){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da funcao: Maneja_Falhas
-* Descricao: faz o gerenciamento das falhas nos geradores e adpatadores, modificando a variavel booleana,
-*		para indicar falha;
-* Assertivas de entrada: 
-*			Interc *inicio != NULL;
-*			incio->funciona = 1 (Se falhou);
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Maneja_Falhas(Interc *inicio){
 	
 	Interc *path = NULL;
@@ -492,14 +385,6 @@ void Maneja_Falhas(Interc *inicio){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da funcao: Zera_Fluxo
-* Descricao: Zera o fluxo das interconexoes
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Zera_Fluxo(Listas *inicio){
 	
 	Cidade *city = NULL;
@@ -530,18 +415,10 @@ void Zera_Fluxo(Listas *inicio){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da funcao: Distribui_Recursos;
-* Descricao: Faz a distribuicao dos recursos dos geradores para os adaptadores, cidades através das interconexoes.
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Distribui_Recursos(Listas *inicio){
 	
-	assert(inicio != NULL);
-	assert(inicio->p_gerador->prim != NULL);
+	Checa_Erro(inicio != NULL);
+	Checa_Erro(inicio->p_gerador->prim != NULL);
 	
 	
 	Record *rec = NULL;
@@ -593,14 +470,7 @@ void Distribui_Recursos(Listas *inicio){
 	
 	rec->tempo_total++;
 }
-/**************************************************************************************************************
-* Nome da funcao: Examina_Cidades
-* Descricao: Calcula o tempo em que a cidade esta sem recurso;
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
+
 void Examina_Cidades(Listas *inicio){
 	
 	Record *rec = inicio->p_record;
@@ -617,7 +487,6 @@ void Examina_Cidades(Listas *inicio){
 		}
 		if(city->fluxo < 0.3*city->recurso_necessario){
 				rec->tempo_sem_30porcento++;
-	
 			if(city->sem_rec < 2){
 				city->sem_rec = 2;
 				rec->cidades_sem_30porcento++;
@@ -627,14 +496,6 @@ void Examina_Cidades(Listas *inicio){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da funcao: Total_Elementos
-* Descricao: Calcula o total de cidades e geradores
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Total_Elementos(Listas *inicio){
 	
 	Record *rec = inicio->p_record;
@@ -652,14 +513,6 @@ void Total_Elementos(Listas *inicio){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da funcao: Tamanho_Interc
-* Descricao: Calcula o tamanho de todas as interconexoes juntas
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 float Tamanho_Interc(Interc *inicio){
 	
 	Interc *path = NULL;
@@ -680,14 +533,6 @@ float Tamanho_Interc(Interc *inicio){
 	return tam;
 }
 
-/**************************************************************************************************************
-* Nome da funcao: Relatorio
-* Descricao: Grava no arquivo .txt o relatorio final com todos so dados solicitados pelo pdf do trabalho
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Relatorio(Listas *inicio){
 	
 	Record *rec = inicio->p_record;
@@ -716,60 +561,3 @@ void Relatorio(Listas *inicio){
 	
 	fclose(arq);
 }
-
-/*void Interface_Grafica(Listas* inicio){
-	assert(inicio != NULL);
-	assert(inicio->p_cidade != NULL);
-	assert(inicio->p_gerador != NULL);
-	assert(inicio->p_interc != NULL);
-	assert(inicio->p_adapter != NULL);
-	int i = 1, j = 0, espera = 0;
-	Cidade *aux1 = NULL;
-	Gerador *aux2 = NULL;
-	Interc *aux3 = NULL;
-	Adapter *aux4 = NULL;
-	initscr();  
-	 start_color(); //Esta funo torna possvel o uso das cores
-//baixo estamos definindo os pares de cores que sero utilizados no programa
-    init_pair(1,COLOR_GREEN,COLOR_BLACK ); //Texto(Branco) | Fundo(Azul)
-    init_pair(2,COLOR_RED,COLOR_BLACK );
-    init_pair(3,COLOR_YELLOW,COLOR_BLACK );
- bkgd(COLOR_PAIR(1));  /*Aqui ns definiremos que a cor de fundo do nosso
-                                      programa ser azul e a cor dos textos ser branca.
-	move (0,0);
-	printw("Os geradores, adapatadores e cidades representados estao todos conectados!Pressione Enter para sair...");
-	aux3 = inicio->p_interc;
-	while (aux3 != NULL){ 
-		if (aux3->vemc == 'G'){
-			attroff(COLOR_PAIR(2));
-			attroff(COLOR_PAIR(3));
-			aux2 = (Gerador*) aux3->vem;
-			move(aux2->pos_x,aux2->pos_y);
-			printw("G\t", i);
-		}else if (aux3->vemc == 'A'){
-			aux4 = (Adapter*)aux3->vem;
-			if(aux3->funciona == 0 && aux4->saida == 2) attron(COLOR_PAIR(2));
-			else attroff(COLOR_PAIR(2));
-			move(aux4->pos_x,aux4->pos_y);
-			printw("A\t", i);
-		}
-		if (aux3->vaic == 'A'){
-			aux4 = (Adapter*)aux3->vai;
-			if(aux3->funciona == 0 && aux4->saida == 2) attron(COLOR_PAIR(2));
-			else attroff(COLOR_PAIR(2));
-			move(aux4->pos_x,aux4->pos_y);
-			printw("A\t", i);
-		}else if (aux3->vaic == 'C'){
-			aux1 = (Cidade*) aux3->vai;
-			if (aux3->vemc == 'A' && aux3->funciona == 0 && aux4->saida == 2) attron(COLOR_PAIR(3));
-			else attroff(COLOR_PAIR(3));
-			move(aux1->pos_x,aux1->pos_y);
-			printw("C\t", i);
-		}
-		aux3 = aux3->prox;
-		i++;
-	}  	
-	refresh();    //Atualiza a tela
-	getch();
-	endwin();	
-}*/

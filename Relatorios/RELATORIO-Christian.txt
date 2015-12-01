@@ -79,3 +79,9 @@
 11:56 26/11/2015 | 0:20 | Revisar módulos
 	* Adicionadas assertivas que garantem a direção do fluxo
 		de recursos (G -> A -> C).
+
+21:11 30/11/2015 |  | Estudar | Codificar módulos
+	* Criadas funções _Checa_Erro e Limpa_Casa que substituem
+		a função assert;
+	* Tentativa frustrada da instalação da SDL2;
+	* Pequenos ajustes no código.
