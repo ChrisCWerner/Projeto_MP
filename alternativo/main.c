@@ -11,7 +11,6 @@ int main(){
 	int tempo = 0;
 	
 	srand(1);
-	
 	inicio = Le_Arquivo(fp);
 	fclose(fp);
 	
@@ -20,20 +19,18 @@ int main(){
 	Localiza_Paths(inicio);
 	
 	puts("GO!!!");
-	while(tempo < 20){
-//		getchar();
+	while(tempo < 25){
 		if(getch() == 's')	break;
 		Distribui_Recursos(inicio);
 		
 		printf("Segundo %d\n", tempo+1);
-//		Imprime(inicio);
+		Imprime(inicio);
 		tempo++;
 	}
 	
 	Relatorio(inicio);
 	
-	inicio = Destroi(inicio);
-	free(inicio);
+	Limpa_Casa();
 	
 	printf("Pressione Enter para sair...");
 	getchar();
