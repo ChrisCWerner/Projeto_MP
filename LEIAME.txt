@@ -1,22 +1,42 @@
-﻿Para correta compilação do programa é necessário adentrar a pasta /src/ dentro da pasta em que este LEIAME está contido, o arquivo executável será executado automaticamente pelo make, mas ele estará presente na mesma pasta assim como o Relatório.txt final sobre as atividades.
+﻿CIC - Departamento de Ciências da Computação
 
-É necessário que o sistema possua a correta instalação da biblioteca gtest e ncurses.
+Matéria: Métodos de Programação	
+
+Semestre: 2/2015
+
+Nome: Christian Costa Werner - Matricula: 140134573
+Nome: Renê Ruan Alves Oliveira - Matricula: 140030930
+Nome: Roberta Renally da Silva Melo - Matricula: 140161317
+
+Para correta compilação do programa é necessário adentrar a pasta /src/ pelo terminal e digtar 'make', que compilará e executará a simulação,
+o gtest, gcov e cppcheck.
+
+É necessário que o sistema possua a correta instalação da biblioteca gtest.
+
+Nessa versão não contem a interface gráfica, que será feita para a versão final.
+
+O relatório é gravado no final da execução de maneira correta. As bibliotecas .h com seus respectivos .c estão todos comentados, com assertivas de entrada, saída e asserts.
+
+Na pasta: /Relatórios Individuais/ estão os relatórios de cada membro.
+
+Na pasta /src/ já vem com dois arquivos de entrada .txt: "Arquivo.txt" e o "Arquivo2.txt", que será solicitado o nome do arquivo durante a execução da simulação. Podendo o usuários inserir outro arquivo de entrada, desde de que esteja no esmo diretório.
+
+Na simulação o usuário pode escolher o tipo de simulação que deseja:
+	1 - Detalhada: Vai mostrar passo a passo através de uma função imprime, que imprimirá na tela a atualização a cada segundo
+			de cada componente: Cidades, Geradores, Adaptadores e Interconexões. Em seguinda o Gtest, gcov e cppcheck.
+	2 - Simples: Roda a simulação, mas não mostra os detalhes no terminal, gerando apenas o relatório requedrido no pdf do trabalho.
+			Em seguinda o Gtest, gcov e cppcheck.
+
+Legenda da interface gráfica:
+	-roxo -> cidades;
+	-laranja -> Geradores;
+	-Cinza -> Adaptadores;
+	- As interconexões "soltas" são porque não ligam nada; Vão de lugar nenhum a lugar nenhum;
 
 
 
 
-G - Geradores;
-A - Adaptadores;
-C - Cidades;
 
-Obs.: Todos os componentes que aparecem na tela estão conectados por interconexões.
 
-A cor verde significa que está funcionando corretamente;
 
-Se o Adaptador ficar vermelho, significa:
-	- que a conexão que chega até ele falhou;
-	- E que apenas uma conexão chega até ele e outra sai dele, levando energia a algum lugar. Então
-	  se a conexão que chega até ele falha ele não pode transportar a energia necessário (requerida pela outra conexão)
 
-Se a Cidade ficar amarela, significa:
-	- que a conexão que chegou até ela falhou.

@@ -2,6 +2,7 @@
 
 #include "leitura.h"
 
+
 Record *Inicializa_Record(void);
 
 void Localiza_Paths(Listas *inicio);
@@ -35,5 +36,3 @@ void Total_Elementos(Listas *inicio);
 float Tamanho_Interc(Interc *inicio);
 
 void Relatorio(Listas *inicio);
-
-void Interface_Grafica(Listas* inicio);

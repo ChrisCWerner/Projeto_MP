@@ -2,6 +2,8 @@
 
 #include "leitura.h"
 
+Listas *LISTA = NULL;
+
 /***********************************************************************************
 * Nome da funcao: Inicializa;
 * Descricao: Inicializa a estrutura que contem as listas de cada tipo de dado;
@@ -15,14 +17,14 @@
 *			Listas->p_adapter = NULL;
 *************************************************************************************/
 Listas *Inicializa(void){
-	Listas *sts = (Listas *) malloc(sizeof(Listas));
-	sts->p_cidade = NULL;
-	sts->p_gerador = NULL;
-	sts->p_interc = NULL;
-	sts->p_adapter = NULL;
-	sts->p_record = NULL;
+	LISTA = (Listas *) malloc(sizeof(Listas));
+	LISTA->p_cidade = NULL;
+	LISTA->p_gerador = NULL;
+	LISTA->p_interc = NULL;
+	LISTA->p_adapter = NULL;
+	LISTA->p_record = NULL;
 	
-	return sts;
+	return LISTA;
 }
 /**********************************************************************************************************************************
 * Nome da funcao: Le_Arquivo;
@@ -38,7 +40,7 @@ Listas *Inicializa(void){
 *************************************************************************************************************************************/
 Listas *Le_Arquivo(FILE *fp){
 	
-	assert(fp != NULL);
+	Checa_Erro(fp != NULL);
 	
 	Listas *sts = NULL;
 	Cidade *cidade = NULL;
@@ -114,10 +116,10 @@ Listas *Le_Arquivo(FILE *fp){
 *****************************************************************************************************************************/
 void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 	
-	assert(top != NULL);
-	assert(elemento != NULL);
-	assert((tipo_elemento == 'C') || (tipo_elemento == 'G') || \
-		   (tipo_elemento == 'I') || (tipo_elemento == 'A'));
+	Checa_Erro(top != NULL);
+	Checa_Erro(elemento != NULL);
+	Checa_Erro((tipo_elemento == 'C') || (tipo_elemento == 'G') || \
+			   (tipo_elemento == 'I') || (tipo_elemento == 'A'));
 	
 	
 	if(tipo_elemento == 'C'){
@@ -184,11 +186,11 @@ void Insere_Lista(char tipo_elemento, Listas *top, void *elemento){
 ***********************************************************************************************************************************/
 void Imprime(Listas *inicio){
 	
-	assert(inicio != NULL);
-	assert(inicio->p_cidade != NULL);
-	assert(inicio->p_gerador != NULL);
-	assert(inicio->p_interc != NULL);
-	assert(inicio->p_adapter != NULL);
+	Checa_Erro(inicio != NULL);
+	Checa_Erro(inicio->p_cidade != NULL);
+	Checa_Erro(inicio->p_gerador != NULL);
+	Checa_Erro(inicio->p_interc != NULL);
+	Checa_Erro(inicio->p_adapter != NULL);
 	
 	
 	Cidade *aux1 = NULL, *v_cidade;
@@ -300,11 +302,11 @@ void Imprime(Listas *inicio){
 ***********************************************************************************************************/
 Listas *Destroi(Listas *inicio){
 	
-	assert(inicio != NULL);
-	assert(inicio->p_cidade != NULL);
-	assert(inicio->p_gerador != NULL);
-	assert(inicio->p_interc != NULL);
-	assert(inicio->p_adapter != NULL);
+	Checa_Erro(inicio != NULL);
+	Checa_Erro(inicio->p_cidade != NULL);
+	Checa_Erro(inicio->p_gerador != NULL);
+	Checa_Erro(inicio->p_interc != NULL);
+	Checa_Erro(inicio->p_adapter != NULL);
 	
 	
 	Cidade *aux1 = NULL;
@@ -338,5 +340,18 @@ Listas *Destroi(Listas *inicio){
 	free(aux5);
 	
 	return inicio;
+}
+
+void _Checa_Erro(const char *str, const char *fn, int line){
+	
+	printf("\n\n[arq %s, linha %d]: Erro! \"%s\"\n", fn, line, str);
+	Limpa_Casa();
+	printf("Saindo...\n\n");
+	abort();
+}
+
+void Limpa_Casa(void){
+	LISTA = Destroi(LISTA);
+	free(LISTA);
 }
 
