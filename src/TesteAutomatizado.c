@@ -181,12 +181,13 @@ int main(int argc, char **argv){
 			Distribui_Recursos(inicio);
 			if(i==0) getchar();
 			Imprime(inicio);
-			delay();
+			Interface_Grafica(inicio);
 	
 		}
 	}else{
 		for(; i<tempo; i++){
 			Distribui_Recursos(inicio);
+			Interface_Grafica(inicio);
 		}
 	}
 	printf("\nSimulação terminada\n");

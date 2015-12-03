@@ -13,7 +13,7 @@ DIRLIB = -L ../lib
 DIROBJ = ../src/obj
 DIRGCNO = ../src/gcda_gcno
 DIRGCOV = ../src/gcov
-PARLIB = -lgtest -lgtest_main -lpthread -lm -lcurses
+PARLIB = -lgtest -lgtest_main -lpthread -lm -lSDL
 FLAGS = -fprofile-arcs -ftest-coverage
 
 COMPILADOR = g++

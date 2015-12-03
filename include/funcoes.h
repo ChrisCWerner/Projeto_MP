@@ -1,6 +1,7 @@
 //Arquivo de header para funcoes principais
 
 #include "leitura.h"
+#include <SDL/SDL.h>
 
 /************************************************************************************************************
 * Nome da função: Inicializa_Record;
@@ -193,4 +194,59 @@ float Tamanho_Interc(Interc *inicio);
 *******************************************************************************************************************/
 void Relatorio(Listas *inicio);
 
-//void Interface_Grafica(Listas* inicio);
+/*******************************************************************************************************************************
+* Nome da função: Interface_Grafica;
+* Descrição: Responsável por criar a janela da interface gráfica da simulação;
+* Assertivas de Entrada:
+*			Listas *inicio != NULL;
+* Assertivas de saída: Nenhuma;
+*********************************************************************************************************************************/
+void Interface_Grafica(Listas* inicio);
+
+/***************************************************************************************************************************
+* Nome da função: put_pixel;
+* Descrição: Desenha um pixel na tela;
+* Assertivas de entrada:
+*			SDL_Surface* surface != NULL;
+*			int x; int y; (posição a ser desenhado o pixel na tela;
+*			Uint8 r, Uint8 g, Uint8 b; (parâmetros das cores em rgb);
+* Assertivas de saída: nenhuma;
+*****************************************************************************************************************************/
+void putpixel(SDL_Surface*, int, int, Uint8, Uint8, Uint8);
+
+/****************************************************************************************************************************
+* Nome da função: cria_linha_horizontal;
+* Descrição: cria uma linha horizontal ligando dois componentes da malha.
+* Assertivas de entrada: 
+*			SDL_Surface*tela; ponteiro para a tela
+*			int xi; int xf; posições x incial e final e 
+*			int yc; posição y constante;
+*			int condicao variável boolana (se a interconexão funciona ou não);
+* Assertivas de saida: nenhuma;
+******************************************************************************************************************************/ 
+void cria_linha_horizontal(int, int, int,SDL_Surface*, int);
+
+/****************************************************************************************************************************
+* Nome da função: cria_linha_vertical;
+* Descrição: cria uma linha vertical ligando dois componentes da malha.
+* Assertivas de entrada: 
+*			SDL_Surface*tela; ponteiro para a tela
+*			int xi; int xf; posições x incial e final e 
+*			int yc; posição y constante;
+*			int condicao variável boolana (se a interconexão funciona ou não);
+* Assertivas de saida: nenhuma;
+******************************************************************************************************************************/ 
+void cria_linha_vertical(int, int, int, SDL_Surface*, int);
+
+/****************************************************************************************************************************
+* Nome da função: cria_linha_diagonal;
+* Descrição: cria uma linha diagonal ligando dois componentes da malha.
+* Assertivas de entrada: 
+*			SDL_Surface*tela; ponteiro para a tela
+*			int xi; int xf; posições x incial e final e 
+*			int yi; int yf; posição y inicial e final;
+*			int condicao variável boolana (se a interconexão funciona ou não);
+* Assertivas de saida: nenhuma;
+******************************************************************************************************************************/ 
+void cria_linha_diagonal(int, int, int, int,SDL_Surface*, int);
+

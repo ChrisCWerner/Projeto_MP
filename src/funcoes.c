@@ -2,15 +2,7 @@
 
 #include "funcoes.h"
 #include <math.h>
-#include <curses.h>
 
-/************************************************************************************************************
-* Nome da função: Inicializa_Record;
-* Descrição: Inicializa a estrutura que irá armazenar os dados dos relatórios.
-* Assertivas de Entrada: nenhuma
-* Assertivas de Saída: 
-*			Record *Registro != NULL (registro alocado na memória)
-*************************************************************************************************************/
 Record *Inicializa_Record(void){
 	Record *rec = (Record *) malloc(sizeof(Record));
 	rec->numero_de_falhas = 0;
@@ -30,19 +22,6 @@ Record *Inicializa_Record(void){
 	return rec;
 }
 
-/**********************************************************************************************************
-* Nome da função: Localiza_Paths;
-* Descrição: Faz as ligações entre os Geradores e adapatadores e entre adapatadores e cidades,
-*	através das interconexões.
-* Assertivas de entrada: 
-*			Listas criadas:
-*			Listas->p_cidade != NULL;
-*			Listas->p_gerador != NULL;
-*			Listas->p_interc != NULL;
-*			Listas->p_adapter != NULL;
-* Assertivas de saída:
-*			nenhum
-************************************************************************************************************/
 void Localiza_Paths(Listas *inicio){
 	
 	assert(inicio != NULL);
@@ -121,15 +100,7 @@ void Localiza_Paths(Listas *inicio){
 		aux3 = aux3->prox;
 	}
 }
-/*******************************************************************************************************************
-* Nome da função: Insere_Irmão;
-* Descrição: Insere na lista de interconexão as outras interconexões que saem do mesmo adaptador.
-* Assertivas de entrada:
-*			Interc *novo_elem != NULL
-*			Inetrc *top != NULL
-* Assertivas de saída:
-*			Interc *saida != NULL && Interc *saida = top;
-********************************************************************************************************************/
+
 Interc *Insere_Irmao(Interc *novo_elem, Interc *top){
 	
 	assert(novo_elem != NULL);
@@ -138,18 +109,7 @@ Interc *Insere_Irmao(Interc *novo_elem, Interc *top){
 	top = novo_elem;
 	return top;
 }
-/************************************************************************************************************************
-* Nome da função: Calcula_Cap_Total;
-* Descrição: Calcula a capacidade total que todas as interconexões podem transportar;
-* Assertivas de Entrada:
-*			Listas criadas:
-*			Listas->p_cidade != NULL;
-*			Listas->p_gerador != NULL;
-*			Listas->p_interc != NULL;
-*			Listas->p_adapter != NULL;
-* Assertivas de Saída:
-*			int capacidade_total != 0;
-*************************************************************************************************************************/
+
 int Calcula_Cap_Total(Interc *inicio){
 	
 	assert(inicio != NULL);
@@ -165,19 +125,6 @@ int Calcula_Cap_Total(Interc *inicio){
 	return capacidade_total;
 }
 
-/************************************************************************************************************************
-* Nome da função: Calcula_Cap_Total;
-* Descrição: Calcula a capacidade relativa que cada interconexão podem transportar;
-* Assertivas de Entrada:
-*			Listas criadas:
-*			Listas->p_cidade != NULL;
-*			Listas->p_gerador != NULL;
-*			Listas->p_interc != NULL;
-*			Listas->p_adapter != NULL;
-*			int total = Capacidade_total;
-* Assertivas de Saída:
-*			int capacidade_total != 0;
-*************************************************************************************************************************/
 int Calcula_Rel_Flow(Interc *inicio, int total){
 	
 	Interc *aux = inicio;
@@ -194,15 +141,6 @@ int Calcula_Rel_Flow(Interc *inicio, int total){
 	return i;
 }
 
-/**************************************************************************************************************
-* Nome da função: Calcula_Fluxo;
-* Descrição: Calcula a sobre de recurso nos adapatadores;
-* Assertivas de entrada: 
-*			void *inicio != NULL;
-*			caracter identificador;
-* Assertivas de saida:
-*			int sobra;
-*******************************************************************************************************************/
 int Calcula_Fluxo(void *inicio, char id){
 	
 	assert(inicio != NULL);
@@ -258,16 +196,6 @@ int Calcula_Fluxo(void *inicio, char id){
 	return sobra;
 }
 
-/**************************************************************************************************************
-* Nome da função: Gerencia_Sobra;
-* Descrição: Faz um gerenciamento da sobre de recursos tanto de adpatadores e geradores, para as interconexões
-*		que saem dele;
-* Assertivas de entrada: 
-*			void *inicio != NULL;
-*			caracter identificador;
-* Assertivas de saida:
-*			nenhuma
-*******************************************************************************************************************/
 void Gerencia_Sobra(void *inicio, char id){
 	
 	Gerador *gerad = NULL;
@@ -349,14 +277,7 @@ void Gerencia_Sobra(void *inicio, char id){
 		adapt->total = total;
 	}
 }
-/**************************************************************************************************************
-* Nome da função:Fluxo_Adpat;
-* Descrição: calcula o fluxo de energia que chega ao adpatador;
-* Assertivas de entrada: 
-*			void *inicio != NULL;
-* Assertivas de saida:
-*			nenhum
-*******************************************************************************************************************/
+
 void Fluxo_Adapt(Interc *inicio){
 	
 	assert(inicio->vai != NULL);
@@ -376,15 +297,6 @@ void Fluxo_Adapt(Interc *inicio){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da função: Fluxo_City;
-* Descrição: Calcula o fluxo de recurso que chega nas cidades;
-* Assertivas de entrada: 
-*			Interc *inicio != NULL;
-*			Record *Registro != NULL (Registro alocado)
-* Assertivas de saida:
-*			nenhuma
-*******************************************************************************************************************/
 void Fluxo_City(Interc *inicio, Record *rec){
 	
 	assert(inicio->vai != NULL);
@@ -447,16 +359,6 @@ void Verifica_Falhas(Interc *inicio, Record *rec){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da função: Maneja_Falhas
-* Descrição: faz o gerenciamento das falhas nos geradores e adpatadores, modificando a variável booleana,
-*		para indicar falha;
-* Assertivas de entrada: 
-*			Interc *inicio != NULL;
-*			incio->funciona = 1 (Se falhou);
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Maneja_Falhas(Interc *inicio){
 	
 	Interc *path = NULL;
@@ -484,14 +386,6 @@ void Maneja_Falhas(Interc *inicio){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da função: Zera_Fluxo
-* Descrição: Zera o fluxo das interconexões
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Zera_Fluxo(Listas *inicio){
 	
 	Cidade *city = NULL;
@@ -522,14 +416,6 @@ void Zera_Fluxo(Listas *inicio){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da função: Distribui_Recursos;
-* Descrição: Faz a distribuição dos recursos dos geradores para os adaptadores, cidades através das interconexões.
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Distribui_Recursos(Listas *inicio){
 	
 	assert(inicio != NULL);
@@ -717,60 +603,235 @@ void Relatorio(Listas *inicio){
 	fclose(arq);
 }
 
-/*void Interface_Grafica(Listas* inicio){
+/***************************************************************************************************************************
+* Nome da função: put_pixel;
+* Descrição: Desenha um pixel na tela;
+* Assertivas de entrada:
+*			SDL_Surface* surface != NULL;
+*			int x; int y; (posição a ser desenhado o pixel na tela;
+*			Uint8 r, Uint8 g, Uint8 b; (parâmetros das cores em rgb);
+* Assertivas de saída: nenhuma;
+*****************************************************************************************************************************/
+void putpixel(SDL_Surface* surface, int x, int y, Uint8 r, Uint8 g, Uint8 b)
+{
+    int offset = y * surface->w + x;
+    Uint32 color = SDL_MapRGB(surface->format, r, g, b);
+
+    if(surface->format->BytesPerPixel == 1)
+        *( ((Uint8*)surface->pixels) + offset) = color;
+    else if(surface->format->BytesPerPixel == 2)
+        *( ((Uint16*)surface->pixels) + offset) = color;
+    else
+        *( ((Uint32*)surface->pixels) + offset) = color;
+}
+
+/****************************************************************************************************************************
+* Nome da função: cria_linha_vertical;
+* Descrição: cria uma linha vertical ligando dois componentes da malha.
+* Assertivas de entrada: 
+*			SDL_Surface*tela; ponteiro para a tela
+*			int xi; int xf; posições x incial e final e 
+*			int yc; posição y constante;
+* Assertivas de saida: nenhuma;
+******************************************************************************************************************************/ 
+void cria_linha_vertical(int xi, int yc, int xf, SDL_Surface*tela, int condicao) {
+	int i;
+	if (xi < xf) {
+		for (i = xi; i <= xf; i++){
+			if (condicao == 1) putpixel(tela, i, yc, 0, 255, 0);
+			else putpixel(tela, i, yc, 255, 0, 0);  
+			SDL_UpdateRect(tela, i, yc, 1, 1); 
+		}
+	}
+	else {
+		for (i = xf; i <= xi; i--) {
+			if (condicao == 1) putpixel(tela, i, yc, 0, 255, 0);
+			else putpixel(tela, i, yc, 255, 0, 0);
+			SDL_UpdateRect(tela, i, yc, 1, 1); 
+		}  
+	}	
+}
+
+/****************************************************************************************************************************
+* Nome da função: cria_linha_horizontal;
+* Descrição: cria uma linha horizontal ligando dois componentes da malha.
+* Assertivas de entrada: 
+*			SDL_Surface*tela; ponteiro para a tela
+*			int xi; int xf; posições x incial e final e 
+*			int yc; posição y constante;
+* Assertivas de saida: nenhuma;
+******************************************************************************************************************************/ 	
+void cria_linha_horizontal(int xc, int yi, int yf,SDL_Surface*tela, int condicao) {
+	int i;
+	if (yi < yf) {
+		for (i = yi; i <= yf; i++){
+			if (condicao == 1) putpixel(tela, xc, i, 0, 255, 0);
+			else putpixel(tela, xc, i, 255, 0, 0); 
+			SDL_UpdateRect(tela, xc, i, 1, 1); 
+		} 
+	}
+	else {
+		for (i = yf; i <= yi; i--){
+			if (condicao == 1) putpixel(tela, xc, i, 0, 255, 0);
+			else putpixel(tela, xc, i, 255, 0, 0);
+			SDL_UpdateRect(tela, xc, i, 1, 1);
+		}   
+	}
+}
+/****************************************************************************************************************************
+* Nome da função: cria_linha_diagonal;
+* Descrição: cria uma linha diagonal ligando dois componentes da malha.
+* Assertivas de entrada: 
+*			SDL_Surface*tela; ponteiro para a tela
+*			int xi; int xf; posições x incial e final e 
+*			int yi; int yf; posição y inicial e final
+* Assertivas de saida: nenhuma;
+******************************************************************************************************************************/ 
+void cria_linha_diagonal(int xi, int xf, int yi, int yf, SDL_Surface*tela, int condicao) {
+	int i = 0, j = 0;
+	if (xi < xf && yi < yf){
+		i = xi; j = yi;
+		while (i < xf || j < yf){
+			if (i < xf && j < yf) {
+				i++; j++;
+				if (condicao == 1) putpixel(tela, i, j, 0, 255, 0);
+				else putpixel(tela, i, j, 255, 0, 0);
+				SDL_UpdateRect(tela, i, j, 1, 1);   
+			}else if (i == xf && j < yf){
+				cria_linha_horizontal(i, j, yf,tela, condicao);
+				return;
+			}else if (j == yf && i < xf){
+				cria_linha_vertical(i,j,xf,tela, condicao);
+				return;
+			}
+		}
+		return;
+	}else if(xi > xf && yi > yf){
+		i = xf; j = yf;
+		while (i < xi || j < yi){
+			if (i < xi && j < yi) {
+				i++; j++;
+				if (condicao == 1) putpixel(tela, i, j, 0, 255, 0);
+				else putpixel(tela, i, j, 255, 0, 0);
+				SDL_UpdateRect(tela, i, j, 1, 1);   
+			}else if (i == xi && j < yi){
+				cria_linha_horizontal(i, j, yf,tela, condicao);
+				return;
+			}else if (j == yi && i < xi){
+				cria_linha_vertical(i,j,xi,tela, condicao);
+				return;
+			}
+		}
+		return;
+	}else if(xi < xf && yi > yf){
+		i = xi; j = yf;
+		while (i < xf || j < yi){
+			if (i < xf && j < yi) {
+				i++; j++;
+				if (condicao == 1) putpixel(tela, i, j, 0, 255, 0);
+				else putpixel(tela, i, j, 255, 0, 0);
+				SDL_UpdateRect(tela, i, j, 1, 1);   
+			}else if (i == xf && j < yi){
+				cria_linha_horizontal(i, j, yi,tela, condicao);
+				return;
+			}else if (j == yi && i < xf){
+				cria_linha_vertical(i,j,xf,tela, condicao);
+				return;
+			}
+		}
+		return;
+	}else if(xi > xf && yi < yf){
+		i = xf; j = yi;
+		while (i < xi || j < yf){
+			if (i < xi && j < yf) {
+				i++; j++;
+				if (condicao == 1) putpixel(tela, i, j, 0, 255, 0);
+				else putpixel(tela, i, j, 255, 0, 0);
+				SDL_UpdateRect(tela, i, j, 1, 1);   
+			}else if (i == xi && j < yf){
+				cria_linha_horizontal(i, j, yf,tela, condicao);
+				return;
+			}else if (j == yf && i < xi){
+				cria_linha_vertical(i,j,xi,tela, condicao);
+				return;
+			}
+		}
+		return;
+	}
+}
+
+/*******************************************************************************************************************************
+* Nome da função: Interface_Grafica;
+* Descrição: Responsável por criar a janela da interface gráfica da simulação;
+* Assertivas de Entrada:
+*			Listas != NULL;
+* Assertivas de saída: Nenhuma;
+*********************************************************************************************************************************/
+void Interface_Grafica(Listas* inicio){	
 	assert(inicio != NULL);
 	assert(inicio->p_cidade != NULL);
 	assert(inicio->p_gerador != NULL);
 	assert(inicio->p_interc != NULL);
 	assert(inicio->p_adapter != NULL);
-	int i = 1, j = 0, espera = 0;
+	int i = 1, j = 0, condicao, q = 0;
 	Cidade *aux1 = NULL;
 	Gerador *aux2 = NULL;
 	Interc *aux3 = NULL;
 	Adapter *aux4 = NULL;
-	initscr();  
-	 start_color(); //Esta funo torna possvel o uso das cores
-//baixo estamos definindo os pares de cores que sero utilizados no programa
-    init_pair(1,COLOR_GREEN,COLOR_BLACK ); //Texto(Branco) | Fundo(Azul)
-    init_pair(2,COLOR_RED,COLOR_BLACK );
-    init_pair(3,COLOR_YELLOW,COLOR_BLACK );
- bkgd(COLOR_PAIR(1));  /*Aqui ns definiremos que a cor de fundo do nosso
-                                      programa ser azul e a cor dos textos ser branca.
-	move (0,0);
-	printw("Os geradores, adapatadores e cidades representados estao todos conectados!Pressione Enter para sair...");
+	//ponteiro para a tela do SDL:
+	SDL_Surface *tela;
+	//Inicializando a SDL:
+	SDL_Init( SDL_INIT_EVERYTHING ); 
+	//atribuindo um nome a janela:
+	SDL_WM_SetCaption("Interface da simulação", NULL); 
+	//Definindo as propriedades da tela:
+	tela = SDL_SetVideoMode(1280,1280,16, SDL_SWSURFACE); 
+	if(SDL_MUSTLOCK(tela)) SDL_LockSurface(tela);
 	aux3 = inicio->p_interc;
 	while (aux3 != NULL){ 
 		if (aux3->vemc == 'G'){
-			attroff(COLOR_PAIR(2));
-			attroff(COLOR_PAIR(3));
 			aux2 = (Gerador*) aux3->vem;
-			move(aux2->pos_x,aux2->pos_y);
-			printw("G\t", i);
+			SDL_Rect drect = {aux2->pos_x, aux2->pos_y, 12, 12};
+			Uint32 color = SDL_MapRGB(tela->format, 255, 127, 0);
+			SDL_FillRect(tela, &drect, color);
+			SDL_UpdateRect(tela, aux2->pos_x, aux2->pos_y, 12, 12);  
 		}else if (aux3->vemc == 'A'){
 			aux4 = (Adapter*)aux3->vem;
-			if(aux3->funciona == 0 && aux4->saida == 2) attron(COLOR_PAIR(2));
-			else attroff(COLOR_PAIR(2));
-			move(aux4->pos_x,aux4->pos_y);
-			printw("A\t", i);
+			SDL_Rect drect = {aux4->pos_x, aux4->pos_y, 12, 12};
+			Uint32 color = SDL_MapRGB(tela->format, 168, 168, 168);
+			SDL_FillRect(tela, &drect, color);
+			SDL_UpdateRect(tela, aux4->pos_x, aux4->pos_y, 12, 12); 
 		}
 		if (aux3->vaic == 'A'){
 			aux4 = (Adapter*)aux3->vai;
-			if(aux3->funciona == 0 && aux4->saida == 2) attron(COLOR_PAIR(2));
-			else attroff(COLOR_PAIR(2));
-			move(aux4->pos_x,aux4->pos_y);
-			printw("A\t", i);
+			SDL_Rect drect = {aux4->pos_x, aux4->pos_y, 12, 12};
+			Uint32 color = SDL_MapRGB(tela->format, 168, 168, 168);
+			SDL_FillRect(tela, &drect, color);
+			SDL_UpdateRect(tela, aux4->pos_x, aux4->pos_y, 12, 12); 
 		}else if (aux3->vaic == 'C'){
 			aux1 = (Cidade*) aux3->vai;
-			if (aux3->vemc == 'A' && aux3->funciona == 0 && aux4->saida == 2) attron(COLOR_PAIR(3));
-			else attroff(COLOR_PAIR(3));
-			move(aux1->pos_x,aux1->pos_y);
-			printw("C\t", i);
+			SDL_Rect drect = {aux1->pos_x, aux1->pos_y, 12, 12};
+			Uint32 color = SDL_MapRGB(tela->format, 107, 35, 142);
+			SDL_FillRect(tela, &drect, color);
+			SDL_UpdateRect(tela, aux1->pos_x, aux1->pos_y, 12, 12);  
+		}		
+		if (aux3->funciona == 1) condicao = 1;
+		else condicao = 0;
+	
+		if (aux3->pos_inic_x == aux3->pos_final_x){
+			cria_linha_horizontal(aux3->pos_inic_x, aux3->pos_inic_y, aux3->pos_final_y,tela, condicao);
+		}else if (aux3->pos_inic_y == aux3->pos_final_y){
+			cria_linha_vertical(aux3->pos_inic_x, aux3->pos_inic_y, aux3->pos_final_x,tela, condicao);
 		}
+		if (aux3->pos_inic_x != aux3->pos_final_x || aux3->pos_inic_y != aux3->pos_final_y)
+			cria_linha_diagonal(aux3->pos_inic_x, aux3->pos_final_x, aux3->pos_inic_y, aux3->pos_final_y,tela, condicao);
+	
 		aux3 = aux3->prox;
-		i++;
-	}  	
-	refresh();    //Atualiza a tela
-	getch();
-	endwin();	
-}*/
+	} 	
+	//pausar a tela:
+	SDL_Delay(6000);
+	if(SDL_MUSTLOCK(tela)) SDL_UnlockSurface(tela);  
+	//finalizar o uso da SDL:
+	SDL_Quit(); 	
+}
 
