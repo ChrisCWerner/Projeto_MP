@@ -9,3 +9,6 @@ Melhorar menu e relação com o usuário, melhorar criação do relatório.
 
 21/11/2015 | 4 horas |
 Adptar códigos entre os integrantes, solucionar erros de modularização, solucionar erros de criação de relatório.
+
+07/12/2015 | 4 horas |
+Solucionar erros de interface, alteração nos comentários, estudar como utilizar o doxygen
