@@ -3,6 +3,7 @@
 #include "funcoes.h"
 #include <math.h>
 
+
 Record *Inicializa_Record(void){
 	Record *rec = (Record *) malloc(sizeof(Record));
 	rec->numero_de_falhas = 0;
@@ -318,15 +319,6 @@ void Fluxo_City(Interc *inicio, Record *rec){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da função: Verifica_Falhas
-* Descrição: Verifica se houve falhas nas interconexões
-* Assertivas de entrada: 
-*			Interc *inicio != NULL;
-*			Record *Registro != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Verifica_Falhas(Interc *inicio, Record *rec){
 	
 	Interc *path = NULL;
@@ -471,14 +463,7 @@ void Distribui_Recursos(Listas *inicio){
 	
 	rec->tempo_total++;
 }
-/**************************************************************************************************************
-* Nome da função: Examina_Cidades
-* Descrição: Calcula o tempo em que a cidade está sem recurso;
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
+
 void Examina_Cidades(Listas *inicio){
 	
 	Record *rec = inicio->p_record;
@@ -513,14 +498,6 @@ void Examina_Cidades(Listas *inicio){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da função: Total_Elementos
-* Descrição: Calcula o total de cidades e geradores
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Total_Elementos(Listas *inicio){
 	
 	Record *rec = inicio->p_record;
@@ -538,14 +515,6 @@ void Total_Elementos(Listas *inicio){
 	}
 }
 
-/**************************************************************************************************************
-* Nome da função: Tamanho_Interc
-* Descrição: Calcula o tamanho de todas as interconexões juntas
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 float Tamanho_Interc(Interc *inicio){
 	
 	Interc *path = NULL;
@@ -566,14 +535,6 @@ float Tamanho_Interc(Interc *inicio){
 	return tam;
 }
 
-/**************************************************************************************************************
-* Nome da função: Relatorio
-* Descrição: Grava no arquivo .txt o relatório final com todos so dados solicitados pelo podf do trabalho
-* Assertivas de entrada: 
-*			Listas *inicio != NULL;
-* Assertivas de saida:
-*			nehuma;
-*******************************************************************************************************************/
 void Relatorio(Listas *inicio){
 	
 	Record *rec = inicio->p_record;
@@ -603,15 +564,7 @@ void Relatorio(Listas *inicio){
 	fclose(arq);
 }
 
-/***************************************************************************************************************************
-* Nome da função: put_pixel;
-* Descrição: Desenha um pixel na tela;
-* Assertivas de entrada:
-*			SDL_Surface* surface != NULL;
-*			int x; int y; (posição a ser desenhado o pixel na tela;
-*			Uint8 r, Uint8 g, Uint8 b; (parâmetros das cores em rgb);
-* Assertivas de saída: nenhuma;
-*****************************************************************************************************************************/
+
 void putpixel(SDL_Surface* surface, int x, int y, Uint8 r, Uint8 g, Uint8 b)
 {
     int offset = y * surface->w + x;
@@ -625,15 +578,6 @@ void putpixel(SDL_Surface* surface, int x, int y, Uint8 r, Uint8 g, Uint8 b)
         *( ((Uint32*)surface->pixels) + offset) = color;
 }
 
-/****************************************************************************************************************************
-* Nome da função: cria_linha_vertical;
-* Descrição: cria uma linha vertical ligando dois componentes da malha.
-* Assertivas de entrada: 
-*			SDL_Surface*tela; ponteiro para a tela
-*			int xi; int xf; posições x incial e final e 
-*			int yc; posição y constante;
-* Assertivas de saida: nenhuma;
-******************************************************************************************************************************/ 
 void cria_linha_vertical(int xi, int yc, int xf, SDL_Surface*tela, int condicao) {
 	int i;
 	if (xi < xf) {
@@ -651,16 +595,7 @@ void cria_linha_vertical(int xi, int yc, int xf, SDL_Surface*tela, int condicao)
 		}  
 	}	
 }
-
-/****************************************************************************************************************************
-* Nome da função: cria_linha_horizontal;
-* Descrição: cria uma linha horizontal ligando dois componentes da malha.
-* Assertivas de entrada: 
-*			SDL_Surface*tela; ponteiro para a tela
-*			int xi; int xf; posições x incial e final e 
-*			int yc; posição y constante;
-* Assertivas de saida: nenhuma;
-******************************************************************************************************************************/ 	
+	
 void cria_linha_horizontal(int xc, int yi, int yf,SDL_Surface*tela, int condicao) {
 	int i;
 	if (yi < yf) {
@@ -678,15 +613,7 @@ void cria_linha_horizontal(int xc, int yi, int yf,SDL_Surface*tela, int condicao
 		}   
 	}
 }
-/****************************************************************************************************************************
-* Nome da função: cria_linha_diagonal;
-* Descrição: cria uma linha diagonal ligando dois componentes da malha.
-* Assertivas de entrada: 
-*			SDL_Surface*tela; ponteiro para a tela
-*			int xi; int xf; posições x incial e final e 
-*			int yi; int yf; posição y inicial e final
-* Assertivas de saida: nenhuma;
-******************************************************************************************************************************/ 
+
 void cria_linha_diagonal(int xi, int xf, int yi, int yf, SDL_Surface*tela, int condicao) {
 	int i = 0, j = 0;
 	if (xi < xf && yi < yf){
@@ -715,7 +642,7 @@ void cria_linha_diagonal(int xi, int xf, int yi, int yf, SDL_Surface*tela, int c
 				else putpixel(tela, i, j, 255, 0, 0);
 				SDL_UpdateRect(tela, i, j, 1, 1);   
 			}else if (i == xi && j < yi){
-				cria_linha_horizontal(i, j, yf,tela, condicao);
+				cria_linha_horizontal(i, j, yi,tela, condicao);
 				return;
 			}else if (j == yi && i < xi){
 				cria_linha_vertical(i,j,xi,tela, condicao);
@@ -788,6 +715,7 @@ void Interface_Grafica(Listas* inicio){
 	tela = SDL_SetVideoMode(1280,1280,16, SDL_SWSURFACE); 
 	if(SDL_MUSTLOCK(tela)) SDL_LockSurface(tela);
 	aux3 = inicio->p_interc;
+
 	while (aux3 != NULL){ 
 		if (aux3->vemc == 'G'){
 			aux2 = (Gerador*) aux3->vem;
@@ -809,9 +737,17 @@ void Interface_Grafica(Listas* inicio){
 			SDL_FillRect(tela, &drect, color);
 			SDL_UpdateRect(tela, aux4->pos_x, aux4->pos_y, 12, 12); 
 		}else if (aux3->vaic == 'C'){
+			Uint32 color;
 			aux1 = (Cidade*) aux3->vai;
 			SDL_Rect drect = {aux1->pos_x, aux1->pos_y, 12, 12};
-			Uint32 color = SDL_MapRGB(tela->format, 107, 35, 142);
+			if(aux1->fluxo >= aux1->recurso_necessario)		
+				color = SDL_MapRGB(tela->format, 0, 255, 0);
+			else if(aux1->fluxo <= aux1->recurso_necessario && aux1->fluxo > 0.3*aux1->recurso_necessario)		
+				color = SDL_MapRGB(tela->format, 255, 200, 0);
+			else if(aux1->fluxo <= 0.3*aux1->recurso_necessario)			
+				color = SDL_MapRGB(tela->format, 255, 0, 0);
+
+			
 			SDL_FillRect(tela, &drect, color);
 			SDL_UpdateRect(tela, aux1->pos_x, aux1->pos_y, 12, 12);  
 		}		
@@ -829,7 +765,7 @@ void Interface_Grafica(Listas* inicio){
 		aux3 = aux3->prox;
 	} 	
 	//pausar a tela:
-	SDL_Delay(6000);
+	SDL_Delay(2500);
 	if(SDL_MUSTLOCK(tela)) SDL_UnlockSurface(tela);  
 	//finalizar o uso da SDL:
 	SDL_Quit(); 	

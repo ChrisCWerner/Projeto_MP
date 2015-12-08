@@ -95,8 +95,11 @@ typedef struct listas{
 /***********************************************************************************
 * Nome da função: Inicializa;
 * Descrição: Inicializa a estrutura que contem as listas de cada tipo de dado;
+* Parâmetros: Nenhum
+* Interface Explícita: retorno Listas* sts
+* Interface Implícita: Nenhuma
 * Assertivas de Entrada: 
-*			nenhum
+*			Nenhuma
 * Assertivas de Saída:
 *			Listas criadas:
 *			Listas->p_cidade = NULL;
@@ -110,6 +113,9 @@ Listas *Inicializa(void);
 /**********************************************************************************************************************************
 * Nome da função: Le_Arquivo;
 * Descrição: Le o arquivo de entrada e insere os tipos de informações nas respectivas listas.
+* Parâmetros: FILE *fp
+* Interface Explícita: retorno Listas* sts;
+* Interface Implícita: Arquivo fp;
 * Assertivas de Entrada: 
 *			FILE *fp != NULL (ponteiro para arquivo de entrada)
 * Assertivas de Saída:
@@ -125,6 +131,9 @@ Listas *Le_Arquivo(FILE*);
 * Nome da função: Insere_Lista;
 * Descrição: Insere o tipo de informação lida, a partir da função 'Le_arquivo', para o tipo correspondente das Listas.
 * Assertivas de Entrada: 
+* Parâmetros: char tipo_elemento, Listas *top, void *elemento.
+* Interface Explícita: parâmetros char tipo_elemento, Listas *top, void *elemento.
+* Interface Implícita: Nenhuma.
 *			char tipo_elemento;
 *			Listas (previamente alocada, podendo ou não estarem vazias)
 *			void *elemento (ponteiro para o elemento a ser inserido)
@@ -137,6 +146,9 @@ void Insere_Lista(char, Listas*, void*);
 * Nome da função: Imprime;
 * Descrição: Imprime a estrutura que armazena cada tipo de lista, ou seja, vai imprimir cada uma das listas de cidades, geradores,
 	     adaptadores e interconexões.
+* Parâmetros: Listas *inicio
+* Interface Explícita: parâmetro Listas *inicio
+* Interface Implícita: Nenhuma.
 * Assertivas de Entrada:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
@@ -151,6 +163,9 @@ void Imprime(Listas*);
 /**********************************************************************************************************
 * Nome da função: Destroi;
 * Descrição: Desaloca a posição de memória ocupada pelas listas.
+* Parâmetros: Listas *inicio
+* Interface Explícita: parâmetro Listas *inicio
+* Interface Implícita: Nenhuma.
 * Assertivas de Entrada:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
