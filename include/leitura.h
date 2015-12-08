@@ -1,4 +1,14 @@
 //Arquivo de header para leitura de dados
+/**
+ * @author Roberta Renally, Rennê Ruan, Christian Werner
+ * @date 8 dez 2015
+ * @brief *
+ *
+ * Biblioteca principal para as funcões da rede de distribuicao de energia
+ */
+
+
+/** @file */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -92,15 +102,15 @@ typedef struct listas{
 
 //Funcoes
 
-/***********************************************************************************
-* Nome da função: Inicializa;
-* Descrição: Inicializa a estrutura que contem as listas de cada tipo de dado;
-* Parâmetros: Nenhum
-* Interface Explícita: retorno Listas* sts
-* Interface Implícita: Nenhuma
-* Assertivas de Entrada: 
+/*********************************************************************//**
+* @brief Nome da funcao: Inicializa;
+* Descricao: Inicializa a estrutura que contem as listas de cada tipo de dado;
+* @remark Parâmetros: Nenhum
+* @remark Interface Explícita: retorno Listas* sts
+* @remark Interface Implícita: Nenhuma
+* @remark Assertivas de Entrada: 
 *			Nenhuma
-* Assertivas de Saída:
+* @remark Assertivas de Saída:
 *			Listas criadas:
 *			Listas->p_cidade = NULL;
 *			Listas->p_gerador = NULL;
@@ -110,15 +120,15 @@ typedef struct listas{
 *************************************************************************************/
 Listas *Inicializa(void);
 
-/**********************************************************************************************************************************
-* Nome da função: Le_Arquivo;
-* Descrição: Le o arquivo de entrada e insere os tipos de informações nas respectivas listas.
-* Parâmetros: FILE *fp
-* Interface Explícita: retorno Listas* sts;
-* Interface Implícita: Arquivo fp;
-* Assertivas de Entrada: 
+/*********************************************************************//**
+* @brief Nome da funcao: Le_Arquivo;
+* Descricao: Le o arquivo de entrada e insere os tipos de informacões nas respectivas listas.
+* @remark Parâmetros: FILE *fp
+* @remark Interface Explícita: retorno Listas* sts;
+* @remark Interface Implícita: Arquivo fp;
+* @remark Assertivas de Entrada: 
 *			FILE *fp != NULL (ponteiro para arquivo de entrada)
-* Assertivas de Saída:
+* @remark Assertivas de Saída:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
 *			Listas->p_gerador != NULL;
@@ -127,52 +137,52 @@ Listas *Inicializa(void);
 *************************************************************************************************************************************/
 Listas *Le_Arquivo(FILE*);
 
-/**************************************************************************************************************************
-* Nome da função: Insere_Lista;
-* Descrição: Insere o tipo de informação lida, a partir da função 'Le_arquivo', para o tipo correspondente das Listas.
-* Assertivas de Entrada: 
-* Parâmetros: char tipo_elemento, Listas *top, void *elemento.
-* Interface Explícita: parâmetros char tipo_elemento, Listas *top, void *elemento.
-* Interface Implícita: Nenhuma.
+/*********************************************************************//**
+* @brief Nome da funcao: Insere_Lista;
+* Descricao: Insere o tipo de informacao lida, a partir da funcao 'Le_arquivo', para o tipo correspondente das Listas.
+* @remark Assertivas de Entrada: 
+* @remark Parâmetros: char tipo_elemento, Listas *top, void *elemento.
+* @remark Interface Explícita: parâmetros char tipo_elemento, Listas *top, void *elemento.
+* @remark Interface Implícita: Nenhuma.
 *			char tipo_elemento;
-*			Listas (previamente alocada, podendo ou não estarem vazias)
+*			Listas (previamente alocada, podendo ou nao estarem vazias)
 *			void *elemento (ponteiro para o elemento a ser inserido)
-* Assertivas de Saída:
+* @remark Assertivas de Saída:
 *			nenhuma
 *****************************************************************************************************************************/
 void Insere_Lista(char, Listas*, void*);
 
-/*********************************************************************************************************************************
-* Nome da função: Imprime;
-* Descrição: Imprime a estrutura que armazena cada tipo de lista, ou seja, vai imprimir cada uma das listas de cidades, geradores,
+/*********************************************************************//**
+* @brief Nome da funcao: Imprime;
+* Descricao: Imprime a estrutura que armazena cada tipo de lista, ou seja, vai imprimir cada uma das listas de cidades, geradores,
 	     adaptadores e interconexões.
-* Parâmetros: Listas *inicio
-* Interface Explícita: parâmetro Listas *inicio
-* Interface Implícita: Nenhuma.
-* Assertivas de Entrada:
+* @remark Parâmetros: Listas *inicio
+* @remark Interface Explícita: parâmetro Listas *inicio
+* @remark Interface Implícita: Nenhuma.
+* @remark Assertivas de Entrada:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
 *			Listas->p_gerador != NULL;
 *			Listas->p_interc != NULL;
 *			Listas->p_adapter != NULL;
-* Assertivas de Saída:
+* @remark Assertivas de Saída:
 *			nenhuma
 ***********************************************************************************************************************************/
 void Imprime(Listas*);
 
-/**********************************************************************************************************
-* Nome da função: Destroi;
-* Descrição: Desaloca a posição de memória ocupada pelas listas.
-* Parâmetros: Listas *inicio
-* Interface Explícita: parâmetro Listas *inicio
-* Interface Implícita: Nenhuma.
-* Assertivas de Entrada:
+/*********************************************************************//**
+* @brief Nome da funcao: Destroi;
+* @remark Descricao: Desaloca a posicao de memória ocupada pelas listas.
+* @remark Parâmetros: Listas *inicio
+* @remark Interface Explícita: parâmetro Listas *inicio
+* @remark Interface Implícita: Nenhuma.
+* @remark Assertivas de Entrada:
 *			Listas criadas:
 *			Listas->p_cidade != NULL;
 *			Listas->p_gerador != NULL;
 *			Listas->p_interc != NULL;
 *			Listas->p_adapter != NULL;
-* Assertivas de Saída:
+* @remark Assertivas de Saída:
 *			Listas = NULL;
 ***********************************************************************************************************/
 Listas *Destroi(Listas*);
